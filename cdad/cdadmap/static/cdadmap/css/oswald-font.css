@@ -1,0 +1,9 @@
+﻿/*!
+ * Registering the Oswald font face
+ */
+
+
+@font-face {
+	font-family: "Oswald";
+	src: url("../fonts/Oswald.eot?") format("embedded-opentype"), url("../fonts/Oswald.woff") format("woff"), url("../fonts/Oswald.ttf") format("truetype"),url("../fonts/Oswald.svg#Oswald") format("svg");
+}

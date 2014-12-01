@@ -1,0 +1,147 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/oswald-font.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/simple-sidebar.css' %}">
+	{% block css_block %}
+	{% endblock %}
+	<link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/main.css' %}">
+	<style type="text/css">
+
+		.settings > a > .settings-button {
+			display: inline-block;
+			margin-left: 12px;
+			margin-right: 3px;
+			width: 12px;
+			height: 14px;
+			background-image: url({% static 'cdadmap/css/images/info-grey.png' %})
+		}
+
+		.settings:hover > a > .settings-button,
+		.settings:focus > a > .settings-button {
+			background-image: url({% static 'cdadmap/css/images/info-white.png' %})
+		}
+
+		.info > a > .info-button {
+			display: inline-block;
+			margin-left: 12px;
+			margin-right: 3px;
+			width: 12px;
+			height: 14px;
+			background-image: url({% static 'cdadmap/css/images/info-grey.png' %})
+		}
+
+		.info:hover > a > .info-button,
+		.info:focus > a > .info-button {
+			background-image: url({% static 'cdadmap/css/images/info-white.png' %})
+		}
+		
+		.filters > a > .filters-button {
+			display: inline-block;
+			margin-left: 8px;
+			width: 19px;
+			height: 14px;
+			background-image: url({% static 'cdadmap/css/images/filters-grey.png' %})
+		}
+
+		.filters:hover > a > .filters-button,
+		.filters:focus > a > .filters-button {
+			background-image: url({% static 'cdadmap/css/images/filters-white.png' %})
+		}
+		
+		.about > a > .about-button {
+			display: inline-block;
+			margin-left: 12px;
+			margin-right: 2px;
+			margin-left: 8px;
+			width: 14px;
+			height: 14px;
+			background-image: url({% static 'cdadmap/css/images/about-grey.png' %})
+		}
+
+		.about:hover > a > .about-button,
+		.about:focus > a > .about-button {
+			background-image: url({% static 'cdadmap/css/images/about-white.png' %})
+		}
+
+
+				
+	</style>
+
+    <!--  javascript
+    ================================================== -->
+    <!-- Only jquery goes here to load autocomplete on forms-->	
+	<script type="text/javascript" src="{% static 'cdadmap/js/jquery-1.11.1.min.js' %}"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	{% block head_js_block %}
+	{% endblock %}
+		
+  </head>
+
+  <body>
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+					<!-- Can add a brand here later if desired -->
+                </li>
+                <li class="settings">
+                    <a href="#">SETTINGS <span class="settings-button"></span><span class="hover-color"></span></a>
+                </li>
+                <li class="info">
+                    <a href="#">INFO <span class="info-button"></span><span class="hover-color"></span></a> 
+                </li>
+                <li class="filters">
+                    <a href="#">FILTERS <span class="filters-button"></span><span class="hover-color"></span></a>
+                </li>
+                <li class="about">
+                    <a href="#">ABOUT <span class="about-button"></span><span class="hover-color"></span></a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+		{% block body_block %}
+		{% endblock %}
+
+    </div>
+    <!-- /#wrapper -->
+
+	
+    <!--  javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+	<script type="text/javascript" src="{% static 'cdadmap/js/bootstrap.min.js' %}"></script>
+	
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+	{% block js_block %}
+	{% endblock %}
+	
+	
+	<!-- modals -->
+	<div class="modal"></div>
+	
+  </body>
+</html>

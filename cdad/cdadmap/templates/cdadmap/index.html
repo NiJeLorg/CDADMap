@@ -1,0 +1,42 @@
+{% extends 'cdadmap/base.html' %}
+{% load staticfiles %}
+
+{% block css_block %}
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/leaflet.css' %}">	
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/MarkerCluster.css' %}">	
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/MarkerCluster.Default.css' %}">	
+	
+{% endblock %}
+
+{% block head_js_block %}
+{% endblock %}
+	
+
+{% block body_block %}
+<!-- Page Content -->
+<div id="page-content-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+				
+				<div id="map"></div>
+				
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /#page-content-wrapper -->
+{% endblock %}
+
+
+{% block js_block %}
+	<script type="text/javascript" src="{% static 'cdadmap/js/d3.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/leaflet.js' %}"></script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/leaflet-omnivore.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/topojson.js' %}"></script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/leaflet.markercluster.js' %}"></script>
+	<script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/CDADMap.js' %}"></script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/application.js' %}"></script>
+
+{% endblock %}
