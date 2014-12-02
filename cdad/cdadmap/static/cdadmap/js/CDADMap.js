@@ -3,27 +3,33 @@
 */
 
 function CDADMap() {
-    //initial values
-	this.markerLayer = null;
 	
-	var stamenLayer = new L.StamenTileLayer("toner-lite");
-	
-    //where brooklyn at?!40.7429 N, 73.9188
-    this.map = L.map('map', {
-		minZoom:11,
+    //where detroit is 42.377410, -83.093719
+    this.map = new L.Map('map', {
+		minZoom:10,
 		maxZoom:17,
-    	center: [42.331427, -83.045754],
-   	 	zoom: 13,
+    	center: [42.377410, -83.093719],
+   	 	zoom: 12,
 	});
 	
+	// add CartoDB tiles
+	var CartoDBLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{
+	  attribution: 'Map Data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> Contributors, Map Tiles &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+	});
+	
+	this.map.addLayer(CartoDBLayer);
+	
+		
     //load logo in lower left corner
     //$("#citydigits-charts").attr({'class':'citydigits-charts'});
 
+
+	//load geocoder control
+	this.map.addControl(L.Control.geocoder({collapsed: false, placeholder:'', }));
 	
 	//load scale bars
-	L.control.scale().addTo(this.map);
+	this.map.addControl(L.control.scale());
 	
-
     // enable events
     this.map.doubleClickZoom.enable();
     this.map.scrollWheelZoom.enable();
@@ -112,10 +118,7 @@ CDADMap.prototype.loadLayers = function (){
 			
 	// load layers
 	this.SAMPLE_LAYER = omnivore.topojson(neighborhoods, null, this.MAP1_POP_POVERTY_style);
-	
-	//flag to indicate that other map layers have been loaded
-	layersLoaded = true;
-		
+			
 }
 
 CDADMap.getStyleColorFor_SAMPLE_LAYER = function (feature){

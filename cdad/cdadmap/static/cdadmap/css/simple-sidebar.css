@@ -6,7 +6,19 @@
 
 /* Toggle Styles */
 
+body {
+    padding: 0;
+    margin: 0;
+}
+
+html, body, #map {
+    height: 100%;
+}
+
+
 #wrapper {
+	height: 100%;
+	width: 100%;
     padding-right: 0;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
@@ -37,12 +49,7 @@
     width: 140px;
 }
 
-#page-content-wrapper {
-    width: 100%;
-    padding: 15px;
-}
-
-#wrapper.toggled #page-content-wrapper {
+#wrapper.toggled #map {
     position: absolute;
     margin-left: -140px;
 }
@@ -127,11 +134,7 @@
         width: 0;
     }
 
-    #page-content-wrapper {
-        padding: 20px;
-    }
-
-    #wrapper.toggled #page-content-wrapper {
+    #wrapper.toggled #map {
         position: relative;
         margin-left: 0;
     }
