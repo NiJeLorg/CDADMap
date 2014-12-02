@@ -120,6 +120,10 @@
 .leaflet-right .leaflet-control {
 	margin-right: 10px;
 	}
+.leaflet-center {
+	margin-left: 70px;
+	position: relative;
+}
 
 
 /* zoom and fade animations */
