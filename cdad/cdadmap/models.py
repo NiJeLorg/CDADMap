@@ -67,6 +67,8 @@ class LocationPanel(models.Model):
     MailingAddress = models.TextField()
     KeepPrivate = models.TextField()
     Activity = models.TextField()
+    Lat = models.CharField(max_length=255, null=True, blank=True)
+    Lon = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         db_table = 'locationPanel'
