@@ -11,9 +11,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/bootstrap.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/oswald-font.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/simple-sidebar.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/jquery-ui.min.css' %}">
 	{% block css_block %}
 	{% endblock %}
 	<link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/main.css' %}">
+	
+	
 	<style type="text/css">
 
 		.settings > a > .settings-button {
@@ -138,14 +141,7 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
 	<script type="text/javascript" src="{% static 'cdadmap/js/bootstrap.min.js' %}"></script>
-	
-    <!-- Menu Toggle Script -->
-    <script>
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-    </script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/jquery-ui.min.js' %}"></script>
 	{% block js_block %}
 	{% endblock %}
 	

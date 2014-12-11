@@ -2,15 +2,14 @@
  * Popup popout that includes settings, info, filters, and about 
  */
 
-
-#popout-wrapper {
+.popout-content {
     z-index: 1001;
     position: fixed;
     right: 442px;
     top: 65px;
 	bottom: 16px;
     width: 0;
-    margin-right: -302px;
+	margin-right: -302px;
     overflow: hidden;
     background: #595959;
     -webkit-transition: all 0.5s ease;
@@ -19,7 +18,14 @@
     transition: all 0.5s ease;
 }
 
-/* popout Styles */
+.popout-content-open {
+	width: 302px;
+}
+
+.popout-banner-open {
+	width: 322px;
+}
+
 
 .banner-text {
 	padding-top: 4px;
@@ -46,12 +52,21 @@
 }
 
 .right-bar-color {
+	display: none;
+	z-index: 1002;
 	position: absolute;
 	right:0;
 	background-color: #e8c51d;
 	width: 8px;
 	height: 100%;
 	overflow-y: visible;
+}
+
+.popout-nav > .popout-content {
+	display: none;
+	text-align: left;
+	width: 302px;
+	padding: 20px;
 }
 
 .popout-nav li {
@@ -93,14 +108,14 @@
 }
 
 
-@media(min-width:768px) {
+@media(max-width:768px) {
 	
-    #popout-wrapper {
-        width: 302px;
+    .popout-content {
+        width: 0;
     }
 
-    #popout-banner {
-        width: 322px;
+    .popout-banner {
+        width: 0;
     }
 	
 }

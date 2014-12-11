@@ -3,6 +3,7 @@
 }
 
 .ps-container > .ps-scrollbar-y-rail {
+	z-index: 1003;
 	display: none;
 	position: absolute;
 	/* please don't change 'position' */
@@ -13,6 +14,7 @@
 }
 
 .ps-container > .ps-scrollbar-x-rail {
+	z-index: 1003;
 	display: none;
 	position: absolute;
 	/* please don't change 'position' */
@@ -23,6 +25,7 @@
 }
 
 .ps-container > .ps-scrollbar-y-rail > .ps-scrollbar-y {
+	z-index: 1004;
 	position: absolute;
 	/* please don't change 'position' */
 	background-color: #000;
@@ -32,6 +35,7 @@
 }
 
 .ps-container > .ps-scrollbar-x-rail > .ps-scrollbar-x {
+	z-index: 1004;
 	position: absolute;
 	/* please don't change 'position' */
 	background-color: #000;

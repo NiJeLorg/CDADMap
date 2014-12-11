@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/Control.Geocoder.css' %}">	
 	<style type="text/css">
 	
-		#popout-banner {			
+		.popout-banner {			
 		    z-index: 1002;
 		    position: fixed;
 		    right: 462px;
@@ -50,32 +50,67 @@
 
 {% block body_block %}
 <!-- Popout-sidebar  -->
-<div id="popout-banner">
-	<p id="banner-text" class="banner-text">FILTERS</p>
+<div id="popout-wrapper" class="popout-wrapper">
+	<div id="popout-banner" class="popout-banner">
+		<p id="banner-text" class="banner-text"></p>
+	</div>
+	<div id="popout-content" class="popout-content always-visible">
+		<div class="right-bar-color"></div>
+	    <div class="popout-nav">
+	        <div id="popout-settings-content" class="popout-content">
+				<p>Settings</p>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget accumsan ipsum. Vivamus dui lacus, aliquam vel molestie eget, sollicitudin sed lectus. Sed iaculis, mauris ac congue lacinia, ante urna vulputate lacus, at dignissim orci purus rutrum velit. In pretium tincidunt dui et ultricies. In hac habitasse platea dictumst. Quisque vestibulum, nisl eget consequat pellentesque, lorem nulla condimentum nisi, nec pretium libero neque lobortis felis. Aliquam commodo ullamcorper dolor sit amet finibus.
+
+
+
+</p>
+	        </div>
+	        <div id="popout-info-content" class="popout-content">
+				<p>Info</p>
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget accumsan ipsum. Vivamus dui lacus, aliquam vel molestie eget, sollicitudin sed lectus. Sed iaculis, mauris ac congue lacinia, ante urna vulputate lacus, at dignissim orci purus rutrum velit. In pretium tincidunt dui et ultricies. In hac habitasse platea dictumst. Quisque vestibulum, nisl eget consequat pellentesque, lorem nulla condimentum nisi, nec pretium libero neque lobortis felis. Aliquam commodo ullamcorper dolor sit amet finibus.
+
+				Phasellus ac ipsum elementum sem dictum faucibus ac at erat. Mauris mollis aliquet pretium. Aliquam erat volutpat. Duis fringilla sed diam vel tempus. Integer sed eros et lectus egestas pulvinar. Quisque quis diam dolor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in posuere ipsum. Phasellus et consectetur mi. Fusce tellus justo, venenatis at magna sagittis, consequat blandit turpis. Vestibulum ut vestibulum ligula. Praesent ullamcorper dolor ut consectetur facilisis. Nulla vehicula nunc eget lacus suscipit convallis. Aenean pellentesque magna sed condimentum imperdiet. Etiam non ultrices justo.
+
+				Cras magna nunc, ultrices sit amet hendrerit sit amet, dapibus ac eros. Sed porttitor metus luctus aliquet iaculis. Proin dictum velit sit amet tellus condimentum, porta vehicula ante mollis. Pellentesque vel nibh sem. Sed porta congue neque sit amet egestas. Proin in quam vel tortor mattis elementum. Maecenas eget neque in ex euismod ullamcorper non eget enim.
+
+				Integer sed scelerisque lorem, ut ultricies ipsum. Pellentesque viverra vehicula sapien, id cursus nibh bibendum non. Nulla semper et risus at ullamcorper. Fusce velit est, tristique viverra fringilla imperdiet, elementum et nisl. Pellentesque vitae iaculis purus. Integer nec nibh tincidunt, lacinia odio nec, viverra sem. Praesent quis gravida felis. Maecenas a diam in nunc rutrum malesuada. Donec velit purus, imperdiet id molestie eu, molestie a ipsum. Nam tortor enim, dignissim at felis ac, semper luctus est. Curabitur non lobortis risus, at gravida libero. Quisque aliquet auctor felis, in elementum libero efficitur in. Phasellus ac efficitur magna, scelerisque dictum elit. Nam posuere, elit faucibus vulputate rutrum, orci mi suscipit sem, a sagittis eros magna sed nisl.
+
+				Nunc dictum magna a hendrerit aliquam. Nam ac feugiat odio. Suspendisse potenti. Phasellus ut nisi in lorem finibus iaculis a eu nunc. In hac habitasse platea dictumst. Mauris porta rutrum pellentesque. Maecenas euismod velit est, vitae euismod massa vulputate eget. Nulla id tristique ligula. In tristique, lectus sed accumsan volutpat, magna neque varius augue, in ornare est massa non tortor. Donec mattis semper ligula.
+
+				</p>
+			</div>
+	        <div id="popout-filters-content" class="popout-content">
+				<p>Filters</p>
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget accumsan ipsum. Vivamus dui lacus, aliquam vel molestie eget, sollicitudin sed lectus. Sed iaculis, mauris ac congue lacinia, ante urna vulputate lacus, at dignissim orci purus rutrum velit. In pretium tincidunt dui et ultricies. In hac habitasse platea dictumst. Quisque vestibulum, nisl eget consequat pellentesque, lorem nulla condimentum nisi, nec pretium libero neque lobortis felis. Aliquam commodo ullamcorper dolor sit amet finibus.
+
+				Phasellus ac ipsum elementum sem dictum faucibus ac at erat. Mauris mollis aliquet pretium. Aliquam erat volutpat. Duis fringilla sed diam vel tempus. Integer sed eros et lectus egestas pulvinar. Quisque quis diam dolor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in posuere ipsum. Phasellus et consectetur mi. Fusce tellus justo, venenatis at magna sagittis, consequat blandit turpis. Vestibulum ut vestibulum ligula. Praesent ullamcorper dolor ut consectetur facilisis. Nulla vehicula nunc eget lacus suscipit convallis. Aenean pellentesque magna sed condimentum imperdiet. Etiam non ultrices justo.
+
+				Cras magna nunc, ultrices sit amet hendrerit sit amet, dapibus ac eros. Sed porttitor metus luctus aliquet iaculis. Proin dictum velit sit amet tellus condimentum, porta vehicula ante mollis. Pellentesque vel nibh sem. Sed porta congue neque sit amet egestas. Proin in quam vel tortor mattis elementum. Maecenas eget neque in ex euismod ullamcorper non eget enim.
+
+				Integer sed scelerisque lorem, ut ultricies ipsum. Pellentesque viverra vehicula sapien, id cursus nibh bibendum non. Nulla semper et risus at ullamcorper. Fusce velit est, tristique viverra fringilla imperdiet, elementum et nisl. Pellentesque vitae iaculis purus. Integer nec nibh tincidunt, lacinia odio nec, viverra sem. Praesent quis gravida felis. Maecenas a diam in nunc rutrum malesuada. Donec velit purus, imperdiet id molestie eu, molestie a ipsum. Nam tortor enim, dignissim at felis ac, semper luctus est. Curabitur non lobortis risus, at gravida libero. Quisque aliquet auctor felis, in elementum libero efficitur in. Phasellus ac efficitur magna, scelerisque dictum elit. Nam posuere, elit faucibus vulputate rutrum, orci mi suscipit sem, a sagittis eros magna sed nisl.
+
+				Nunc dictum magna a hendrerit aliquam. Nam ac feugiat odio. Suspendisse potenti. Phasellus ut nisi in lorem finibus iaculis a eu nunc. In hac habitasse platea dictumst. Mauris porta rutrum pellentesque. Maecenas euismod velit est, vitae euismod massa vulputate eget. Nulla id tristique ligula. In tristique, lectus sed accumsan volutpat, magna neque varius augue, in ornare est massa non tortor. Donec mattis semper ligula.
+
+				</p>
+			</div>
+	        <div id="popout-about-content" class="popout-content">
+				<p>About</p>
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget accumsan ipsum. Vivamus dui lacus, aliquam vel molestie eget, sollicitudin sed lectus. Sed iaculis, mauris ac congue lacinia, ante urna vulputate lacus, at dignissim orci purus rutrum velit. In pretium tincidunt dui et ultricies. In hac habitasse platea dictumst. Quisque vestibulum, nisl eget consequat pellentesque, lorem nulla condimentum nisi, nec pretium libero neque lobortis felis. Aliquam commodo ullamcorper dolor sit amet finibus.
+
+				Phasellus ac ipsum elementum sem dictum faucibus ac at erat. Mauris mollis aliquet pretium. Aliquam erat volutpat. Duis fringilla sed diam vel tempus. Integer sed eros et lectus egestas pulvinar. Quisque quis diam dolor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in posuere ipsum. Phasellus et consectetur mi. Fusce tellus justo, venenatis at magna sagittis, consequat blandit turpis. Vestibulum ut vestibulum ligula. Praesent ullamcorper dolor ut consectetur facilisis. Nulla vehicula nunc eget lacus suscipit convallis. Aenean pellentesque magna sed condimentum imperdiet. Etiam non ultrices justo.
+
+				Cras magna nunc, ultrices sit amet hendrerit sit amet, dapibus ac eros. Sed porttitor metus luctus aliquet iaculis. Proin dictum velit sit amet tellus condimentum, porta vehicula ante mollis. Pellentesque vel nibh sem. Sed porta congue neque sit amet egestas. Proin in quam vel tortor mattis elementum. Maecenas eget neque in ex euismod ullamcorper non eget enim.
+
+				Integer sed scelerisque lorem, ut ultricies ipsum. Pellentesque viverra vehicula sapien, id cursus nibh bibendum non. Nulla semper et risus at ullamcorper. Fusce velit est, tristique viverra fringilla imperdiet, elementum et nisl. Pellentesque vitae iaculis purus. Integer nec nibh tincidunt, lacinia odio nec, viverra sem. Praesent quis gravida felis. Maecenas a diam in nunc rutrum malesuada. Donec velit purus, imperdiet id molestie eu, molestie a ipsum. Nam tortor enim, dignissim at felis ac, semper luctus est. Curabitur non lobortis risus, at gravida libero. Quisque aliquet auctor felis, in elementum libero efficitur in. Phasellus ac efficitur magna, scelerisque dictum elit. Nam posuere, elit faucibus vulputate rutrum, orci mi suscipit sem, a sagittis eros magna sed nisl.
+
+				Nunc dictum magna a hendrerit aliquam. Nam ac feugiat odio. Suspendisse potenti. Phasellus ut nisi in lorem finibus iaculis a eu nunc. In hac habitasse platea dictumst. Mauris porta rutrum pellentesque. Maecenas euismod velit est, vitae euismod massa vulputate eget. Nulla id tristique ligula. In tristique, lectus sed accumsan volutpat, magna neque varius augue, in ornare est massa non tortor. Donec mattis semper ligula.
+
+				</p>
+			</div>
+		</div>
+	</div>
 </div>
-<div id="popout-wrapper" class="always-visible">
-	<div class="right-bar-color"></div>
-    <ul class="popout-nav">
-        <li class="settings">
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas interdum sodales ligula eu rhoncus. Quisque et tincidunt nulla. Sed tristique posuere varius. Aliquam erat volutpat. Pellentesque iaculis fringilla libero id vulputate. Morbi consequat sagittis laoreet. Proin placerat diam vel turpis interdum, eget laoreet erat volutpat. Phasellus feugiat, erat et vestibulum aliquam, nibh nulla eleifend nulla, in fermentum odio sem sit amet libero. Nullam feugiat fermentum velit interdum pretium. Nullam ac orci diam. Etiam id laoreet felis. Aenean a maximus odio. Ut varius ante non ligula dapibus pharetra.
-
-Proin sit amet odio at elit semper maximus eget et sapien. Nunc tempus luctus pharetra. Integer eleifend congue pulvinar. Proin commodo metus in magna euismod vehicula. Suspendisse tempor eros eget nisi efficitur fermentum. Pellentesque ac sodales lectus. Aenean eu vehicula massa, aliquam sodales orci. Nunc mollis porttitor porta.
-
-Aenean rutrum ac leo ut tincidunt. Phasellus dictum arcu vel viverra aliquam. Duis mauris quam, fringilla et mollis quis, porta ac mi. Nam in sapien eget metus semper pharetra. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur tincidunt, purus non gravida tempor, tortor tortor venenatis orci, nec ultricies est mi sit amet elit. Suspendisse potenti. Donec dapibus pulvinar libero vitae fringilla. Fusce ut commodo arcu. Nam malesuada felis a nisi volutpat, ut suscipit leo sodales. Nunc non risus blandit, ultrices eros consequat, ultrices est. Vivamus non egestas sem. Vivamus elit mi, venenatis vitae elementum at, rhoncus at diam.
-
-Morbi ut efficitur metus, quis ullamcorper turpis. Donec eget interdum nisi, sit amet maximus dui. Aliquam semper libero ac dolor ornare volutpat. In non lorem lacinia, semper eros quis, mollis ligula. Integer libero eros, blandit et varius quis, interdum nec nunc. Quisque volutpat massa vestibulum, laoreet justo eu, faucibus enim. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-
-Donec id pulvinar lacus. Suspendisse elit sapien, gravida ac sem vel, elementum semper dui. Maecenas sed bibendum turpis. Sed blandit ex a vestibulum vehicula. Donec convallis quis tortor sed pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ac ornare dui, vitae facilisis erat. Proin dapibus tellus quis nisi venenatis congue. Sed et gravida velit. In sollicitudin enim tellus, eget rutrum ligula venenatis vel. Maecenas consectetur, justo eu ullamcorper fringilla, mi augue blandit purus, sit amet fermentum velit tortor id arcu. Vivamus gravida bibendum mi ac eleifend. Aenean hendrerit enim et iaculis maximus. Aenean ultrices eget velit mollis tempus.</p>
-        </li>
-        <li class="info">
-        </li>
-        <li class="filters">
-        </li>
-        <li class="about">
-        </li>
-    </ul>
-</div>
-<!-- /#sidebar-wrapper -->
+<!-- /#popout-wrapper-->
 
 <!-- Page Content -->
 <div id="map"></div>				
@@ -93,6 +128,6 @@ Donec id pulvinar lacus. Suspendisse elit sapien, gravida ac sem vel, elementum 
 	<script type="text/javascript" src="{% static 'cdadmap/js/CDADMap.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/application.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/perfect-scrollbar.js' %}"></script>
-	<script type="text/javascript" src="{% static 'cdadmap/js/popout-scrollbar.js' %}"></script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/popout.js' %}"></script>
 
 {% endblock %}
