@@ -1,0 +1,106 @@
+/*!
+ * Popup popout that includes settings, info, filters, and about 
+ */
+
+
+#popout-wrapper {
+    z-index: 1001;
+    position: fixed;
+    right: 442px;
+    top: 65px;
+	bottom: 16px;
+    width: 0;
+    margin-right: -302px;
+    overflow: hidden;
+    background: #595959;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+/* popout Styles */
+
+.banner-text {
+	padding-top: 4px;
+    font-family: 'Oswald';
+	font-size: 36px;
+    font-style: normal;
+    font-weight: normal;
+	text-align: center;
+	letter-spacing: 0.1em;
+    display: block;
+    text-decoration: none;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.popout-nav {
+    position: absolute;
+    top: 0;
+    width: 302px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.right-bar-color {
+	position: absolute;
+	right:0;
+	background-color: #e8c51d;
+	width: 8px;
+	height: 100%;
+	overflow-y: visible;
+}
+
+.popout-nav li {
+	text-align: left;
+	width: 262px;
+	margin: 20px;
+}
+
+.popout-nav li a {
+	padding-right: 20px;
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: normal;
+    display: block;
+    text-decoration: none;
+    color: #595959;
+	
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.popout-nav li a:hover {
+    text-decoration: none;
+    color: #d8d8d7;
+    /*background: rgba(255,255,255,0.2);*/
+}
+
+.popout-nav li a:active,
+.popout-nav li a:focus {
+    text-decoration: none;
+}
+
+.popout-nav li a:hover > .hover-color {
+	position: absolute;
+	right:0;
+	background-color: #e8c51d;
+	width: 4px;
+	height: 40px;
+}
+
+
+@media(min-width:768px) {
+	
+    #popout-wrapper {
+        width: 302px;
+    }
+
+    #popout-banner {
+        width: 322px;
+    }
+	
+}

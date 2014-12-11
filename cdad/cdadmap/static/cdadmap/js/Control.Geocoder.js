@@ -58,8 +58,12 @@
 			var className = 'leaflet-control-geocoder',
 			    container = L.DomUtil.create('div', className),
 				icon = L.DomUtil.create('div', 'leaflet-control-geocoder-icon', container),
+				dropdown = L.DomUtil.create('div', 'leaflet-control-geocoder-dropdown', container),
 			    form = this._form = L.DomUtil.create('form', className + '-form', container),
 			    input;
+
+			// add text to the dropdown
+			dropdown.innerHTML = '<p>ADDRESS <span class="caret"></span></p>';
 
 			this._map = map;
 			this._container = container;
@@ -99,6 +103,9 @@
 			} else {
 				this._expand();
 			}
+			
+			// added click to geocode
+			L.DomEvent.addListener(icon, 'click', this._geocode, this);
 
 			L.DomEvent.disableClickPropagation(container);
 

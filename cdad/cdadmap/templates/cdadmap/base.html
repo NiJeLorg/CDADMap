@@ -19,15 +19,15 @@
 		.settings > a > .settings-button {
 			display: inline-block;
 			margin-left: 12px;
-			margin-right: 3px;
-			width: 12px;
+			margin-right: 2px;
+			width: 14px;
 			height: 14px;
-			background-image: url({% static 'cdadmap/css/images/info-grey.png' %})
+			background-image: url({% static 'cdadmap/css/images/settings-grey.png' %})
 		}
 
 		.settings:hover > a > .settings-button,
 		.settings:focus > a > .settings-button {
-			background-image: url({% static 'cdadmap/css/images/info-white.png' %})
+			background-image: url({% static 'cdadmap/css/images/settings-white.png' %})
 		}
 
 		.info > a > .info-button {
@@ -61,7 +61,6 @@
 			display: inline-block;
 			margin-left: 12px;
 			margin-right: 2px;
-			margin-left: 8px;
 			width: 14px;
 			height: 14px;
 			background-image: url({% static 'cdadmap/css/images/about-grey.png' %})
@@ -70,6 +69,17 @@
 		.about:hover > a > .about-button,
 		.about:focus > a > .about-button {
 			background-image: url({% static 'cdadmap/css/images/about-white.png' %})
+		}
+		
+		.sidebar-nav li a:hover > .hover-triangle,
+		.sidebar-nav li a:active > .hover-triangle,
+		.sidebar-nav li a:focus > .hover-triangle {
+			display: inline-block;
+			float: left;
+			margin-top: 10px;
+			width: 14px;
+			height: 20px;
+			background-image: url({% static 'cdadmap/css/images/yellow-triangle.png' %})
 		}
 
 
@@ -102,16 +112,16 @@
 					<!-- Can add a brand here later if desired -->
                 </li>
                 <li class="settings">
-                    <a href="#">SETTINGS <span class="settings-button"></span><span class="hover-color"></span></a>
+                    <a href="#"><span class="hover-triangle"></span>SETTINGS <span class="settings-button"></span><span class="hover-color"></span></a>
                 </li>
                 <li class="info">
-                    <a href="#">INFO <span class="info-button"></span><span class="hover-color"></span></a> 
+                    <a href="#"><span class="hover-triangle"></span>INFO <span class="info-button"></span><span class="hover-color"></span></a> 
                 </li>
                 <li class="filters">
-                    <a href="#">FILTERS <span class="filters-button"></span><span class="hover-color"></span></a>
+                    <a href="#"><span class="hover-triangle"></span>FILTERS <span class="filters-button"></span><span class="hover-color"></span></a>
                 </li>
                 <li class="about">
-                    <a href="#">ABOUT <span class="about-button"></span><span class="hover-color"></span></a>
+                    <a href="#"><span class="hover-triangle"></span>ABOUT <span class="about-button"></span><span class="hover-color"></span></a>
                 </li>
             </ul>
         </div>

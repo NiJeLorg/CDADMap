@@ -25,7 +25,7 @@ function CDADMap() {
 
 
 	//load geocoder control
-	this.map.addControl(L.Control.geocoder({collapsed: false, placeholder:'', }));
+	this.map.addControl(L.Control.geocoder({collapsed: false, placeholder:'', geocoder:new L.Control.Geocoder.Google()}));
 	
 	//load scale bars
 	this.map.addControl(L.control.scale());

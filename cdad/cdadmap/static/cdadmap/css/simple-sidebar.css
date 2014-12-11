@@ -26,10 +26,6 @@ html, body, #map {
     transition: all 0.5s ease;
 }
 
-#wrapper.toggled {
-    padding-right: 140px;
-}
-
 #sidebar-wrapper {
     z-index: 1000;
     position: fixed;
@@ -43,15 +39,6 @@ html, body, #map {
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
-}
-
-#wrapper.toggled #sidebar-wrapper {
-    width: 140px;
-}
-
-#wrapper.toggled #map {
-    position: absolute;
-    margin-left: -140px;
 }
 
 /* Sidebar Styles */
@@ -83,18 +70,17 @@ html, body, #map {
     -moz-osx-font-smoothing: grayscale;
 }
 
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus,
 .sidebar-nav li a:hover {
     text-decoration: none;
     color: #d8d8d7;
     /*background: rgba(255,255,255,0.2);*/
 }
 
-.sidebar-nav li a:active,
-.sidebar-nav li a:focus {
-    text-decoration: none;
-}
-
-.sidebar-nav li a:hover > .hover-color {
+.sidebar-nav li a:hover > .hover-color,
+.sidebar-nav li a:active > .hover-color,
+.sidebar-nav li a:focus > .hover-color {
 	position: absolute;
 	right:0;
 	background-color: #e8c51d;
@@ -122,20 +108,8 @@ html, body, #map {
         padding-right: 140px;
     }
 
-    #wrapper.toggled {
-        padding-right: 0;
-    }
-
     #sidebar-wrapper {
         width: 140px;
     }
 
-    #wrapper.toggled #sidebar-wrapper {
-        width: 0;
-    }
-
-    #wrapper.toggled #map {
-        position: relative;
-        margin-left: 0;
-    }
 }

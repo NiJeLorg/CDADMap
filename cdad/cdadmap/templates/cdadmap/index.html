@@ -6,8 +6,41 @@
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/MarkerCluster.css' %}">	
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/MarkerCluster.Default.css' %}">	
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/Control.Geocoder.css' %}">	
+	<style type="text/css">
 	
-	
+		#popout-banner {			
+		    z-index: 1002;
+		    position: fixed;
+		    right: 462px;
+		    top: 5px;
+		    width: 0;
+			height: 77px;
+		    margin-right: -322px;
+			overflow: hidden;
+		    -webkit-transition: all 0.5s ease;
+		    -moz-transition: all 0.5s ease;
+		    -o-transition: all 0.5s ease;
+		    transition: all 0.5s ease;
+			background-image: url({% static 'cdadmap/css/images/yellow-banner.png' %})
+		}		
+
+		.settings > a > .settings-button {
+			display: inline-block;
+			margin-left: 12px;
+			margin-right: 2px;
+			width: 14px;
+			height: 14px;
+			background-image: url({% static 'cdadmap/css/images/settings-grey.png' %})
+		}
+
+		.settings:hover > a > .settings-button,
+		.settings:focus > a > .settings-button {
+			background-image: url({% static 'cdadmap/css/images/settings-white.png' %})
+		}
+				
+	</style>
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/popout-sidebar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/perfect-scrollbar.css' %}">
 	
 {% endblock %}
 
@@ -16,6 +49,34 @@
 	
 
 {% block body_block %}
+<!-- Popout-sidebar  -->
+<div id="popout-banner">
+	<p id="banner-text" class="banner-text">FILTERS</p>
+</div>
+<div id="popout-wrapper" class="always-visible">
+	<div class="right-bar-color"></div>
+    <ul class="popout-nav">
+        <li class="settings">
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas interdum sodales ligula eu rhoncus. Quisque et tincidunt nulla. Sed tristique posuere varius. Aliquam erat volutpat. Pellentesque iaculis fringilla libero id vulputate. Morbi consequat sagittis laoreet. Proin placerat diam vel turpis interdum, eget laoreet erat volutpat. Phasellus feugiat, erat et vestibulum aliquam, nibh nulla eleifend nulla, in fermentum odio sem sit amet libero. Nullam feugiat fermentum velit interdum pretium. Nullam ac orci diam. Etiam id laoreet felis. Aenean a maximus odio. Ut varius ante non ligula dapibus pharetra.
+
+Proin sit amet odio at elit semper maximus eget et sapien. Nunc tempus luctus pharetra. Integer eleifend congue pulvinar. Proin commodo metus in magna euismod vehicula. Suspendisse tempor eros eget nisi efficitur fermentum. Pellentesque ac sodales lectus. Aenean eu vehicula massa, aliquam sodales orci. Nunc mollis porttitor porta.
+
+Aenean rutrum ac leo ut tincidunt. Phasellus dictum arcu vel viverra aliquam. Duis mauris quam, fringilla et mollis quis, porta ac mi. Nam in sapien eget metus semper pharetra. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Curabitur tincidunt, purus non gravida tempor, tortor tortor venenatis orci, nec ultricies est mi sit amet elit. Suspendisse potenti. Donec dapibus pulvinar libero vitae fringilla. Fusce ut commodo arcu. Nam malesuada felis a nisi volutpat, ut suscipit leo sodales. Nunc non risus blandit, ultrices eros consequat, ultrices est. Vivamus non egestas sem. Vivamus elit mi, venenatis vitae elementum at, rhoncus at diam.
+
+Morbi ut efficitur metus, quis ullamcorper turpis. Donec eget interdum nisi, sit amet maximus dui. Aliquam semper libero ac dolor ornare volutpat. In non lorem lacinia, semper eros quis, mollis ligula. Integer libero eros, blandit et varius quis, interdum nec nunc. Quisque volutpat massa vestibulum, laoreet justo eu, faucibus enim. Interdum et malesuada fames ac ante ipsum primis in faucibus.
+
+Donec id pulvinar lacus. Suspendisse elit sapien, gravida ac sem vel, elementum semper dui. Maecenas sed bibendum turpis. Sed blandit ex a vestibulum vehicula. Donec convallis quis tortor sed pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ac ornare dui, vitae facilisis erat. Proin dapibus tellus quis nisi venenatis congue. Sed et gravida velit. In sollicitudin enim tellus, eget rutrum ligula venenatis vel. Maecenas consectetur, justo eu ullamcorper fringilla, mi augue blandit purus, sit amet fermentum velit tortor id arcu. Vivamus gravida bibendum mi ac eleifend. Aenean hendrerit enim et iaculis maximus. Aenean ultrices eget velit mollis tempus.</p>
+        </li>
+        <li class="info">
+        </li>
+        <li class="filters">
+        </li>
+        <li class="about">
+        </li>
+    </ul>
+</div>
+<!-- /#sidebar-wrapper -->
+
 <!-- Page Content -->
 <div id="map"></div>				
 <!-- /#page-content-wrapper -->
@@ -31,5 +92,7 @@
 	<script type="text/javascript" src="{% static 'cdadmap/js/Control.Geocoder.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/CDADMap.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/application.js' %}"></script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/perfect-scrollbar.js' %}"></script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/popout-scrollbar.js' %}"></script>
 
 {% endblock %}
