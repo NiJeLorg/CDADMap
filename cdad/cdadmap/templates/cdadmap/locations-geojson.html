@@ -1,0 +1,25 @@
+{% load staticfiles %}
+	{
+		"type": "FeatureCollection",
+    	"features": [ {% for location in locations %}
+			{
+			    "type": "Feature",
+			    "properties": {
+					"idlocation": "{{ location.idlocation }}",
+			        "Organization_Name": "{{ location.Organization_Name }}",
+			        "Address": "{{ location.Address }}",
+			        "Address2": "{{ location.Address2 }}",
+			        "City": "{{ location.City }}",
+			        "ZipCode": "{{ location.ZipCode }}",
+			        "State": "{{ location.State }}",
+			        "MailingAddress": "{{ location.MailingAddress }}",
+			        "Activity": "{{ location.Activity }}",
+					"iconUrl": "{% static 'cdadmap/css/images/cdad-marker.png' %}"
+			    },
+			    "geometry": {
+			        "type": "Point",
+			        "coordinates": [ {{ location.Lon }}, {{ location.Lat }} ]
+			    }
+			}{% if forloop.last %}{% else %},{% endif %}{% endfor %}
+	    ]
+	}

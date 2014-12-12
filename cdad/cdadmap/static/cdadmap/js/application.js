@@ -8,7 +8,7 @@
  */
 var map_popups = [];
 var mainLayer = null;
-var SAMPLE_POINT = null;
+var LOCATIONS = null;
 var SAMPLE_LAYER = null;
 var clusterLocations = null;
 var MY_MAP = null;
@@ -18,7 +18,8 @@ $().ready(new function(){
 	
     //get screen measurements
     var myMap = new CDADMap();
-    //myMap.loadMarkers();
+    myMap.loadLocations();
+	myMap.showLocationsOnPageLoad();
     MY_MAP = myMap;	
 		
 });

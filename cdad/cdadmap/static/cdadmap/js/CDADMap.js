@@ -19,11 +19,6 @@ function CDADMap() {
 	
 	this.map.addLayer(CartoDBLayer);
 	
-		
-    //load logo in lower left corner
-    //$("#citydigits-charts").attr({'class':'citydigits-charts'});
-
-
 	//load geocoder control
 	this.map.addControl(L.Control.geocoder({collapsed: false, placeholder:'', geocoder:new L.Control.Geocoder.Google()}));
 	
@@ -34,13 +29,16 @@ function CDADMap() {
     this.map.doubleClickZoom.enable();
     this.map.scrollWheelZoom.enable();
 	
-	// placeholder for points
-	this.SAMPLE_POINT = null;
+	// create empty container for locations
+	this.LOCATIONS = null;
 	
 	// placeholder for layers
 	this.SAMPLE_LAYER = null;
 	
-	clusterLocations = L.markerClusterGroup();
+	clusterLocations = L.markerClusterGroup({ 
+		showCoverageOnHover: false, 
+		maxClusterRadius: 40
+	});
 	
 	// popup container to catch on hover popups	
 	this.popup = new L.Popup({ 
@@ -171,48 +169,32 @@ CDADMap.onEachFeatureFor_SAMPLE_POINT = function(feature, layer){
 		// close all open popups
 		MY_MAP.map.closePopup();
 		
-		var lat = feature.geometry.coordinates[1];
-		var lng = feature.geometry.coordinates[0];
-		
-		// set latlng variable
-		var latlng = L.latLng(lat, lng);
-		// bind popup with data to the feature
-		MY_MAP.popup2.setLatLng(latlng);
 
-		var header = '<div class="map-popup"><a href="/cashcity/media/image/' + feature.properties.id + '/" style="text-decoration:none; color:inherit"><h4 class="text-left">' + feature.properties.section + '</h4>';
-		var mediaBox = '<div style="height: 280px; width: 280px; margin: auto; overflow: hidden;"><img src="' + feature.properties.image + '"></div>';
-		var title = '<div style="margin-top: 5px"><p class="text-left">' + feature.properties.name + '</p></div></a>';
-		var footer = '</div>';
-				
-		var popupContent = header + mediaBox + title + footer;
-		
-		MY_MAP.popup2.setContent(popupContent);
-		MY_MAP.popup2.openOn(MY_MAP.map);
 	});
 	
 }
 
 CDADMap.prototype.loadLocations = function(){
-				
-	this.SAMPLE_POINT = null;
+					
+	this.LOCATIONS = null;
 
 	// define layer styles and oneachfeature popup styling
-	this.SAMPLE_POINT = L.geoJson(locationsJSON, {
-		pointToLayer: CDADMap.getStyleFor_SAMPLE_POINT,
-		onEachFeature: CDADMap.onEachFeatureFor_SAMPLE_POINT
+	this.LOCATIONS = L.geoJson(locations, {
+		pointToLayer: CDADMap.getStyleFor_LOCATIONS,
+		onEachFeature: CDADMap.onEachFeatureFor_LOCATIONS
 	});
 	
 	
 	// add media to cluster library
-	clusterLocations.addLayer(this.SAMPLE_POINT);
+	clusterLocations.addLayer(this.LOCATIONS);
 	
 }
 
-CDADMap.getStyleFor_SAMPLE_POINT = function(feature, latlng){
+CDADMap.getStyleFor_LOCATIONS = function(feature, latlng){
 	var locationIcon = L.icon({
 	    iconUrl: feature.properties.iconUrl,
-	    iconSize: [42, 50],
-		iconAnchor: [17, 38], 
+	    iconSize: [24, 32],
+		iconAnchor: [12, 30], 
 	});
 
 	return L.marker(latlng, {icon: locationIcon});
@@ -241,10 +223,16 @@ CDADMap.loadLayerFor = function(layerId){
 
 CDADMap.prototype.showLocationsOnPageLoad = function(){
 	
-	// add points to map			
-	LOC1 = this.LOC1_PAWN_SHOPS.addTo(this.map);
-	LOC2 = this.LOC2_CHECK_CASHING.addTo(this.map);
-	LOC3 = this.LOC3_WIRE_TRANSFER.addTo(this.map);
+	// set on mouseover interaction for cluster group
+	clusterLocations.on('clustermouseover', function (ev) {
+		// only have on mouseover work if popup2 isn't open
+		if (!MY_MAP.popup._isOpen) {
+			// close all popups first
+			MY_MAP.map.closePopup();
+		}
+	});
+
+	clusterLocations.addTo(this.map);
 	
 }
 
