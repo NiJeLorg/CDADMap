@@ -163,5 +163,77 @@ $( document ).ready(function() {
 				
 	});
 	
+	// map background button group
+	// ensure the map buttion is active on page load
+	$( "#CartoDBLayer" ).addClass('active');
+	
+	$( "#CartoDBLayer" ).click(function() {
+		if (!$( "#CartoDBLayer" ).hasClass( "active" )) {
+			$( "#CartoDBLayer").addClass('active');
+			$( "#osmTileSat" ).removeClass('active');
+			$( "#osmTileMap" ).removeClass('active');
+			CDADMap.switchMaps('CartoDBLayer');			
+		}
+	});
+
+	$( "#osmTileSat" ).click(function() {
+		if (!$( "#osmTileSat" ).hasClass( "active" )) {
+			$( "#osmTileSat" ).addClass('active');
+			$( "#CartoDBLayer" ).removeClass('active');
+			$( "#osmTileMap" ).removeClass('active');
+			CDADMap.switchMaps('osmTileSat');			
+		}
+	});
+
+	$( "#osmTileMap" ).click(function() {
+		if (!$( "#osmTileMap" ).hasClass( "active" )) {
+			$( "#osmTileMap" ).addClass('active');
+			$( "#CartoDBLayer" ).removeClass('active');
+			$( "#osmTileSat" ).removeClass('active');
+			CDADMap.switchMaps('osmTileMap');			
+		}
+	});
+	
+	
+	// toggle off and on map background layers in settings
+	$( "#CouncilDistrictBoundaries" ).click(function() {
+		if ($( "#CouncilDistrictBoundaries" ).hasClass( "toggle-off" )) {
+			$( "#CouncilDistrictBoundaries" ).removeClass('toggle-off');
+			$( "#CouncilDistrictBoundaries" ).addClass('toggle-on');
+			CDADMap.loadLayerFor('CouncilDistrictBoundaries');			
+		} else {
+			$( "#CouncilDistrictBoundaries" ).removeClass('toggle-on');			
+			$( "#CouncilDistrictBoundaries" ).addClass('toggle-off');
+			CDADMap.removeLayerFor('CouncilDistrictBoundaries');
+		}
+	});
+	
+	$( "#NeighborhoodBoundaries" ).click(function() {
+		if ($( "#NeighborhoodBoundaries" ).hasClass( "toggle-off" )) {
+			$( "#NeighborhoodBoundaries" ).removeClass('toggle-off');
+			$( "#NeighborhoodBoundaries" ).addClass('toggle-on');
+			CDADMap.loadLayerFor('NeighborhoodBoundaries');			
+		} else {
+			$( "#NeighborhoodBoundaries" ).removeClass('toggle-on');			
+			$( "#NeighborhoodBoundaries" ).addClass('toggle-off');
+			CDADMap.removeLayerFor('NeighborhoodBoundaries');
+		}
+	});
+	
+	$( "#ZipCodeBoundaries" ).click(function() {
+		if ($( "#ZipCodeBoundaries" ).hasClass( "toggle-off" )) {
+			$( "#ZipCodeBoundaries" ).removeClass('toggle-off');
+			$( "#ZipCodeBoundaries" ).addClass('toggle-on');
+			CDADMap.loadLayerFor('ZipCodeBoundaries');			
+		} else {
+			$( "#ZipCodeBoundaries" ).removeClass('toggle-on');			
+			$( "#ZipCodeBoundaries" ).addClass('toggle-off');
+			CDADMap.removeLayerFor('ZipCodeBoundaries');
+		}
+	});
+	
+	
+	
+	
 	
 });

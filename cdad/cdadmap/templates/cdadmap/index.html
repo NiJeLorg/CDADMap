@@ -24,18 +24,22 @@
 			background-image: url({% static 'cdadmap/css/images/yellow-banner.png' %})
 		}		
 
-		.settings > a > .settings-button {
+		.toggle-off {
 			display: inline-block;
-			margin-left: 12px;
-			margin-right: 2px;
-			width: 14px;
-			height: 14px;
-			background-image: url({% static 'cdadmap/css/images/settings-grey.png' %})
+			float: right;
+			margin-top: 2px;
+			width: 30px;
+			height: 15px;
+			background-image: url({% static 'cdadmap/css/images/toggle-off.png' %})
 		}
 
-		.settings:hover > a > .settings-button,
-		.settings:focus > a > .settings-button {
-			background-image: url({% static 'cdadmap/css/images/settings-white.png' %})
+		.toggle-on {
+			display: inline-block;
+			float: right;
+			margin-top: 2px;
+			width: 30px;
+			height: 15px;
+			background-image: url({% static 'cdadmap/css/images/toggle-on.png' %})
 		}
 				
 	</style>
@@ -58,55 +62,27 @@
 		<div class="right-bar-color"></div>
 	    <div class="popout-nav">
 	        <div id="popout-settings-content" class="popout-content">
-				<p>Settings</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget accumsan ipsum. Vivamus dui lacus, aliquam vel molestie eget, sollicitudin sed lectus. Sed iaculis, mauris ac congue lacinia, ante urna vulputate lacus, at dignissim orci purus rutrum velit. In pretium tincidunt dui et ultricies. In hac habitasse platea dictumst. Quisque vestibulum, nisl eget consequat pellentesque, lorem nulla condimentum nisi, nec pretium libero neque lobortis felis. Aliquam commodo ullamcorper dolor sit amet finibus.
-
-
-
-</p>
+				<div class="btn-group btn-group-justified " role="group" aria-label="Change Background Map">
+				  <div class="btn-group" role="group">
+				    <button id="CartoDBLayer" type="button" class="btn btn-default">MAP</button>
+				  </div>
+				  <div class="btn-group" role="group">
+				    <button id="osmTileSat" type="button" class="btn btn-default">SATELLITE</button>
+				  </div>
+				  <div class="btn-group" role="group">
+				    <button id="osmTileMap" type="button" class="btn btn-default">HYBRID</button>
+				  </div>
+				</div>
+				<ul class="list-group toggle-maps">
+				  <li class="list-group-item">COUNCIL DISTRICT BOUNDARIES <span id="CouncilDistrictBoundaries" class="toggle-off"></span></li>
+				  <li class="list-group-item">NEIGHBORHOOD BOUNDARIES <span id="NeighborhoodBoundaries" class="toggle-off"></span></li>
+				  <li class="list-group-item">ZIP CODE BOUNDARIES <span id="ZipCodeBoundaries" class="toggle-off"></span></li>
+				  <li class="list-group-item">CDO & BLOCK CLUB SERVICE AREAS <span id="CDOBoundaries" class="toggle-off"></span></li>
+				</ul>
 	        </div>
-	        <div id="popout-info-content" class="popout-content">
-				<p>Info</p>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget accumsan ipsum. Vivamus dui lacus, aliquam vel molestie eget, sollicitudin sed lectus. Sed iaculis, mauris ac congue lacinia, ante urna vulputate lacus, at dignissim orci purus rutrum velit. In pretium tincidunt dui et ultricies. In hac habitasse platea dictumst. Quisque vestibulum, nisl eget consequat pellentesque, lorem nulla condimentum nisi, nec pretium libero neque lobortis felis. Aliquam commodo ullamcorper dolor sit amet finibus.
-
-				Phasellus ac ipsum elementum sem dictum faucibus ac at erat. Mauris mollis aliquet pretium. Aliquam erat volutpat. Duis fringilla sed diam vel tempus. Integer sed eros et lectus egestas pulvinar. Quisque quis diam dolor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in posuere ipsum. Phasellus et consectetur mi. Fusce tellus justo, venenatis at magna sagittis, consequat blandit turpis. Vestibulum ut vestibulum ligula. Praesent ullamcorper dolor ut consectetur facilisis. Nulla vehicula nunc eget lacus suscipit convallis. Aenean pellentesque magna sed condimentum imperdiet. Etiam non ultrices justo.
-
-				Cras magna nunc, ultrices sit amet hendrerit sit amet, dapibus ac eros. Sed porttitor metus luctus aliquet iaculis. Proin dictum velit sit amet tellus condimentum, porta vehicula ante mollis. Pellentesque vel nibh sem. Sed porta congue neque sit amet egestas. Proin in quam vel tortor mattis elementum. Maecenas eget neque in ex euismod ullamcorper non eget enim.
-
-				Integer sed scelerisque lorem, ut ultricies ipsum. Pellentesque viverra vehicula sapien, id cursus nibh bibendum non. Nulla semper et risus at ullamcorper. Fusce velit est, tristique viverra fringilla imperdiet, elementum et nisl. Pellentesque vitae iaculis purus. Integer nec nibh tincidunt, lacinia odio nec, viverra sem. Praesent quis gravida felis. Maecenas a diam in nunc rutrum malesuada. Donec velit purus, imperdiet id molestie eu, molestie a ipsum. Nam tortor enim, dignissim at felis ac, semper luctus est. Curabitur non lobortis risus, at gravida libero. Quisque aliquet auctor felis, in elementum libero efficitur in. Phasellus ac efficitur magna, scelerisque dictum elit. Nam posuere, elit faucibus vulputate rutrum, orci mi suscipit sem, a sagittis eros magna sed nisl.
-
-				Nunc dictum magna a hendrerit aliquam. Nam ac feugiat odio. Suspendisse potenti. Phasellus ut nisi in lorem finibus iaculis a eu nunc. In hac habitasse platea dictumst. Mauris porta rutrum pellentesque. Maecenas euismod velit est, vitae euismod massa vulputate eget. Nulla id tristique ligula. In tristique, lectus sed accumsan volutpat, magna neque varius augue, in ornare est massa non tortor. Donec mattis semper ligula.
-
-				</p>
-			</div>
-	        <div id="popout-filters-content" class="popout-content">
-				<p>Filters</p>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget accumsan ipsum. Vivamus dui lacus, aliquam vel molestie eget, sollicitudin sed lectus. Sed iaculis, mauris ac congue lacinia, ante urna vulputate lacus, at dignissim orci purus rutrum velit. In pretium tincidunt dui et ultricies. In hac habitasse platea dictumst. Quisque vestibulum, nisl eget consequat pellentesque, lorem nulla condimentum nisi, nec pretium libero neque lobortis felis. Aliquam commodo ullamcorper dolor sit amet finibus.
-
-				Phasellus ac ipsum elementum sem dictum faucibus ac at erat. Mauris mollis aliquet pretium. Aliquam erat volutpat. Duis fringilla sed diam vel tempus. Integer sed eros et lectus egestas pulvinar. Quisque quis diam dolor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in posuere ipsum. Phasellus et consectetur mi. Fusce tellus justo, venenatis at magna sagittis, consequat blandit turpis. Vestibulum ut vestibulum ligula. Praesent ullamcorper dolor ut consectetur facilisis. Nulla vehicula nunc eget lacus suscipit convallis. Aenean pellentesque magna sed condimentum imperdiet. Etiam non ultrices justo.
-
-				Cras magna nunc, ultrices sit amet hendrerit sit amet, dapibus ac eros. Sed porttitor metus luctus aliquet iaculis. Proin dictum velit sit amet tellus condimentum, porta vehicula ante mollis. Pellentesque vel nibh sem. Sed porta congue neque sit amet egestas. Proin in quam vel tortor mattis elementum. Maecenas eget neque in ex euismod ullamcorper non eget enim.
-
-				Integer sed scelerisque lorem, ut ultricies ipsum. Pellentesque viverra vehicula sapien, id cursus nibh bibendum non. Nulla semper et risus at ullamcorper. Fusce velit est, tristique viverra fringilla imperdiet, elementum et nisl. Pellentesque vitae iaculis purus. Integer nec nibh tincidunt, lacinia odio nec, viverra sem. Praesent quis gravida felis. Maecenas a diam in nunc rutrum malesuada. Donec velit purus, imperdiet id molestie eu, molestie a ipsum. Nam tortor enim, dignissim at felis ac, semper luctus est. Curabitur non lobortis risus, at gravida libero. Quisque aliquet auctor felis, in elementum libero efficitur in. Phasellus ac efficitur magna, scelerisque dictum elit. Nam posuere, elit faucibus vulputate rutrum, orci mi suscipit sem, a sagittis eros magna sed nisl.
-
-				Nunc dictum magna a hendrerit aliquam. Nam ac feugiat odio. Suspendisse potenti. Phasellus ut nisi in lorem finibus iaculis a eu nunc. In hac habitasse platea dictumst. Mauris porta rutrum pellentesque. Maecenas euismod velit est, vitae euismod massa vulputate eget. Nulla id tristique ligula. In tristique, lectus sed accumsan volutpat, magna neque varius augue, in ornare est massa non tortor. Donec mattis semper ligula.
-
-				</p>
-			</div>
-	        <div id="popout-about-content" class="popout-content">
-				<p>About</p>
-								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget accumsan ipsum. Vivamus dui lacus, aliquam vel molestie eget, sollicitudin sed lectus. Sed iaculis, mauris ac congue lacinia, ante urna vulputate lacus, at dignissim orci purus rutrum velit. In pretium tincidunt dui et ultricies. In hac habitasse platea dictumst. Quisque vestibulum, nisl eget consequat pellentesque, lorem nulla condimentum nisi, nec pretium libero neque lobortis felis. Aliquam commodo ullamcorper dolor sit amet finibus.
-
-				Phasellus ac ipsum elementum sem dictum faucibus ac at erat. Mauris mollis aliquet pretium. Aliquam erat volutpat. Duis fringilla sed diam vel tempus. Integer sed eros et lectus egestas pulvinar. Quisque quis diam dolor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis in posuere ipsum. Phasellus et consectetur mi. Fusce tellus justo, venenatis at magna sagittis, consequat blandit turpis. Vestibulum ut vestibulum ligula. Praesent ullamcorper dolor ut consectetur facilisis. Nulla vehicula nunc eget lacus suscipit convallis. Aenean pellentesque magna sed condimentum imperdiet. Etiam non ultrices justo.
-
-				Cras magna nunc, ultrices sit amet hendrerit sit amet, dapibus ac eros. Sed porttitor metus luctus aliquet iaculis. Proin dictum velit sit amet tellus condimentum, porta vehicula ante mollis. Pellentesque vel nibh sem. Sed porta congue neque sit amet egestas. Proin in quam vel tortor mattis elementum. Maecenas eget neque in ex euismod ullamcorper non eget enim.
-
-				Integer sed scelerisque lorem, ut ultricies ipsum. Pellentesque viverra vehicula sapien, id cursus nibh bibendum non. Nulla semper et risus at ullamcorper. Fusce velit est, tristique viverra fringilla imperdiet, elementum et nisl. Pellentesque vitae iaculis purus. Integer nec nibh tincidunt, lacinia odio nec, viverra sem. Praesent quis gravida felis. Maecenas a diam in nunc rutrum malesuada. Donec velit purus, imperdiet id molestie eu, molestie a ipsum. Nam tortor enim, dignissim at felis ac, semper luctus est. Curabitur non lobortis risus, at gravida libero. Quisque aliquet auctor felis, in elementum libero efficitur in. Phasellus ac efficitur magna, scelerisque dictum elit. Nam posuere, elit faucibus vulputate rutrum, orci mi suscipit sem, a sagittis eros magna sed nisl.
-
-				Nunc dictum magna a hendrerit aliquam. Nam ac feugiat odio. Suspendisse potenti. Phasellus ut nisi in lorem finibus iaculis a eu nunc. In hac habitasse platea dictumst. Mauris porta rutrum pellentesque. Maecenas euismod velit est, vitae euismod massa vulputate eget. Nulla id tristique ligula. In tristique, lectus sed accumsan volutpat, magna neque varius augue, in ornare est massa non tortor. Donec mattis semper ligula.
-
-				</p>
-			</div>
+	        <div id="popout-info-content" class="popout-content"></div>
+	        <div id="popout-filters-content" class="popout-content"></div>
+	        <div id="popout-about-content" class="popout-content"></div>
 		</div>
 	</div>
 </div>
@@ -119,9 +95,12 @@
 
 
 {% block js_block %}
-	<!-- create locations geojson -->
+	<!-- create locations geojson and include the topojson layers-->
 	<script type="text/javascript">
 		var locations = {% include 'cdadmap/locations-geojson.html' %};
+		var cdblayer = "{% static 'cdadmap/topojsons/detroit_city_council_district_boundaries.json' %}";	
+		var nblayer = "{% static 'cdadmap/topojsons/detroit_neighborhood_boundaries.json' %}";	
+		var zcblayer = "{% static 'cdadmap/topojsons/detroit_zip_codes.json' %}";	
 	</script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/d3.min.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/leaflet.js' %}"></script>

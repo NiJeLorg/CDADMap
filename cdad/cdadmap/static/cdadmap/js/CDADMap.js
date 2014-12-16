@@ -2,22 +2,34 @@
 * Functions to create a generic City Digits map 
 */
 
+// initialize map
 function CDADMap() {
 	
     //where detroit is 42.377410, -83.093719
     this.map = new L.Map('map', {
 		minZoom:10,
 		maxZoom:17,
-    	center: [42.377410, -83.093719],
-   	 	zoom: 12,
+    	center: [42.377410, -83.043719],
+   	 	zoom: 11,
 	});
 	
 	// add CartoDB tiles
-	var CartoDBLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{
+	this.CartoDBLayer = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{
 	  attribution: 'Map Data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> Contributors, Map Tiles &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
 	});
 	
-	this.map.addLayer(CartoDBLayer);
+	// define areial tiles for future use
+	this.osmTileSat = L.tileLayer('http://otile4.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg', {
+	    attribution: '&copy; <a href="http://developer.mapquest.com/web/products/open/map">MapQuest Open Aerial</a>'
+	});
+	
+	// define Mapquest tiles for future use
+	this.osmTileMap = L.tileLayer('http://otile4.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg', {
+	    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors; Map Tiles &copy;  <a href="http://developer.mapquest.com/web/products/open/map">MapQuest</a>'
+	});
+	
+	// add cartoDB tiles to start
+	this.map.addLayer(this.CartoDBLayer);
 	
 	//load geocoder control
 	this.map.addControl(L.Control.geocoder({collapsed: false, placeholder:'', geocoder:new L.Control.Geocoder.Google()}));
@@ -32,9 +44,13 @@ function CDADMap() {
 	// create empty container for locations
 	this.LOCATIONS = null;
 	
-	// placeholder for layers
-	this.SAMPLE_LAYER = null;
+	// empty containers for ohter layers 
+	this.CDBLAYER = null;
+	this.NBLAYER = null;
+	this.ZCBLAYER = null;
+	this.CDOBCLAYER = null;
 	
+	// marker cluster options
 	clusterLocations = L.markerClusterGroup({ 
 		showCoverageOnHover: false, 
 		maxClusterRadius: 40
@@ -42,65 +58,160 @@ function CDADMap() {
 	
 	// popup container to catch on hover popups	
 	this.popup = new L.Popup({ 
+		autoPan: false, 
 		maxWidth: 300,
-		minWidth: 200, 
-		minHeight: 30, 
+		minWidth: 100, 
+		minHeight: 30,
+		closeButton:true 
 	});
 	
 }
 
 
-CDADMap.onEachFeature_SAMPLE_LAYER = function(feature,layer){	
+// map switcher
+CDADMap.switchMaps = function (id){
+	
+	// remove all basemap layers if they exist
+	if (MY_MAP.map.hasLayer(MY_MAP.CartoDBLayer)) {
+		MY_MAP.map.removeLayer(MY_MAP.CartoDBLayer);
+	}
+
+	if (MY_MAP.map.hasLayer(MY_MAP.osmTileSat)) {
+		MY_MAP.map.removeLayer(MY_MAP.osmTileSat);
+	}
+
+	if (MY_MAP.map.hasLayer(MY_MAP.osmTileMap)) {
+		MY_MAP.map.removeLayer(MY_MAP.osmTileMap);
+	}
+	
+	if (id == 'CartoDBLayer') {
+		MY_MAP.map.addLayer(MY_MAP.CartoDBLayer);
+	} else if (id == 'osmTileSat') {
+		MY_MAP.map.addLayer(MY_MAP.osmTileSat);
+	} else if (id == 'osmTileMap') {
+		MY_MAP.map.addLayer(MY_MAP.osmTileMap);		
+	}
+	
+			
+}
+
+
+
+CDADMap.onEachFeature_CDBLAYER = function(feature,layer){	
 	var highlight = {
-	    weight: 3,
+	    weight: 4,
 	    opacity: 1
 	};
 	var noHighlight = {
-        weight: 1,
-        opacity: .1
+        weight: 2,
+        opacity: 0.75
 	};
 	
     //add on hover -- same on hover and mousemove for each layer
     layer.on('mouseover', function(ev) {
-		// only have on mouseover work if popup2 isn't open
-		
-    	MY_MAP.popup.setLatLng(MY_MAP.map.layerPointToLatLng(ev.layerPoint));
-		MY_MAP.popup.setContent('<div class="rollover-tooltip">'+feature.properties.Name + '</div>');
-	
-		//display popup
-        if (!MY_MAP.popup._isOpen && ($.inArray(feature.properties.Name,open_tooltips)<0)){
-            MY_MAP.popup.openOn(MY_MAP.map);
-        }else{
-            MY_MAP.map.closePopup();
-        }			
 		
 		//highlight polygon
 		layer.setStyle(highlight);		
 		
     });
-		
-    layer.on('mousemove', function(ev) {
-		
-        //get lat/long
-        if(($.inArray(feature.properties.Name,open_tooltips)<0)){
-			MY_MAP.popup.setLatLng(MY_MAP.map.layerPointToLatLng(ev.layerPoint));
-			MY_MAP.popup.setContent('<div class="rollover-tooltip">'+feature.properties.Name + '</div>');
-    	}
-
-        //display popup
-		if (!MY_MAP.popup._isOpen && ($.inArray(feature.properties.Name,open_tooltips)<0)){
-			MY_MAP.popup.openOn(MY_MAP.map);
-		}			
-
-    });
+	
 	
     layer.on('mouseout', function(ev) {
 		//remove highlight for polygon
-		layer.setStyle(noHighlight);		
+		layer.setStyle(noHighlight);
+		
     });	
 	
+	// add on click popups for each layer -- these will be different
+	layer.on("click",function(ev){
+		// close all open popups
+		MY_MAP.map.closePopup();
+		
+		// bind popup with data to the feature
+		MY_MAP.popup.setLatLng(MY_MAP.map.layerPointToLatLng(ev.layerPoint));
+		MY_MAP.popup.setContent('<div class="rollover-tooltip">City Council District: '+ feature.id + '</div>');
+		MY_MAP.popup.openOn(MY_MAP.map);
+	});
 	
 }
+
+CDADMap.onEachFeature_NBLAYER = function(feature,layer){	
+	var highlight = {
+	    weight: 4,
+	    opacity: 1
+	};
+	var noHighlight = {
+        weight: 2,
+        opacity: 0.75
+	};
+	
+    //add on hover -- same on hover and mousemove for each layer
+    layer.on('mouseover', function(ev) {
+		
+		//highlight polygon
+		layer.setStyle(highlight);		
+		
+    });
+	
+	
+    layer.on('mouseout', function(ev) {
+		//remove highlight for polygon
+		layer.setStyle(noHighlight);
+		
+    });	
+	
+	// add on click popups for each layer -- these will be different
+	layer.on("click",function(ev){
+		// close all open popups
+		MY_MAP.map.closePopup();
+		
+		// bind popup with data to the feature
+		MY_MAP.popup.setLatLng(MY_MAP.map.layerPointToLatLng(ev.layerPoint));
+		MY_MAP.popup.setContent('<div class="rollover-tooltip">Neighborhood Name: '+ feature.id + '</div>');
+		MY_MAP.popup.openOn(MY_MAP.map);
+	});
+	
+}
+
+
+CDADMap.onEachFeature_ZCBLAYER = function(feature,layer){	
+	var highlight = {
+	    weight: 4,
+	    opacity: 1
+	};
+	var noHighlight = {
+        weight: 2,
+        opacity: 0.75
+	};
+	
+    //add on hover -- same on hover and mousemove for each layer
+    layer.on('mouseover', function(ev) {
+		
+		//highlight polygon
+		layer.setStyle(highlight);		
+		
+    });
+	
+	
+    layer.on('mouseout', function(ev) {
+		//remove highlight for polygon
+		layer.setStyle(noHighlight);
+		
+    });	
+	
+	// add on click popups for each layer -- these will be different
+	layer.on("click",function(ev){
+		// close all open popups
+		MY_MAP.map.closePopup();
+		
+		// bind popup with data to the feature
+		MY_MAP.popup.setLatLng(MY_MAP.map.layerPointToLatLng(ev.layerPoint));
+		MY_MAP.popup.setContent('<div class="rollover-tooltip">Zip Code: '+ feature.id + '</div>');
+		MY_MAP.popup.openOn(MY_MAP.map);
+	});
+	
+}
+
 
 CDADMap.prototype.loadLayers = function (){
     var self = this;
@@ -109,65 +220,102 @@ CDADMap.prototype.loadLayers = function (){
 	// path to data defined in index.html django template
 
 	// define layer styles and oneachfeature popup styling
-	this.SAMPLE_LAYER_style = L.geoJson(null, {
-	    style: CDADMap.getStyleColorFor_SAMPLE_LAYER,
-		onEachFeature: CDADMap.onEachFeature_SAMPLE_LAYER
+	this.CDBLAYER_style = L.geoJson(null, {
+	    style: CDADMap.getStyleColorFor_CDBLAYER,
+		onEachFeature: CDADMap.onEachFeature_CDBLAYER
+	});
+
+	this.NBLAYER_style = L.geoJson(null, {
+	    style: CDADMap.getStyleColorFor_NBLAYER,
+		onEachFeature: CDADMap.onEachFeature_NBLAYER
+	});
+
+	this.ZCBLAYER_style = L.geoJson(null, {
+	    style: CDADMap.getStyleColorFor_ZCBLAYER,
+		onEachFeature: CDADMap.onEachFeature_ZCBLAYER
 	});
 			
 	// load layers
-	this.SAMPLE_LAYER = omnivore.topojson(neighborhoods, null, this.MAP1_POP_POVERTY_style);
+	this.CDBLAYER = omnivore.topojson(cdblayer, null, this.CDBLAYER_style);
+	this.NBLAYER = omnivore.topojson(nblayer, null, this.NBLAYER_style);
+	this.ZCBLAYER = omnivore.topojson(zcblayer, null, this.ZCBLAYER_style);
 			
 }
 
-CDADMap.getStyleColorFor_SAMPLE_LAYER = function (feature){
-    try{
-        var value = feature.properties.PovertyPer;
-        var fillColor = null;
-        if(value >= 0 && value <=0.1){
-			fillColor = "#a5f3fa";
-        }
-        if(value >0.1 && value <=0.15){
-            fillColor = "#83E8F9";
-        }
-        if(value >0.15 && value<=0.2){
-        	fillColor = "#62def8";
-        }
-        if(value > 0.2 && value <=0.3){
-        	fillColor = "#0bb6ec";
-        }
-        if(value > 0.3 && value <=0.4) { 
-			fillColor = "#178def";
-        }
-        if(value > 0.4) { 
-			fillColor = "#254aeb";
-        }
-    }catch (e){
+CDADMap.getStyleColorFor_CDBLAYER = function (feature){
+    return {
+        weight: 2,
+        opacity: 0.75,
+        color: '#595959',
+        fillOpacity: 0
+    }
+}
 
-    }finally{
-        return {
-	        weight: 1,
-	        opacity: .1,
-	        color: 'white',
-	        fillOpacity: 0.75,
-	        fillColor: fillColor
-        }
+CDADMap.getStyleColorFor_NBLAYER = function (feature){
+    return {
+        weight: 2,
+        opacity: 0.75,
+        color: '#e8826d',
+        fillOpacity: 0
+    }
+}
+
+CDADMap.getStyleColorFor_ZCBLAYER = function (feature){
+    return {
+        weight: 2,
+        opacity: 0.75,
+        color: '#e8c51d',
+        fillOpacity: 0
     }
 }
 
 
-
-
-CDADMap.onEachFeatureFor_SAMPLE_POINT = function(feature, layer){
-
-    // on hover close the other popups
-    layer.on('mouseover', function(ev) {
-		MY_MAP.map.closePopup();
-    });
+CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 		
-	// add on click popups for each layer -- these will be different
+	// add on click popups for locations -- open ino sidebar and populate with data
 	layer.on("click",function(ev){
 		// close all open popups
 		MY_MAP.map.closePopup();
+		
+		console.log(feature.properties.Organization_Name);
+		// update sidebar content based on click
+		$( "#popout-info-content" ).html("<div class='info-title-bar text-capitalize'>" + feature.properties.Organization_Name + "</div><div class='info-content-titles'>OFFICE ADDRESS</div><p class='info-content'>" + feature.properties.Address + " " + feature.properties.Address2 + "<br>" + feature.properties.City + ", " + feature.properties.State + " " + feature.properties.ZipCode + "</p>");
+		
+		// populate banner				
+		$( "#banner-text" ).html("INFO");
+
+		// ensure the correct content is showing
+		$( "#popout-info-content" ).show();
+		$( "#popout-settings-content" ).hide();
+		$( "#popout-filters-content" ).hide();
+		$( "#popout-about-content" ).hide();
+		
+		if ($( ".popout-banner" ).hasClass( "popout-banner-open" )) {
+			// don't toggle classes
+		} else {
+			$( ".popout-banner" ).toggleClass("popout-banner-open");		
+			$( ".popout-content" ).toggleClass("popout-content-open");								
+		}		
+		
+		// set actives for next click
+		$( ".info" ).addClass("active");
+		$( ".settings" ).removeClass("active");
+		$( ".filters" ).removeClass("active");
+		$( ".about" ).removeClass("active");
+		
+		// create scrollbars
+		$( "#popout-info-content" ).perfectScrollbar({
+			suppressScrollX: true,
+			includePadding: true
+		});
+		
+		// show yellow bar if scrollbar isn't on
+		if ($( "#popout-info-content" ).hasClass( "ps-active-y" )) {
+			$( ".right-bar-color" ).hide();
+		} else {
+			$( ".right-bar-color" ).show();			
+		}
+		
 		
 
 	});
@@ -214,10 +362,18 @@ CDADMap.loadFilteredLocations = function(data){
 
 CDADMap.loadLayerFor = function(layerId){
 	
-    if(layerId == "MAP1"){
-        mainLayer = MY_MAP.SAMPLE_LAYER;
-		mainLayer.addTo(MY_MAP.map).bringToBack();
-	 }	
+    if(layerId == "CouncilDistrictBoundaries"){
+		MY_MAP.CDBLAYER.addTo(MY_MAP.map).bringToBack();
+	}	
+
+    if(layerId == "NeighborhoodBoundaries"){
+		MY_MAP.NBLAYER.addTo(MY_MAP.map).bringToBack();
+	}	
+
+    if(layerId == "ZipCodeBoundaries"){
+		MY_MAP.ZCBLAYER.addTo(MY_MAP.map).bringToBack();
+	}	
+
 
 }
 
@@ -280,7 +436,18 @@ CDADMap.removeLayerFor = function(layerId){
 	// remove all popups first
 	MY_MAP.map.closePopup();
 	// then remove layer
-	MY_MAP.map.removeLayer( layerId ); 
+	if (layerId == 'CouncilDistrictBoundaries') {
+		MY_MAP.map.removeLayer( MY_MAP.CDBLAYER ); 		
+	}
+
+	if (layerId == 'NeighborhoodBoundaries') {
+		MY_MAP.map.removeLayer( MY_MAP.NBLAYER ); 		
+	}
+
+	if (layerId == 'ZipCodeBoundaries') {
+		MY_MAP.map.removeLayer( MY_MAP.ZCBLAYER ); 		
+	}
+	
 }
 
 CDADMap.removeLocationsLayers = function(){

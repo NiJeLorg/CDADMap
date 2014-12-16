@@ -32,7 +32,8 @@
 		.settings:focus > a > .settings-button {
 			background-image: url({% static 'cdadmap/css/images/settings-white.png' %})
 		}
-
+				
+		
 		.info > a > .info-button {
 			display: inline-block;
 			margin-left: 12px;
@@ -46,6 +47,11 @@
 		.info:focus > a > .info-button {
 			background-image: url({% static 'cdadmap/css/images/info-white.png' %})
 		}
+		
+		.active > a > .info-button {
+			background-image: url({% static 'cdadmap/css/images/info-white.png' %})
+		}
+				
 		
 		.filters > a > .filters-button {
 			display: inline-block;
@@ -74,9 +80,16 @@
 			background-image: url({% static 'cdadmap/css/images/about-white.png' %})
 		}
 		
-		.sidebar-nav li a:hover > .hover-triangle,
-		.sidebar-nav li a:active > .hover-triangle,
-		.sidebar-nav li a:focus > .hover-triangle {
+		.sidebar-nav li a .active > .hover-triangle {
+			display: inline-block;
+			float: left;
+			margin-top: 10px;
+			width: 14px;
+			height: 20px;
+			background-image: url({% static 'cdadmap/css/images/yellow-triangle.png' %})
+		}
+		
+		.active > a > .hover-triangle {
 			display: inline-block;
 			float: left;
 			margin-top: 10px;

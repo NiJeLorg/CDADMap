@@ -11,7 +11,7 @@
     width: 0;
 	margin-right: -302px;
     overflow: hidden;
-    background: #595959;
+    background: #3D3D3D;
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
@@ -67,16 +67,6 @@
 	text-align: left;
 	width: 302px;
 	padding: 20px;
-}
-
-.popout-nav li {
-	text-align: left;
-	width: 262px;
-	margin: 20px;
-}
-
-.popout-nav li a {
-	padding-right: 20px;
     font-family: 'Oswald';
     font-style: normal;
     font-weight: normal;
@@ -86,27 +76,12 @@
 	
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+	
 }
 
-.popout-nav li a:hover {
-    text-decoration: none;
-    color: #d8d8d7;
-    /*background: rgba(255,255,255,0.2);*/
+.popout-nav > .popout-content > .toggle-maps {
+	margin-top: 20px;
 }
-
-.popout-nav li a:active,
-.popout-nav li a:focus {
-    text-decoration: none;
-}
-
-.popout-nav li a:hover > .hover-color {
-	position: absolute;
-	right:0;
-	background-color: #e8c51d;
-	width: 4px;
-	height: 40px;
-}
-
 
 @media(max-width:768px) {
 	

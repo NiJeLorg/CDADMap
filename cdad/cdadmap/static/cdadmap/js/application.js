@@ -7,9 +7,13 @@
   On DOM load handlers
  */
 var map_popups = [];
+var open_tooltips = [];
 var mainLayer = null;
 var LOCATIONS = null;
-var SAMPLE_LAYER = null;
+var CDBLAYER = null;
+var NBLAYER = null;
+var ZCBLAYER = null;
+var CDOBCLAYER = null;
 var clusterLocations = null;
 var MY_MAP = null;
 
@@ -19,6 +23,7 @@ $().ready(new function(){
     //get screen measurements
     var myMap = new CDADMap();
     myMap.loadLocations();
+    myMap.loadLayers();
 	myMap.showLocationsOnPageLoad();
     MY_MAP = myMap;	
 		

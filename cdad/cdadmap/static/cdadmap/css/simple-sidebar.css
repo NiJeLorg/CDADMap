@@ -88,6 +88,20 @@ html, body, #map {
 	height: 40px;
 }
 
+.active > a > .hover-color {
+	position: absolute;
+	right:0;
+	background-color: #e8c51d;
+	width: 4px;
+	height: 40px;
+}
+
+
+.sidebar-nav > .active a {
+	color: #d8d8d7;
+}
+
+
 .sidebar-nav > .sidebar-brand {
     height: 25px; /* if brand is added change to 65px */
     font-size: 18px;

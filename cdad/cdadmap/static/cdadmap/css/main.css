@@ -2,4 +2,46 @@
  * Main css for CDAD Detroit Mapping Site
  */
 
+.rollover-tooltip {
+    text-align: center;
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: normal;
+    color: #fff;
+    font-size: 13px;
+}
+
+.info-title-bar {
+	width: 302px;
+	margin-top: -20px;
+	margin-left: -20px;
+	padding: 20px;
+	font-size: 16px;
+	color: #d8d8d7;
+	background-color: #595959;
+}
+
+.info-content-titles {
+	margin-top: 10px;
+	font-size: 14px;
+	color: #8C8C8C;
+}
+
+.info-content {
+	margin-top: 5px;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	color: #d8d8d7;
+}
+
+
+/*
+* Leaflet overrides
+*/
+
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+	background-color: #595959;
+}
+
+
 
