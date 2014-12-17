@@ -277,9 +277,29 @@ CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 		// close all open popups
 		MY_MAP.map.closePopup();
 		
-		console.log(feature.properties.Organization_Name);
+		// set up data for popout
+		var commaSpace = /,\s/ig;
+		var pipeSpace = /\|\s/ig;
+		var activityString = feature.properties.Activity.replace(commaSpace, '| ');
+		var activityArray = activityString.split(',');
+		var activityList = activityArray.join('; ');
+		activityList.replace(pipeSpace, ', ');
+		
+		var activities_ServicesString = feature.properties.Activities_Services.replace(commaSpace, '| ');
+		var activities_ServicesArray = activities_ServicesString.split(',');
+		var activities_ServicesArrayLength = activities_ServicesArray.length;
+		for (var i = 0; i < activities_ServicesArrayLength; i++) {
+			// wrap each item in labels
+			activities_ServicesArray[i] = '<span class="label label-activity">' + activities_ServicesArray[i].replace(pipeSpace, ', ') + '</span>';
+		}
+		var activities_ServicesList = activities_ServicesArray.join(' ');
+		
+		var url = feature.properties.Social_website.replace('http://', '');
+		var printurl = url.replace(/\/$/, "");
+		url = 'http://' + url;
+		
 		// update sidebar content based on click
-		$( "#popout-info-content" ).html("<div class='info-title-bar text-capitalize'>" + feature.properties.Organization_Name + "</div><div class='info-content-titles'>OFFICE ADDRESS</div><p class='info-content'>" + feature.properties.Address + " " + feature.properties.Address2 + "<br>" + feature.properties.City + ", " + feature.properties.State + " " + feature.properties.ZipCode + "</p>");
+		$( "#popout-info-content" ).html("<div class='info-title-bar text-capitalize'>" + feature.properties.Organization_Name + "</div><div class='info-content-titles'>OFFICE ADDRESS</div><p class='info-content'>" + feature.properties.Address + " " + feature.properties.Address2 + "<br>" + feature.properties.City + ", " + feature.properties.State + " " + feature.properties.ZipCode + "</p><div class='info-content-titles'>DESCRIPTION</div><p class='info-content'>" + feature.properties.Organization_Description + "</p><div class='info-content-titles'>PRIMARY FOCUS AREAS</div><p class='info-content'>" + activityList + "</p><div class='info-content-titles'>SERVICES</div><p class='info-content'>" + activities_ServicesList + "</p><div class='info-content-titles'>CONTACT</div><p class='info-content'>" + feature.properties.Tel + "<br><a href='mailto:" + feature.properties.Email + "'>" + feature.properties.Email + "</a></p><div class='info-content-titles'>WEBSITE</div><p class='info-content'><a href='" + url + "'>" + printurl + "</a></p><br><button type='button' class='btn btn-default btn-block' data-toggle='modal' data-target='#orgModal' data-local='#orgCarousel'><span class='pull-left'>VIEW FULL PROFILE</span><span class='glyphicon glyphicon-fullscreen pull-right' aria-hidden='true'></span></button>");
 		
 		// populate banner				
 		$( "#banner-text" ).html("INFO");
@@ -308,7 +328,7 @@ CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 			suppressScrollX: true,
 			includePadding: true
 		});
-		
+				
 		// show yellow bar if scrollbar isn't on
 		if ($( "#popout-info-content" ).hasClass( "ps-active-y" )) {
 			$( ".right-bar-color" ).hide();
@@ -316,6 +336,8 @@ CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 			$( ".right-bar-color" ).show();			
 		}
 		
+		// set up modal for having this org selected
+		$( "#titleOrgName" ).html(feature.properties.Organization_Name);
 		
 
 	});

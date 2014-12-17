@@ -44,7 +44,7 @@ class Command(BaseCommand):
                 pathToNewJson = os.path.join(__location__,survey.Organization_Name + '_new.json')
                   
                 # ogr2ogr -f GeoJSON newfile.json old_file.json OGRGeoJSON                
-								command_line = 'ogr2ogr -f GeoJSON -t_srs EPSG:4326' + pathToNewJson + ' ' + pathToRaw +  ' OGRGeoJSON'
+                command_line = 'ogr2ogr -f GeoJSON -t_srs EPSG:4326 ' + pathToNewJson + ' ' + pathToRaw + ' OGRGeoJSON'
                 args = shlex.split(command_line)
                 subprocess.Popen(args)
                                 

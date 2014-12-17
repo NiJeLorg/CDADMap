@@ -11,6 +11,9 @@ $( document ).ready(function() {
 		// populate banner				
 		$( "#banner-text" ).html("SETTINGS");
 		
+		// remove info content if any
+		$( "#popout-info-content" ).html('');
+		
 		// ensure the correct content is showing
 		$( "#popout-settings-content" ).show();
 		$( "#popout-info-content" ).hide();
@@ -89,6 +92,9 @@ $( document ).ready(function() {
 		
 		// populate banner				
 		$( "#banner-text" ).html("FILTERS");
+		
+		// remove info content if any
+		$( "#popout-info-content" ).html('');
 
 		// ensure the correct content is showing
 		$( "#popout-filters-content" ).show();
@@ -128,6 +134,9 @@ $( document ).ready(function() {
 
 		// populate banner				
 		$( "#banner-text" ).html("ABOUT");
+		
+		// remove info content if any
+		$( "#popout-info-content" ).html('');
 
 		// ensure the correct content is showing
 		$( "#popout-about-content" ).show();

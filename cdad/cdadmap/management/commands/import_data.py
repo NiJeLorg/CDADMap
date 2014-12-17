@@ -1,6 +1,6 @@
 import sys,os
 from django.core.management.base import BaseCommand, CommandError
-from cdadmap.models import Contact, ContactPanel, Location, LocationPanel, Meeting, MeetingPanel, Survey, SurveyPanel
+from cdadmap.models import *
 import csv
 
 
@@ -9,10 +9,7 @@ import csv
 """
 class Command(BaseCommand):
     
-    def load_data(self):
-        """
-
-        """
+    def load_data_contact(self):
         __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
         # open contact.csv and dump into Contact table
         with open(os.path.join(__location__, 'contact.csv'), 'rb') as f:
@@ -20,7 +17,7 @@ class Command(BaseCommand):
             for row in reader:
                 if row[0] != 'id': # Ignore the header row, import everything else
                     contact = Contact()
-                    contact.id = row[0]
+                    contact.id = int(row[0])
                     contact.Organization_Name = row[1]
                     contact.Name = row[2]
                     contact.Title = row[3]
@@ -31,13 +28,14 @@ class Command(BaseCommand):
                     contact.MyTrace = row[8]
                     contact.save()
 
-        # open contact.csv and dump into ContactPanel table
-        with open(os.path.join(__location__, 'contact.csv'), 'rb') as f:
+        # open contactPanel.csv and dump into ContactPanel table
+        with open(os.path.join(__location__, 'contactPanel.csv'), 'rb') as f:
             reader = csv.reader(f)
             for row in reader:
                 if row[0] != 'id': # Ignore the header row, import everything else
                     contactpanel = ContactPanel()
-                    contactpanel.id = row[0]
+                    # get surveypanel object for foreign key
+                    contactpanel.id = int(row[0])
                     contactpanel.Organization_Name = row[1]
                     contactpanel.Name = row[2]
                     contactpanel.Title = row[3]
@@ -47,13 +45,17 @@ class Command(BaseCommand):
                     contactpanel.AddListPermission = row[7]
                     contactpanel.save()
 
+
+    def load_data_location(self):
+        __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+
         # open location.csv and dump into Location table
         with open(os.path.join(__location__, 'location.csv'), 'rb') as f:
             reader = csv.reader(f)
             for row in reader:
                 if row[0] != 'id': # Ignore the header row, import everything else
                     location = Location()
-                    location.id = row[0]
+                    location.id = int(row[0])
                     location.Organization_Name = row[1]
                     location.Address = row[2]
                     location.Address2 = row[3]
@@ -66,13 +68,13 @@ class Command(BaseCommand):
                     location.MyTrace = row[10]
                     location.save()
                 
-        # open location.csv and dump into LocationPanel table
-        with open(os.path.join(__location__, 'location.csv'), 'rb') as f:
+        # open locationPanel.csv and dump into LocationPanel table
+        with open(os.path.join(__location__, 'locationPanel.csv'), 'rb') as f:
             reader = csv.reader(f)
             for row in reader:
-                if row[0] != 'id': # Ignore the header row, import everything else
+                if row[0] != 'idlocation': # Ignore the header row, import everything else
                     locationpanel = LocationPanel()
-                    locationpanel.idlocation = row[0]
+                    locationpanel.idlocation = int(row[0])
                     locationpanel.Organization_Name = row[1]
                     locationpanel.Address = row[2]
                     locationpanel.Address2 = row[3]
@@ -82,7 +84,15 @@ class Command(BaseCommand):
                     locationpanel.MailingAddress = row[7]
                     locationpanel.KeepPrivate = row[8]
                     locationpanel.Activity = row[9]
+                    # look up surveypanel and contactpanel objects for foreign key
+                    surveyPanelRecord = SurveyPanel.objects.get(Organization_Name=row[1])
+                    locationpanel.Organization_Name_SurveyPanel_FK = surveyPanelRecord
+                    contactPanelRecord = ContactPanel.objects.get(Organization_Name=row[1])
+                    locationpanel.Organization_Name_ContactPanel_FK = contactPanelRecord
                     locationpanel.save()
+
+    def load_data_meeting(self):
+        __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
         # open meeting.csv and dump into Meeting table
         with open(os.path.join(__location__, 'meeting.csv'), 'rb') as f:
@@ -90,7 +100,7 @@ class Command(BaseCommand):
             for row in reader:
                 if row[0] != 'id': # Ignore the header row, import everything else
                     meeting = Meeting()
-                    meeting.id = row[0]
+                    meeting.id = int(row[0])
                     meeting.Organization_Name = row[1]
                     meeting.hasMeeting = row[2]
                     meeting.MeetingName = row[3]
@@ -113,13 +123,13 @@ class Command(BaseCommand):
                     meeting.MyTrace = row[20]
                     meeting.save()
                 
-        # open meeting.csv and dump into MeetingPanel table
-        with open(os.path.join(__location__, 'meeting.csv'), 'rb') as f:
+        # open meetingPanel.csv and dump into MeetingPanel table
+        with open(os.path.join(__location__, 'meetingPanel.csv'), 'rb') as f:
             reader = csv.reader(f)
             for row in reader:
                 if row[0] != 'id': # Ignore the header row, import everything else
                     meetingpanel = MeetingPanel()
-                    meetingpanel.id = row[0]
+                    meetingpanel.id = int(row[0])
                     meetingpanel.Organization_Name = row[1]
                     meetingpanel.hasMeeting = row[2]
                     meetingpanel.MeetingName = row[3]
@@ -141,13 +151,16 @@ class Command(BaseCommand):
                     meetingpanel.MeetAlways = row[19]
                     meetingpanel.save()                
 
+    def load_data_survey(self):
+        __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
+
         # open survey.csv and dump into Survey table
         with open(os.path.join(__location__, 'survey.csv'), 'rb') as f:
             reader = csv.reader(f)
             for row in reader:
                 if row[0] != 'id': # Ignore the header row, import everything else
                     survey = Survey()
-                    survey.id = row[0]
+                    survey.id = int(row[0])
                     survey.Organization_Name = row[1]
                     survey.Organizaton_Acronym = row[2]
                     survey.Survey_Taker_Name = row[3]
@@ -190,14 +203,14 @@ class Command(BaseCommand):
                     survey.CDAD_FeedBack = row[40]
                     survey.MyTrace = row[41]
                     survey.save()
-                
-        # open survey.csv and dump into SurveyPanel table
-        with open(os.path.join(__location__, 'survey.csv'), 'rb') as f:
+
+        # open surveyPanel.csv and dump into SurveyPanel table
+        with open(os.path.join(__location__, 'surveyPanel.csv'), 'rb') as f:
             reader = csv.reader(f)
             for row in reader:
                 if row[0] != 'id': # Ignore the header row, import everything else
                     surveypanel = SurveyPanel()
-                    surveypanel.id = row[0]
+                    surveypanel.id = int(row[0])
                     surveypanel.Organization_Name = row[1]
                     surveypanel.Organizaton_Acronym = row[2]
                     surveypanel.Survey_Taker_Name = row[3]
@@ -241,9 +254,14 @@ class Command(BaseCommand):
                     surveypanel.save()
 
     def handle(self, *args, **options):
-        print "Loading Data...."
-        self.load_data()
-
+        print "Loading Survey Data...."
+        self.load_data_survey()
+        print "Loading Contact Data...."
+        self.load_data_contact()
+        print "Loading Location Data...."
+        self.load_data_location()
+        print "Loading Meeting Data...."
+        self.load_data_meeting()
 
 
 

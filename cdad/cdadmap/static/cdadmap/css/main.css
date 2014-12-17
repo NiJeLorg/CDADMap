@@ -34,6 +34,24 @@
 	color: #d8d8d7;
 }
 
+.modal-orgName {
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: normal;
+    color: #595959;
+    font-size: 36px;
+	margin-bottom: -9px;
+}
+
+.modal-header {
+	padding: 15px 15px 0px 15px;
+	border-bottom: 30px solid #595959;
+}
+
+.modal-lg {
+	width: 90%;
+}
+
 
 /*
 * Leaflet overrides

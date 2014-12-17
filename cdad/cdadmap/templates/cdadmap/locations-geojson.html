@@ -14,6 +14,11 @@
 			        "State": "{{ location.State }}",
 			        "MailingAddress": "{{ location.MailingAddress }}",
 			        "Activity": "{{ location.Activity }}",
+			        "Organization_Description": "{{ location.getSurveyObject.Organization_Description }}",
+			        "Activities_Services": "{{ location.getSurveyObject.Activities_Services }}",
+			        "Tel": "{{ location.getContactObject.Tel }}",
+			        "Email": "{{ location.getContactObject.Email }}",
+			        "Social_website": "{{ location.getSurveyObject.Social_website }}",
 					"iconUrl": "{% static 'cdadmap/css/images/cdad-marker.png' %}"
 			    },
 			    "geometry": {

@@ -1,0 +1,51 @@
+{% load staticfiles %}
+
+<div id="orgCarousel" class="carousel slide carousel-fit">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+{% for location in locations %}
+	{% if forloop.first %}
+    	<li data-target="#orgCarousel" data-slide-to="{{ forloop.counter0 }}" class="active"></li>
+	{% else %}
+    	<li data-target="#orgCarousel" data-slide-to="{{ forloop.counter0 }}"></li>
+	{% endif %}
+{% endfor %}	  
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+{% for location in locations %}
+	{% if forloop.first %}
+	    <div class="item active">
+			<p>{{ location.Organization_Name }}</p>
+	    </div>
+	{% else %}
+	    <div class="item">
+			<p>{{ location.Organization_Name }}</p>
+	    </div>
+	{% endif %}
+{% endfor %}
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#orgCarousel" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#orgCarousel" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>
+
+<div class="modal fade in" id="orgModal" tabindex="-1" role="dialog" aria-labelledby="orgModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <p class="modal-orgName text-uppercase" id="titleOrgName"></p>
+      </div>
+      <div class="modal-body">
+		  <!-- carousel goes here -->
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

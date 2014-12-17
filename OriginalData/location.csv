@@ -1,24 +1,34 @@
 "id","Organization_Name","Address","Address2","City","ZipCode","State","MailingAddress","KeepPrivate","Activity","MyTrace"
 11,"The Greening of Detroit","1418 Michigan Ave.",,"Detroit",48216,"MI","false","false","Youth Programs/Services,Job Training,Urban Agriculture, Workforce Development, Green Infrastructure, Vacant Lot Interventions, Environmental Education, Nutrition Education, Volunteer Opportunities",0
-20,"Southwest Detroit Environmental Vision","PO Box 9400",,"Detroit",48209,"MI","true","false","N/A",0
-24,"Kids-TALK Childrens Advocacy Center","40 E Ferry St.",,"Detroit",48202,"MI","false","false","Youth Programs/Services",0
-25,"Healthy Neighborhoods Detroit","4777 E. Outer Drive, Suite 1371",,"Detroit",48234,"MI","false","false","Health and Wellness Services,Computer and/or Technology Resources",0
-26,"Test NiJeL","926 Fulton","#1","Brooklyn",11238,"NY","true","true","Computer and/or Technology Resources",0
+20,"Southwest Detroit Environmental Vision","PO Box 9400",,"Detroit",48209,"MI","true","false","N/A",1
+24,"Kids-TALK Childrens Advocacy Center","40 E Ferry St.",,"Detroit",48202,"MI","false","false","Youth Programs/Services",1
+25,"Healthy Neighborhoods Detroit","4777 E. Outer Drive, Suite 1371",,"Detroit",48234,"MI","false","false","Health and Wellness Services,Computer and/or Technology Resources",1
+26,"Test NiJeL","926 Fulton","#1","Brooklyn",11238,"NY","true","true","Computer and/or Technology Resources",1
 27,"Black Mothers Breastfeeding Organization","9641 Harper Ave",,"Detroit",48213,"MI","false","false","Health and Wellness Services",0
-28,"North Corktown Neighborhood Association","3005 Rosa Parks Blvd",,"Detroit",48216,"MI","false","true","N/A",0
-29,"The Center for Entrepreneurship & Innovation","7650 Second Avenue",,"Detroit",48202,"MI","false","false","Entrepreneurship/Business Development Services,Job Training",0
+28,"North Corktown Neighborhood Association","3005 Rosa Parks Blvd",,"Detroit",48216,"MI","false","true","N/A",1
+29,"The Center for Entrepreneurship & Innovation","7650 Second Avenue",,"Detroit",48202,"MI","false","false","Entrepreneurship/Business Development Services,Job Training",1
 30,"Grandmont Rosedale Development Corporation","19800 Grand River Ave",,"Detroit",48223,"MI","false","false","Youth Programs/Services,Entrepreneurship/Business Development Services,Housing renovation, beautification, farmers market, etc.",0
-32,"Framework and Resources for Empowering Environments","24111 Meridian Rd.","Apt. 120","Grosse Ile.",48138,"MI","true","true","N/A",0
-33,"Detroit Greenways Coalition","PO Box 32013",,"Detroit",48232,"MI","true","false","undefined",0
-34,"Detroit Greenways Coalition","PO Box 32013",,"Detroit",48232,"MI","true","false","N/A",0
-35,"Detroit Food Policy Council","2934 Russell",,"Detroit",48207,"MI","false","false","undefined",0
-36,"Detroit Food Policy Council","2934 Russell",,"Detroit",48207,"MI","false","false","N/A",0
-37,"Stafford House, Inc","2990 West Grand Blvd","Suite M23","Detroit",48202,"MI","true","false","Youth Programs/Services,Entrepreneurship/Business Development Services",0
+32,"Framework and Resources for Empowering Environments","24111 Meridian Rd.","Apt. 120","Grosse Ile.",48138,"MI","true","true","N/A",1
+33,"Detroit Greenways Coalition","PO Box 32013",,"Detroit",48232,"MI","true","false","undefined",1
+34,"Detroit Greenways Coalition","PO Box 32013",,"Detroit",48232,"MI","true","false","N/A",1
+35,"Detroit Food Policy Council","2934 Russell",,"Detroit",48207,"MI","false","false","undefined",1
+36,"Detroit Food Policy Council","2934 Russell",,"Detroit",48207,"MI","false","false","N/A",1
+37,"Stafford House, Inc","2990 West Grand Blvd","Suite M23","Detroit",48202,"MI","true","false","Youth Programs/Services,Entrepreneurship/Business Development Services",1
 38,"GenesisHOPE Community Development Corporation","7200 Mack Avenue",,"Detroit",48214,"MI","false","false","Youth Programs/Services,Health and Wellness Services,Entrepreneurship/Business Development Services",0
 39,"GenesisHOPE Community Development Corporation","3458 Field Street",,"Detroit",48214,"MI","true","false","undefined",0
 40,"GenesisHOPE Community Development Corporation","7200 Mack Avenue",,"Detroit",48214,"MI","false","false","Youth Programs/Services,Health and Wellness Services,Entrepreneurship/Business Development Services",0
 41,"GenesisHOPE Community Development Corporation","3458 Field Street",,"Detroit",48214,"MI","true","false","N/A",0
 42,"USGBC Detroit Regional Chapter","461 Burroughs",,"Detroit",48202,"MI","false","false","N/A",0
 43,"Bridging Communities, Inc.","6900 McGraw",,"Detroit",48210,"MI","true","false","Youth Programs/Services,Senior Programs/Services,Entrepreneurship/Business Development Services,Computer and/or Technology Resources,TimeBank",0
-44,"Virginia Park Block Club","909 Virginia Park St",,"Detroit",48202,"MI","false","true","N/A",0
-45,"OHair Park Community Association","19800 Pembroke",,"Detroit",48219,"MI","true","false","Youth Programs/Services,block development and neighborhood rehab and development",0
+44,"Virginia Park Block Club","909 Virginia Park St",,"Detroit",48202,"MI","false","true","N/A",1
+45,"OHair Park Community Association","19800 Pembroke",,"Detroit",48219,"MI","true","false","Youth Programs/Services,block development and neighborhood rehab and development",1
+46,"Greater Sandhill Neighborhood Organization","PO Box 19063",,"Det",48219,"error","true","false","N/A",0
+47,"Greater Sandhill Neighborhood Organization","PO Box 19063",,"Detroit",48219,"error","true","false","N/A",0
+48,"Greater Sandhill Neighborhood Organization","PO Box 19063",,"Detroit",48219,"error","true","false","N/A",0
+49,"Greater Sandhill Neighborhood Organization","PO Box 19063",,"Detroit",48219,"error","true","false","N/A",0
+50,"Greater Sandhill Neighborhood Organization","PO Box 19063",,"Detroit",48219,"error","true","false","N/A",0
+51,"Greater Sandhill Neighborhood Organization","PO Box 19063",,"Detroit",48219,"MI","true","false","N/A",0
+52,"Nortown Community Development Corporation","20017 Van Dyke","P.O. Box 34102 (mailing address)","Detroit",48234,"MI","false","false","Youth Programs/Services,Senior Programs/Services,Health and Wellness Services,Entrepreneurship/Business Development Services,Neighborhood and Block Club programs; clean and safe program;city information and referral services;",0
+53,"Bleeding Heart Design","19397 Andover",,"detroit",48203,"MI","false","true","Youth Programs/Services,public art; empowerment events;",0
+54,"Teppert & State Fair Block Club","Arneatha Reynolds","P.O. Box 57","Eastpointe",48021,"MI","true","true","N/A",0
+55,"200 Lakewood block club","224 Lakewood",,"Detroit",48215,"MI","false","false","N/A",0

@@ -83,6 +83,11 @@
 	margin-top: 20px;
 }
 
+.label-activity {
+	line-height: 20px;
+	background-color: #e8826d;
+}
+
 @media(max-width:768px) {
 	
     .popout-content {
