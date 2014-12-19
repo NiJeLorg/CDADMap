@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/bootstrap.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/oswald-font.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/simple-sidebar.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/jquery-ui.min.css' %}">
@@ -149,6 +149,8 @@
     </div>
     <!-- /#wrapper -->
 
+	{% block modal_block %}
+	{% endblock %}
 	
     <!--  javascript
     ================================================== -->
@@ -158,8 +160,6 @@
 	{% block js_block %}
 	{% endblock %}
 
-	{% block modal_block %}
-	{% endblock %}
 		
   </body>
 </html>

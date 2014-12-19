@@ -14,7 +14,7 @@
   bottom: 0;
 }
 .carousel.carousel-fit .carousel-inner > .item {
-  text-align: center;
+  /* text-align: center; */
 }
 .carousel.carousel-fit .carousel-inner > .item > img {
   display: inline-block;

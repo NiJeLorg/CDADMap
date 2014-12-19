@@ -94,6 +94,9 @@
 <!-- /#page-content-wrapper -->
 {% endblock %}
 
+{% block modal_block %}
+{% include 'cdadmap/org-modal.html' %};
+{% endblock %}
 
 {% block js_block %}
 	<!-- create locations geojson and include the topojson layers-->
@@ -103,7 +106,7 @@
 		var nblayer = "{% static 'cdadmap/topojsons/detroit_neighborhood_boundaries.json' %}";	
 		var zcblayer = "{% static 'cdadmap/topojsons/detroit_zip_codes.json' %}";	
 	</script>
-	<script type="text/javascript" src="{% static 'cdadmap/js/bootstrap-modal-carousel.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/bootstrap-modal-carousel.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/perfect-scrollbar.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/d3.min.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/leaflet.js' %}"></script>
@@ -112,15 +115,50 @@
 	<script type="text/javascript" src="{% static 'cdadmap/js/leaflet.markercluster.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/Control.Geocoder.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/CDADMap.js' %}"></script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/CDADModalMap.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/application.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/popout.js' %}"></script>
+	
+	<script type="text/javascript">
+		// modal maps: loop through each location and create a map for each on the modal
+		$().ready(new function(){
+			{% for location in locations %}
+				var mapid = 'map' + {{ location.idlocation }};
+			    var map{{ location.idlocation }} = new CDADModalMap(mapid, {{ location.Lat }}, {{ location.Lon }});			
+				// slide to correct carousel slide on button click
+				$("#slideTo{{ location.idlocation }}").click(function() {
+					console.log({{ location.idlocation }});
+					setTimeout(function() {
+						var idlocation = parseInt({{ location.idlocation }});
+						$( ".carousel" ).carousel(idlocation);
+					}, 1000);					
+				});
+					
+			{% endfor %}
+			
+			// ensure thumbnail maps render in dropdown				
+			$(".carousel-control").click(function() {
+				
+				{% for location in locations %}				
+					// use invalidate size to make maps show appropriately
+					setTimeout(function() {
+						map{{ location.idlocation }}.map.invalidateSize();
+						
+						// update modal title
+						if ($( "#modalItem{{ location.idlocation }}").hasClass('next')) {
+							$( "#titleOrgName" ).html('{{ location.Organization_Name }}');						
+						}
+						
+					}, 10);
+					
+				{% endfor %}
+			});		
+		});
+	</script>
 
 {% endblock %}
 
 
-{% block modal_block %}
-{% include 'cdadmap/org-modal.html' %};
-{% endblock %}
 	
 	
 

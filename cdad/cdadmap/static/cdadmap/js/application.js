@@ -20,7 +20,6 @@ var MY_MAP = null;
 
 $().ready(new function(){
 	
-    //get screen measurements
     var myMap = new CDADMap();
     myMap.loadLocations();
     myMap.loadLayers();

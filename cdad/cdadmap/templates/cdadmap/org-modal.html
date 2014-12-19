@@ -1,13 +1,13 @@
 {% load staticfiles %}
 
-<div id="orgCarousel" class="carousel slide carousel-fit">
+<div id="orgCarousel" class="carousel slide">
   <!-- Indicators -->
   <ol class="carousel-indicators">
 {% for location in locations %}
 	{% if forloop.first %}
-    	<li data-target="#orgCarousel" data-slide-to="{{ forloop.counter0 }}" class="active"></li>
+    	<li data-target="#orgCarousel" data-slide-to="{{ location.idlocation }}" class="active"></li>
 	{% else %}
-    	<li data-target="#orgCarousel" data-slide-to="{{ forloop.counter0 }}"></li>
+    	<li data-target="#orgCarousel" data-slide-to="{{ location.idlocation }}"></li>
 	{% endif %}
 {% endfor %}	  
   </ol>
@@ -16,14 +16,95 @@
   <div class="carousel-inner">
 {% for location in locations %}
 	{% if forloop.first %}
-	    <div class="item active">
-			<p>{{ location.Organization_Name }}</p>
-	    </div>
+	    <div class="item active" id="modalItem{{ location.idlocation }}">
 	{% else %}
-	    <div class="item">
-			<p>{{ location.Organization_Name }}</p>
-	    </div>
+	    <div class="item" id="modalItem{{ location.idlocation }}">
 	{% endif %}
+			<div class="container">
+				<div class="row modalContent">
+				  <div class="col-sm-3">
+				  	<div class='modalmap' id='map{{ location.idlocation }}'></div>
+				  </div>
+				  <div class="col-sm-3">
+					  <div class="info-modal-titles">{{ location.idlocation }}</div>
+					  <div class="info-modal-titles">ADDRESS</div>
+					  <p class="info-modal-content">{{ location.Address }} {{ location.Address2 }}<br>{{ location.City }}, {{ location.State }} {{ location.ZipCode }}</p>
+					  <div class="info-modal-titles">CONTACT</div>
+					  <p class="info-modal-content">{{ location.getContactObject.Tel }}<br><a href="mailto:{{ location.getContactObject.Email }}">{{ location.getContactObject.Email }}</a></p>
+					  <div class="info-modal-titles">WEBSITE</div>
+					  <p class="info-modal-content"><a href="{{ location.getSurveyObject.Social_website }}">{{ location.getSurveyObject.Social_website }}</a></p>
+				  </div>
+				  <div class="col-sm-3">
+					  <div class="info-modal-titles">DESCRIPTION</div>
+					  <p class="info-modal-content">{{ location.getSurveyObject.Organization_Description }}</p>				  	
+					  <div class="info-modal-titles">PRIMARY FOCUS AREAS</div>
+					  <p class="info-modal-content">{{ location.Activity }}</p>				  	
+					  <div class="info-modal-titles">SERVICE AREA</div>
+					  <p class="info-modal-content">{{ location.getSurveyObject.Service_Area_Description }}</p>				  	
+					  <div class="info-modal-titles">STRUCTURE</div>
+					  <p class="info-modal-content">{{ location.getSurveyObject.organization_structured }}</p>
+					  <div class="info-modal-titles">YEAR FOUNDED</div>
+					  <p class="info-modal-content">{{ location.getSurveyObject.Year_Founded }}</p>
+				  </div>
+				  <div class="col-sm-3">
+					  <div class="info-modal-titles">LOGO HERE</div>
+					  <br><br>
+					  <div class="info-modal-titles">ACTIVITES</div>
+					  <p class="info-modal-content">{{ location.getSurveyObject.Activities_Services }}</p>
+					  <div class="info-modal-titles">INDIVIDUALS SERVED</div>
+					  <p class="info-modal-content">{{ location.getSurveyObject.Service_Population }}</p>
+				  </div>
+				</div>
+				<div class="row modalContent">
+				  <div class="col-sm-6">
+					  <div class="info-modal-titles">ORGANIATIONAL MISSION</div>
+					  <p class="info-modal-content">{{ location.getSurveyObject.Organizational_Mission }}</p>
+					  <div class="info-modal-titles">LANGUAGES</div>
+					  <p class="info-modal-content">{{ location.getSurveyObject.Languages }}</p>
+					  <div class="info-modal-titles">CONTACTS</div>
+					  <p class="info-modal-content">{{ location.getContactObject.Name }} | {{ location.getContactObject.Title }}<br>{{ location.getContactObject.Email }}<br>{{ location.getContactObject.Tel }}</p>
+					  
+				  </div>
+				  <div class="col-sm-6">
+					  <div class="info-modal-titles">ACCOMPLISHMENTS</div>
+					  <p class="info-modal-content">
+						  {% if location.getSurveyObject.accomplish_one_title != 'No Data Yet' %}
+							  <strong>1. {{ location.getSurveyObject.accomplish_one_title }}</strong> <br>						  
+						  {% endif %}
+						  {% if location.getSurveyObject.accomplish_one_description != 'No Data Yet' %}
+							  {{ location.getSurveyObject.accomplish_one_description }}<br>
+						  {% endif %}
+						  {% if location.getSurveyObject.accomplish_two_title != 'No Data Yet' %}
+							  <strong>2. {{ location.getSurveyObject.accomplish_two_title }}</strong> <br>						  
+						  {% endif %}
+						  {% if location.getSurveyObject.accomplish_two_description != 'No Data Yet' %}
+							  {{ location.getSurveyObject.accomplish_two_description }}<br>
+						  {% endif %}
+						  {% if location.getSurveyObject.accomplish_three_title != 'No Data Yet' %}
+							  <strong>3. {{ location.getSurveyObject.accomplish_three_title }}</strong> <br>						  
+						  {% endif %}
+						  {% if location.getSurveyObject.accomplish_three_description != 'No Data Yet' %}
+							  {{ location.getSurveyObject.accomplish_three_description }}<br>
+						  {% endif %}
+						  {% if location.getSurveyObject.accomplish_four_title != 'No Data Yet' %}
+							  <strong>4. {{ location.getSurveyObject.accomplish_four_title }}</strong> <br>						  
+						  {% endif %}
+						  {% if location.getSurveyObject.accomplish_four_description != 'No Data Yet' %}
+							  {{ location.getSurveyObject.accomplish_four_description }}<br>
+						  {% endif %}
+						  {% if location.getSurveyObject.accomplish_five_title != 'No Data Yet' %}
+							  <strong>5. {{ location.getSurveyObject.accomplish_four_title }}</strong> <br>						  
+						  {% endif %}
+						  {% if location.getSurveyObject.accomplish_five_description != 'No Data Yet' %}
+							  {{ location.getSurveyObject.accomplish_five_description }}<br>
+						  {% endif %}
+						  
+					  </p>				  					  				  	
+				  </div>
+				</div>
+				
+			</div>
+	    </div>
 {% endfor %}
   </div>
 
