@@ -34,6 +34,12 @@
 	color: #d8d8d7;
 }
 
+.content-filters {
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	color: #595959;
+}
+
 /*
 * Modal styles
 */

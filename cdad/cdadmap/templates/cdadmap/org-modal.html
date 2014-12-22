@@ -1,16 +1,6 @@
 {% load staticfiles %}
 
-<div id="orgCarousel" class="carousel slide">
-  <!-- Indicators -->
-  <ol class="carousel-indicators">
-{% for location in locations %}
-	{% if forloop.first %}
-    	<li data-target="#orgCarousel" data-slide-to="{{ location.idlocation }}" class="active"></li>
-	{% else %}
-    	<li data-target="#orgCarousel" data-slide-to="{{ location.idlocation }}"></li>
-	{% endif %}
-{% endfor %}	  
-  </ol>
+<div id="orgCarousel" class="carousel slide" data-interval="false">
 
   <!-- Wrapper for slides -->
   <div class="carousel-inner">
@@ -26,7 +16,6 @@
 				  	<div class='modalmap' id='map{{ location.idlocation }}'></div>
 				  </div>
 				  <div class="col-sm-3">
-					  <div class="info-modal-titles">{{ location.idlocation }}</div>
 					  <div class="info-modal-titles">ADDRESS</div>
 					  <p class="info-modal-content">{{ location.Address }} {{ location.Address2 }}<br>{{ location.City }}, {{ location.State }} {{ location.ZipCode }}</p>
 					  <div class="info-modal-titles">CONTACT</div>
