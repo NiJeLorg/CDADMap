@@ -22,7 +22,7 @@
 		    -moz-transition: all 0.5s ease;
 		    -o-transition: all 0.5s ease;
 		    transition: all 0.5s ease;
-			background-image: url({% static 'cdadmap/css/images/yellow-banner.png' %})
+			background-image: url({% static 'cdadmap/css/images/yellow-banner.png' %});
 		}		
 
 		.toggle-off {
@@ -31,7 +31,7 @@
 			margin-top: 2px;
 			width: 30px;
 			height: 15px;
-			background-image: url({% static 'cdadmap/css/images/toggle-off.png' %})
+			background-image: url({% static 'cdadmap/css/images/toggle-off.png' %});
 		}
 
 		.toggle-on {
@@ -40,7 +40,7 @@
 			margin-top: 2px;
 			width: 30px;
 			height: 15px;
-			background-image: url({% static 'cdadmap/css/images/toggle-on.png' %})
+			background-image: url({% static 'cdadmap/css/images/toggle-on.png' %});
 		}
 				
 	</style>
@@ -249,13 +249,13 @@
 {% endblock %}
 
 {% block modal_block %}
-{% include 'cdadmap/org-modal.html' %};
+{% include 'cdadmap/org-modal.html' %}
 {% endblock %}
-
 {% block js_block %}
 	<!-- create locations geojson and include the topojson layers-->
 	<script type="text/javascript">
 		var locations = {% include 'cdadmap/locations-geojson.html' %};
+		var locationsWithoutLatLon = {% include 'cdadmap/locationsWithoutLatLon.html' %};
 		var cdblayer = "{% static 'cdadmap/topojsons/detroit_city_council_district_boundaries.json' %}";	
 		var nblayer = "{% static 'cdadmap/topojsons/detroit_neighborhood_boundaries.json' %}";	
 		var zcblayer = "{% static 'cdadmap/topojsons/detroit_zip_codes.json' %}";	
@@ -279,6 +279,29 @@
 		
 		// modal maps: loop through each location and create a map for each on the modal
 		$().ready(new function(){
+			// hide the carousel
+			$('#orgCarousel').hide();
+
+			// set up a listener for hiding the carousel when the modal is closed
+			$('#orgModal').on('hidden.bs.modal', function (e) {
+			  $('#orgCarousel').hide();
+			});
+
+			// after carousel completes sliding 
+			$('#orgCarousel').on('slid.bs.carousel', function () {
+				// set modal backrop height if the modal height is bigger than the window height
+				var modalHeightValue = $('.modal-body').height() + $('.modal-header').height() + $('.modal-footer').height() + 205;
+				var windowHeight = $(window).height();
+				if (modalHeightValue < windowHeight) {
+					modalHeightValue = windowHeight;
+				}
+				var modalHeightString = modalHeightValue + 'px';
+				$(".modal-backdrop").css('height', modalHeightString);
+
+			});
+
+
+
 			// define mini-maps array
 			{% for location in locations %}
 				var mapid = 'map' + {{ location.idlocation }};

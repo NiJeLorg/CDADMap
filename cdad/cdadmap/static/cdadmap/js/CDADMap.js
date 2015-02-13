@@ -306,18 +306,16 @@ CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 		var slideToIdlocation = '#slideTo' + parseInt(feature.properties.idlocation);
 		var modalItemId = '#modalItem' + parseInt(feature.properties.idlocation);
 		$(slideToIdlocation).click(function() {
+			// show carousel in modal
+			$( "#orgCarousel" ).show();
+
 			// rotate carousel
 			$( "#orgCarousel" ).carousel(parseInt(feature.properties.counterId));
 			
 			setTimeout(function() {
 				
 				maps[feature.properties.idlocation].map.invalidateSize();
-				
-				// update modal title
-				if ($( modalItemId ).hasClass('active')) {
-					$( "#titleOrgName" ).html(feature.properties.Organization_Name);						
-				}
-				
+
 			}, 200);
 			
 		});

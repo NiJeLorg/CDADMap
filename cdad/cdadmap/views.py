@@ -15,9 +15,15 @@ def index(request):
     # show only public locations 
     kwargs['KeepPrivate__exact'] = 'false'
     
-    #get locations
-    locations = LocationPanel.objects.filter(**kwargs)
-    
+    #get locations but exclude NULL or empty Lat Lon values
+    locations = LocationPanel.objects.filter(**kwargs).exclude(Lat__isnull=True).exclude(Lat__exact='').exclude(Lon__isnull=True).exclude(Lon__exact='')
+
+    # now get a set of locations where no Lat/Lon exists
+    #kwargs['Lat__in'] = ['', 'NULL']
+    #kwargs['Lon__in'] = ['', 'NULL']
+    kwargs['Lat__exact'] = '' 
+    kwargs['Lon__exact'] = '' 
+    locationsWithoutLatLon = LocationPanel.objects.filter(**kwargs)
         
     # get lists of options for filters
     Organization_Description_Choices_Array = []
@@ -89,7 +95,7 @@ def index(request):
 
 
 
-    context_dict = {'locations': locations, "Organization_Description_Choices": Organization_Description_Choices, "Service_Area_Choices": Service_Area_Choices, "organization_structured_Choices": organization_structured_Choices, "Activities_Services_Choices": Activities_Services_Choices, "Service_Population_Choices": Service_Population_Choices, "Languages_Choices": Languages_Choices }
+    context_dict = {'locations': locations, 'locationsWithoutLatLon': locationsWithoutLatLon, "Organization_Description_Choices": Organization_Description_Choices, "Service_Area_Choices": Service_Area_Choices, "organization_structured_Choices": organization_structured_Choices, "Activities_Services_Choices": Activities_Services_Choices, "Service_Population_Choices": Service_Population_Choices, "Languages_Choices": Languages_Choices }
     return render_to_response('cdadmap/index.html', context_dict, context)
     
 

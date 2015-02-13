@@ -166,8 +166,8 @@ class LocationPanel(models.Model):
     MailingAddress = models.TextField()
     KeepPrivate = models.TextField()
     Activity = models.TextField()
-    Lat = models.CharField(max_length=255, null=True, blank=True)
-    Lon = models.CharField(max_length=255, null=True, blank=True)
+    Lat = models.CharField(max_length=255, null=False, blank=True, default='')
+    Lon = models.CharField(max_length=255, null=False, blank=True, default='')
     Organization_Name_SurveyPanel_FK = models.ForeignKey(SurveyPanel, to_field='Organization_Name', null=True)
     Organization_Name_ContactPanel_FK = models.ForeignKey(ContactPanel, to_field='Organization_Name', null=True)
     

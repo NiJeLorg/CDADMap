@@ -4,7 +4,7 @@ from cdadmap.models import LocationPanel
 
 
 """
-  Loads data from MapDissolve field and replaces header text
+  Geocodes locations
 """
 class Command(BaseCommand):
     
@@ -14,25 +14,33 @@ class Command(BaseCommand):
     	base_url = "http://maps.googleapis.com/maps/api/geocode/json?";
         
         
-        for location in LocationPanel.objects.filter(Address__isnull=False, Lat__isnull=True):
-            if bool(location.City) is True:
-                fullAddress = location.Address + ' ' + location.City + ', ' + location.State
-                params = { 'address' : fullAddress, 'sensor' : "false" }                    
-            else:
-                fullAddress = location.Address + ', ' + location.State
-                params = { 'address' : fullAddress, 'sensor' : "false" }                    
-        
-            # fully form url    
-            request_url = base_url + urllib.urlencode(params);
+        for location in LocationPanel.objects.filter(Address__isnull=False, Lat__exact='', Lon__exact=''):
+            # ignore location if address is a P.O. Box
+            if "P.O." not in location.Address and "PO" not in location.Address:
+
+                if bool(location.City) is True:
+                    fullAddress = location.Address + ' ' + location.City + ', ' + location.State
+                    params = { 'address' : fullAddress, 'sensor' : "false" }                    
+                else:
+                    fullAddress = location.Address + ', ' + location.State
+                    params = { 'address' : fullAddress, 'sensor' : "false" }                    
             
-            #send request to google and decode the returned JSON into a string
-            response = json.loads(urllib2.urlopen(request_url).read(1000000))
-        
-            # pull out and save the lat & lons            
-            location.Lat = response['results'][0]['geometry']['location']['lat']	    	
-            location.Lon = response['results'][0]['geometry']['location']['lng']           
-        
-            location.save()
+                # fully form url    
+                request_url = base_url + urllib.urlencode(params);
+                
+                #send request to google and decode the returned JSON into a string
+                response = json.loads(urllib2.urlopen(request_url).read(1000000))
+            
+                # pull out and save the lat & lons            
+                location.Lat = response['results'][0]['geometry']['location']['lat']	    	
+                location.Lon = response['results'][0]['geometry']['location']['lng']           
+            
+                location.save()
+
+            else:
+                location.Lat = ''
+                location.Lon = ''
+                location.save
                                 
 
     def handle(self, *args, **options):

@@ -5,7 +5,7 @@
 // initialize map
 function CDADModalMap(mapid, lat, lon) {
 	
-	console.log(mapid);
+	//console.log(mapid);
 	
     //where detroit is 42.377410, -83.093719
     this.map = new L.Map(mapid, {

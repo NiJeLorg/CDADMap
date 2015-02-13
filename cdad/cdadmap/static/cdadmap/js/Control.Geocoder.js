@@ -135,8 +135,15 @@
 				this._map.removeLayer(this._geocodeMarker);
 			}
 
+			var popupText;
+			if (result.html) {
+				popupText = "<div class=\"rollover-tooltip\">" + result.html + "</div>";
+			} else {
+				popupText = "<div class=\"rollover-tooltip\">" + result.name + "</div>";
+			}
+
 			this._geocodeMarker = new L.Marker(result.center)
-				.bindPopup(result.html || result.name)
+				.bindPopup(popupText)
 				.addTo(this._map)
 				.openPopup();
 
@@ -693,8 +700,10 @@
 		},
 
 		geocode: function(query, cb, context) {
+			var bounds = "41.5525,-84.9277|43.3396,-82.1524";
 			var params = {
 				address: query,
+				bounds: bounds
 			};
 			if(this._key && this._key.length)
 			{
