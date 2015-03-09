@@ -4,7 +4,21 @@
  */
 
 
-$( document ).ready(function() {
+function CDADMapPopout() {
+
+	// ensure all menu's content is hidden on page load
+	$( "#popout-settings-content" ).hide();
+	$( "#popout-info-content" ).hide();
+	$( "#popout-filters-content" ).hide();
+	$( "#popout-about-content" ).hide();
+	
+	// clear all fliters if clicked
+	$( "#clearFilters" ).click(function() {	
+		$( "input:checked" ).attr("checked", false);
+		CDADMapPopout.onFilterChange();
+	});
+	
+
 					
 	$( ".settings" ).click(function() {		
 
@@ -15,7 +29,7 @@ $( document ).ready(function() {
 		$( "#popout-info-content" ).html('');
 		
 		// ensure the correct content is showing
-		$( "#popout-settings-content" ).show();
+		$( "#popout-settings-content" ).toggle();
 		$( "#popout-info-content" ).hide();
 		$( "#popout-filters-content" ).hide();
 		$( "#popout-about-content" ).hide();
@@ -24,7 +38,7 @@ $( document ).ready(function() {
 			// don't toggle classes
 		} else {
 			$( ".popout-banner" ).toggleClass("popout-banner-open");		
-			$( ".popout-content" ).toggleClass("popout-content-open");								
+			$( ".popout-content" ).toggleClass("popout-content-open");
 		}
 		
 		// set actives for next click
@@ -45,45 +59,53 @@ $( document ).ready(function() {
 		} else {
 			$( ".right-bar-color" ).show();			
 		}
-		
+
+		// set class for popup box at the bottom for scrolling
+		CDADMapPopout.checkPopoutOpen();
 				
 	});
 	
-	$( ".info" ).click(function() {		
-		
-		// populate banner				
-		$( "#banner-text" ).html("INFO");
+	$( ".info" ).click(function() {
 
-		// ensure the correct content is showing
-		$( "#popout-info-content" ).show();
-		$( "#popout-settings-content" ).hide();
-		$( "#popout-filters-content" ).hide();
-		$( "#popout-about-content" ).hide();
-		
-		if ($( ".popout-banner" ).hasClass( "popout-banner-open" ) && $( ".info" ).hasClass( "active" ) == false) {
-			// don't toggle classes
-		} else {
-			$( ".popout-banner" ).toggleClass("popout-banner-open");		
-			$( ".popout-content" ).toggleClass("popout-content-open");								
-		}		
-		
-		// set actives for next click
-		$( ".info" ).toggleClass("active");
-		$( ".settings" ).removeClass("active");
-		$( ".filters" ).removeClass("active");
-		$( ".about" ).removeClass("active");
-		
-		// create scrollbars
-		$( "#popout-info-content" ).perfectScrollbar({
-			suppressScrollX: true,
-			includePadding: true
-		});
-		
-		// show yellow bar if scrollbar isn't on
-		if ($( "#popout-info-content" ).hasClass( "ps-active-y" )) {
-			$( ".right-bar-color" ).hide();
-		} else {
-			$( ".right-bar-color" ).show();			
+		// do nothing if there is no content 
+		if ($( "#popout-info-content" ).html().length > 0) {
+			// populate banner				
+			$( "#banner-text" ).html("INFO");
+
+			// ensure the correct content is showing
+			$( "#popout-info-content" ).toggle();
+			$( "#popout-settings-content" ).hide();
+			$( "#popout-filters-content" ).hide();
+			$( "#popout-about-content" ).hide();
+			
+			if ($( ".popout-banner" ).hasClass( "popout-banner-open" ) && $( ".info" ).hasClass( "active" ) == false) {
+				// don't toggle classes
+			} else {
+				$( ".popout-banner" ).toggleClass("popout-banner-open");		
+				$( ".popout-content" ).toggleClass("popout-content-open");								
+			}		
+			
+			// set actives for next click
+			$( ".info" ).toggleClass("active");
+			$( ".settings" ).removeClass("active");
+			$( ".filters" ).removeClass("active");
+			$( ".about" ).removeClass("active");
+			
+			// create scrollbars
+			$( "#popout-info-content" ).perfectScrollbar({
+				suppressScrollX: true,
+				includePadding: true
+			});
+			
+			// show yellow bar if scrollbar isn't on
+			if ($( "#popout-info-content" ).hasClass( "ps-active-y" )) {
+				$( ".right-bar-color" ).hide();
+			} else {
+				$( ".right-bar-color" ).show();			
+			}
+
+			CDADMapPopout.checkPopoutOpen();
+
 		}
 		
 	});
@@ -97,7 +119,7 @@ $( document ).ready(function() {
 		$( "#popout-info-content" ).html('');
 
 		// ensure the correct content is showing
-		$( "#popout-filters-content" ).show();
+		$( "#popout-filters-content" ).toggle();
 		$( "#popout-info-content" ).hide();
 		$( "#popout-settings-content" ).hide();
 		$( "#popout-about-content" ).hide();
@@ -106,7 +128,7 @@ $( document ).ready(function() {
 			// don't toggle classes
 		} else {
 			$( ".popout-banner" ).toggleClass("popout-banner-open");		
-			$( ".popout-content" ).toggleClass("popout-content-open");								
+			$( ".popout-content" ).toggleClass("popout-content-open");					
 		}				
 
 		// set actives for next click
@@ -127,6 +149,8 @@ $( document ).ready(function() {
 		} else {
 			$( ".right-bar-color" ).show();			
 		}
+
+		CDADMapPopout.checkPopoutOpen();
 				
 	});
 	
@@ -139,7 +163,7 @@ $( document ).ready(function() {
 		$( "#popout-info-content" ).html('');
 
 		// ensure the correct content is showing
-		$( "#popout-about-content" ).show();
+		$( "#popout-about-content" ).toggle();
 		$( "#popout-info-content" ).hide();
 		$( "#popout-filters-content" ).hide();
 		$( "#popout-settings-content" ).hide();
@@ -169,6 +193,8 @@ $( document ).ready(function() {
 		} else {
 			$( ".right-bar-color" ).show();			
 		}
+
+		CDADMapPopout.checkPopoutOpen();
 				
 	});
 	
@@ -205,6 +231,18 @@ $( document ).ready(function() {
 	
 	
 	// toggle off and on map background layers in settings
+	$( "#DetroitBoundary" ).click(function() {
+		if ($( "#DetroitBoundary" ).hasClass( "toggle-off" )) {
+			$( "#DetroitBoundary" ).removeClass('toggle-off');
+			$( "#DetroitBoundary" ).addClass('toggle-on');
+			CDADMap.loadLayerFor('DetroitBoundary');			
+		} else {
+			$( "#DetroitBoundary" ).removeClass('toggle-on');			
+			$( "#DetroitBoundary" ).addClass('toggle-off');
+			CDADMap.removeLayerFor('DetroitBoundary');
+		}
+	});
+
 	$( "#CouncilDistrictBoundaries" ).click(function() {
 		if ($( "#CouncilDistrictBoundaries" ).hasClass( "toggle-off" )) {
 			$( "#CouncilDistrictBoundaries" ).removeClass('toggle-off');
@@ -240,9 +278,166 @@ $( document ).ready(function() {
 			CDADMap.removeLayerFor('ZipCodeBoundaries');
 		}
 	});
+
+	$( "#CDOBC" ).click(function() {
+		if ($( "#CDOBC" ).hasClass( "toggle-off" )) {
+			$( "#CDOBC" ).removeClass('toggle-off');
+			$( "#CDOBC" ).addClass('toggle-on');
+			CDADMap.loadLayerFor('CDOBC');			
+		} else {
+			$( "#CDOBC" ).removeClass('toggle-on');			
+			$( "#CDOBC" ).addClass('toggle-off');
+			CDADMap.removeLayerFor('CDOBC');
+		}
+	});
 	
+
+	// set up listeners to detect changes in checkbox toggling for filtering data
+	// add event listeners to run functions on change
+	$("#accordion").on("change", function(e){
+		CDADMapPopout.onFilterChange();
+	});
+
+}	
+
+CDADMapPopout.checkPopoutOpen = function () {
+	if ($( ".popout-banner" ).hasClass( "popout-banner-open" )) {
+		$("#popup-wrapper").css("right", "442px");
+	} else {
+		$("#popup-wrapper").css("right", "140px");
+	}		
+}	
+
+CDADMapPopout.onFilterChange = function (){
+	//get keyword
+	var keyword = '';
+	if ($("#liKeyword").hasClass("chosen")) {
+		// get value
+		keyword = $('.leaflet-control-geocoder-form input').val();	
+	} 
+
+	var Organization_Description_Choices = [];
+	var Service_Area_Choices = [];
+	var organization_structured_Choices = [];
+	var Activities_Services_Choices = [];
+	var Service_Population_Choices = [];
+	var Languages_Choices = [];
+	var cdadmebership = [];
+
+	// select all checked and iterate through each checked value and bin into categories
+	$( "input:checked" ).each(function() {				
+		if ($( this ).attr('class') === "Organization_Description_Choices") {
+			Organization_Description_Choices.push($( this ).attr('value'));
+		}
+		if ($( this ).attr('class') === "Service_Area_Choices") {
+			Service_Area_Choices.push($( this ).attr('value'));
+		}
+		if ($( this ).attr('class') === "organization_structured_Choices") {
+			organization_structured_Choices.push($( this ).attr('value'));
+		}
+		if ($( this ).attr('class') === "Activities_Services_Choices") {
+			Activities_Services_Choices.push($( this ).attr('value'));
+		}
+		if ($( this ).attr('class') === "Service_Population_Choices") {
+			Service_Population_Choices.push($( this ).attr('value'));
+		}
+		if ($( this ).attr('class') === "Languages_Choices") {
+			Languages_Choices.push($( this ).attr('value'));
+		}
+		if ($( this ).attr('class') === "cdadmebership") {
+			cdadmebership.push($( this ).attr('value'));
+		}
+
+	});
+
+	// create comma delimited strings
+	Organization_Description_Choices_String = Organization_Description_Choices.join("|");
+	Service_Area_Choices_String = Service_Area_Choices.join("|");
+	organization_structured_Choices_String = organization_structured_Choices.join("|");
+	Activities_Services_Choices_String = Activities_Services_Choices.join("|");
+	Service_Population_Choices_String = Service_Population_Choices.join("|");
+	Languages_Choices_String = Languages_Choices.join("|");
+	cdadmebership_String = cdadmebership.join("|");
+
+    //reload map data
+    CDADMapPopout.loadData(Organization_Description_Choices, Service_Area_Choices, organization_structured_Choices, Activities_Services_Choices, Service_Population_Choices, Languages_Choices, cdadmebership, Organization_Description_Choices_String, Service_Area_Choices_String, organization_structured_Choices_String, Activities_Services_Choices_String, Service_Population_Choices_String, Languages_Choices_String, cdadmebership_String, keyword);
+
+}
+
+	// ajax call to server to reload data when filters are chosen
+CDADMapPopout.loadData = function (Organization_Description_Choices, Service_Area_Choices, organization_structured_Choices, Activities_Services_Choices, Service_Population_Choices, Languages_Choices, cdadmebership, Organization_Description_Choices_String, Service_Area_Choices_String, organization_structured_Choices_String, Activities_Services_Choices_String, Service_Population_Choices_String, Languages_Choices_String, cdadmebership_String, keyword){
+    $.ajax({
+        type: 'GET',
+        url:  'filter/?Organization_Description_Choices=' + Organization_Description_Choices_String + '&Service_Area_Choices=' + Service_Area_Choices_String + '&organization_structured_Choices=' + organization_structured_Choices_String + '&Activities_Services_Choices=' + Activities_Services_Choices_String + '&Service_Population_Choices=' + Service_Population_Choices_String + '&Languages_Choices=' + Languages_Choices_String + '&cdadmebership=' + cdadmebership_String + '&keyword=' + keyword + '&template=locations',
+        success: function(data){
+        	//console.log(data);
+        	// remove locations from map
+        	CDADMap.clearLocationsLayers();
+        	// parse new incoming geojson
+        	var geoJSON = $.parseJSON( data );
+        	// rebuild the geoJSON files with new data
+			CDADMap.loadFilteredLocations(geoJSON);
+        }
+    });
+
+	// second ajax call to reload the popup data when filters are chosen
+    $.ajax({
+        type: 'GET',
+        url:  'filter/?Organization_Description_Choices=' + Organization_Description_Choices_String + '&Service_Area_Choices=' + Service_Area_Choices_String + '&organization_structured_Choices=' + organization_structured_Choices_String + '&Activities_Services_Choices=' + Activities_Services_Choices_String + '&Service_Population_Choices=' + Service_Population_Choices_String + '&Languages_Choices=' + Languages_Choices_String + '&cdadmebership=' + cdadmebership_String + '&keyword=' + keyword + '&template=popup',
+        success: function(data){
+        	// remove data in popup content
+        	$("#popup-wrapper").html('');
+        	// add new data to popup content
+			$("#popup-wrapper").html(data);
+
+			CDADMapPopout.setFiltersInPopup(Organization_Description_Choices, Service_Area_Choices, organization_structured_Choices, Activities_Services_Choices, Service_Population_Choices, Languages_Choices, cdadmebership, keyword);
+
+			// open list below the map
+			if ($( ".popup-wrapper" ).hasClass( "popup-wrapper-open" )) {
+				// don't toggle classes
+			} else {
+				$( ".popup-wrapper" ).toggleClass("popup-wrapper-open");			
+			}
+
+        }
+    });
+
 	
+}
+
+CDADMapPopout.setFiltersInPopup = function(Organization_Description_Choices, Service_Area_Choices, organization_structured_Choices, Activities_Services_Choices, Service_Population_Choices, Languages_Choices, cdadmebership, keyword){
+	if ((Organization_Description_Choices.length > 0) || (Service_Area_Choices.length > 0) || (organization_structured_Choices.length > 0) || (Activities_Services_Choices.length > 0) || (Service_Population_Choices.length > 0) || (Languages_Choices.length > 0) || (cdadmebership.length > 0)) {
+		$("#popup-filters").append('<span class="popup-filters">Filters applied: </span>');
+	}
+
+
+	// set filters labels in the popup window for each filter selected
+	$.each(Organization_Description_Choices, function( index, value ) {
+		$("#popup-filters").append('<span class="label label-filter label-orgtype">' + value + '</span>');
+	});
+	$.each(Service_Area_Choices, function( index, value ) {
+		$("#popup-filters").append('<span class="label label-filter label-servicearea">' + value + '</span>');
+	});
+	$.each(organization_structured_Choices, function( index, value ) {
+		$("#popup-filters").append('<span class="label label-filter label-orgstructure">' + value + '</span>');
+	});
+	$.each(Activities_Services_Choices, function( index, value ) {
+		$("#popup-filters").append('<span class="label label-filter label-activityservice">' + value + '</span>');
+	});
+	$.each(Service_Population_Choices, function( index, value ) {
+		$("#popup-filters").append('<span class="label label-filter label-servicepop">' + value + '</span>');
+	});
+	$.each(Languages_Choices, function( index, value ) {
+		$("#popup-filters").append('<span class="label label-filter label-language">' + value + '</span>');
+	});
+	$.each(cdadmebership, function( index, value ) {
+		if (value == 'Yes') {
+			$("#popup-filters").append('<span class="label label-filter label-cdadmebership">CDAD Members</span>');
+		} else {
+			$("#popup-filters").append('<span class="label label-filter label-cdadmebership">Not CDAD Members</span>');
+
+		}
+	});
+
+}
 	
-	
-	
-});

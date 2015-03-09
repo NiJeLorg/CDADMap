@@ -1,4 +1,5 @@
 {% load staticfiles %}
+
 	{
 		"type": "FeatureCollection",
     	"features": [ {% for location in locations %}
@@ -8,6 +9,7 @@
 					"counterId": "{{ forloop.counter0 }}",
 					"idlocation": "{{ location.idlocation }}",
 			        "Organization_Name": "{{ location.Organization_Name }}",
+			        "Organizaton_Acronym": "{{ location.getSurveyObject.Organizaton_Acronym }}",
 			        "Address": "{{ location.Address }}",
 			        "Address2": "{{ location.Address2 }}",
 			        "City": "{{ location.City }}",
@@ -17,9 +19,10 @@
 			        "Activity": "{{ location.Activity }}",
 			        "Organization_Description": "{{ location.getSurveyObject.Organization_Description }}",
 			        "Activities_Services": "{{ location.getSurveyObject.Activities_Services }}",
-			        "Tel": "{{ location.getContactObject.Tel }}",
-			        "Email": "{{ location.getContactObject.Email }}",
+			        "Email": "{{ location.getSurveyObject.Social_Email }}",
 			        "Social_website": "{{ location.getSurveyObject.Social_website }}",
+			        "Social_facebook": "{{ location.getSurveyObject.Social_facebook }}",
+			        "Social_Twitter": "{{ location.getSurveyObject.Social_Twitter }}",
 					"iconUrl": "{% static 'cdadmap/css/images/cdad-marker.png' %}"
 			    },
 			    "geometry": {

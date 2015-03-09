@@ -3,7 +3,7 @@
  */
 
 .popout-content {
-    z-index: 1001;
+    z-index: 1003;
     position: fixed;
     right: 442px;
     top: 65px;
@@ -52,8 +52,8 @@
 }
 
 .right-bar-color {
-	display: none;
-	z-index: 1002;
+	display: block;
+	z-index: 1004;
 	position: absolute;
 	right:0;
 	background-color: #e8c51d;
@@ -83,10 +83,46 @@
 	margin-top: 20px;
 }
 
+/* Leaflet Override */
+.label {
+    display: inline-block;
+    padding: .3em .7em .3em;
+    margin-bottom: .3em;
+    font-size: 80%;
+}
+
 .label-activity {
-	line-height: 20px;
 	background-color: #e8826d;
 }
+
+.glyphicon-orgtype {
+    color: #1b9e77;
+}
+
+.glyphicon-servicearea {
+    color: #d95f02;
+}
+
+.glyphicon-orgstructure {
+    color: #7570b3;
+}
+
+.glyphicon-activityservice {
+    color: #e7298a;
+}
+
+.glyphicon-servicepop {
+    color: #66a61e;
+}
+
+.glyphicon-language {
+    color: #e6ab02;
+}
+
+.glyphicon-cdadmebership {
+    color: #a6761d;
+}
+
 
 @media(max-width:768px) {
 	

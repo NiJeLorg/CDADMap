@@ -86,7 +86,6 @@
 .leaflet-top,
 .leaflet-bottom {
 	position: absolute;
-	z-index: 1000;
 	pointer-events: none;
 	}
 .leaflet-top {
@@ -94,12 +93,14 @@
 	}
 .leaflet-right {
 	right: 0;
+	z-index: 1002;
 	}
 .leaflet-bottom {
 	bottom: 0;
 	}
 .leaflet-left {
 	left: 0;
+	z-index: 1000;
 	}
 .leaflet-control {
 	float: left;

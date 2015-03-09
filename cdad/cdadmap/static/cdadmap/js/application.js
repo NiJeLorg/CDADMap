@@ -10,6 +10,7 @@ var map_popups = [];
 var open_tooltips = [];
 var mainLayer = null;
 var LOCATIONS = null;
+var DETLAYER = null;
 var CDBLAYER = null;
 var NBLAYER = null;
 var ZCBLAYER = null;
@@ -22,8 +23,12 @@ $().ready(new function(){
 	
     var myMap = new CDADMap();
     myMap.loadLocations();
-    myMap.loadLayers();
 	myMap.showLocationsOnPageLoad();
     MY_MAP = myMap;	
+    var myPopout = new CDADMapPopout();
+
+    // load layers after map and popout are loaded to speed things up a bit
+    CDADMap.loadLayers();
+
 		
 });

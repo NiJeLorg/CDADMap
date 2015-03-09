@@ -4,6 +4,7 @@
 {% block css_block %}
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/bootstrap-modal-carousel.css' %}">	
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/leaflet.css' %}">	
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/leaflet.label.css' %}">	
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/MarkerCluster.css' %}">	
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/MarkerCluster.Default.css' %}">	
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/Control.Geocoder.css' %}">	
@@ -42,10 +43,31 @@
 			height: 15px;
 			background-image: url({% static 'cdadmap/css/images/toggle-on.png' %});
 		}
+
+		.twitter-logo {
+			display: inline-block;
+			margin-right: 10px;
+			width: 50px;
+			height: 50px;
+			background-image: url({% static 'cdadmap/css/images/twitter-logo.png' %});
+		}
+
+		.facebook-logo {
+			display: inline-block;
+			margin-right: 10px;
+			width: 50px;
+			height: 50px;
+			background-image: url({% static 'cdadmap/css/images/facebook-logo.png' %});
+		}
+
+
 				
 	</style>
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/popout-sidebar.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/perfect-scrollbar.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/popup-bottombar.css' %}">
+
+
 	
 {% endblock %}
 
@@ -59,7 +81,7 @@
 	<div id="popout-banner" class="popout-banner">
 		<p id="banner-text" class="banner-text"></p>
 	</div>
-	<div id="popout-content" class="popout-content always-visible">
+	<div id="popout-content" class="popout-content">
 		<div class="right-bar-color"></div>
 	    <div class="popout-nav">
 	        <div id="popout-settings-content" class="popout-content">
@@ -71,14 +93,15 @@
 				    <button id="osmTileSat" type="button" class="btn btn-default">SATELLITE</button>
 				  </div>
 				  <div class="btn-group" role="group">
-				    <button id="osmTileMap" type="button" class="btn btn-default">HYBRID</button>
+				    <button id="osmTileMap" type="button" class="btn btn-default">STREET</button>
 				  </div>
 				</div>
 				<ul class="list-group toggle-maps">
+				  <li class="list-group-item">CITY OF DETROIT BOUNDARY <span id="DetroitBoundary" class="toggle-off"></span></li>
 				  <li class="list-group-item">COUNCIL DISTRICT BOUNDARIES <span id="CouncilDistrictBoundaries" class="toggle-off"></span></li>
-				  <li class="list-group-item">NEIGHBORHOOD BOUNDARIES <span id="NeighborhoodBoundaries" class="toggle-off"></span></li>
+				  <li class="list-group-item">MASTER PLAN BOUNDARIES <span id="NeighborhoodBoundaries" class="toggle-off"></span></li>
 				  <li class="list-group-item">ZIP CODE BOUNDARIES <span id="ZipCodeBoundaries" class="toggle-off"></span></li>
-				  <li class="list-group-item">CDO & BLOCK CLUB SERVICE AREAS <span id="CDOBoundaries" class="toggle-off"></span></li>
+				  <li class="list-group-item">CDO & BLOCK CLUB SERVICE AREAS <span id="CDOBC" class="toggle-off"></span></li>
 				</ul>
 	        </div>
 	        <div id="popout-info-content" class="popout-content"></div>
@@ -88,7 +111,7 @@
 				    <div class="panel-heading" role="tab" id="headingOne">
 				      <h4 class="panel-title">
 				        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-				          ORGANIZATION TYPE <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span>
+				          ORGANIZATION TYPE <span class="glyphicon glyphicon-plus glyphicon-orgtype pull-right" aria-hidden="true"></span>
 				        </a>
 				      </h4>
 				    </div>
@@ -97,7 +120,7 @@
 						{% for choice in Organization_Description_Choices %}  						
 							<div class="checkbox">
 							  <label>
-							    <input type="checkbox" value="{{ choice }}">
+							    <input type="checkbox" class="Organization_Description_Choices" value="{{ choice }}">
 							    {{ choice }}
 							  </label>
 							</div>
@@ -109,7 +132,7 @@
 				    <div class="panel-heading" role="tab" id="headingTwo">
 				      <h4 class="panel-title">
 				        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-				          SERVICE AREA <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span>
+				          SERVICE AREA <span class="glyphicon glyphicon-plus glyphicon-servicearea pull-right" aria-hidden="true"></span>
 				        </a>
 				      </h4>
 				    </div>
@@ -118,7 +141,7 @@
 						{% for choice in Service_Area_Choices %}  						
 							<div class="checkbox">
 							  <label>
-							    <input type="checkbox" value="{{ choice }}">
+							    <input type="checkbox" class="Service_Area_Choices" value="{{ choice }}">
 							    {{ choice }}
 							  </label>
 							</div>
@@ -130,7 +153,7 @@
 				    <div class="panel-heading" role="tab" id="headingThree">
 				      <h4 class="panel-title">
 				        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-				          ORGANIZATION STRUCTURE <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span>
+				          ORGANIZATION STRUCTURE <span class="glyphicon glyphicon-plus glyphicon-orgstructure pull-right" aria-hidden="true"></span>
 				        </a>
 				      </h4>
 				    </div>
@@ -139,7 +162,7 @@
 						{% for choice in organization_structured_Choices %}  						
 							<div class="checkbox">
 							  <label>
-							    <input type="checkbox" value="{{ choice }}">
+							    <input type="checkbox" class="organization_structured_Choices" value="{{ choice }}">
 							    {{ choice }}
 							  </label>
 							</div>
@@ -151,7 +174,7 @@
 				    <div class="panel-heading" role="tab" id="headingFour">
 				      <h4 class="panel-title">
 				        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-				          ACTIVITIES AND SERVICES <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span>
+				          ACTIVITIES AND SERVICES <span class="glyphicon glyphicon-plus glyphicon-activityservice pull-right" aria-hidden="true"></span>
 				        </a>
 				      </h4>
 				    </div>
@@ -160,7 +183,7 @@
 						{% for choice in Activities_Services_Choices %}  						
 							<div class="checkbox">
 							  <label>
-							    <input type="checkbox" value="{{ choice }}">
+							    <input type="checkbox" class="Activities_Services_Choices" value="{{ choice }}">
 							    {{ choice }}
 							  </label>
 							</div>
@@ -172,7 +195,7 @@
 				    <div class="panel-heading" role="tab" id="headingFive">
 				      <h4 class="panel-title">
 				        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-				          INDIVIDUALS & GROUPS SERVED <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span>
+				          INDIVIDUALS & GROUPS SERVED <span class="glyphicon glyphicon-plus glyphicon-servicepop pull-right" aria-hidden="true"></span>
 				        </a>
 				      </h4>
 				    </div>
@@ -181,7 +204,7 @@
 						{% for choice in Service_Population_Choices %}  						
 							<div class="checkbox">
 							  <label>
-							    <input type="checkbox" value="{{ choice }}">
+							    <input type="checkbox" class="Service_Population_Choices" value="{{ choice }}">
 							    {{ choice }}
 							  </label>
 							</div>
@@ -193,7 +216,7 @@
 				    <div class="panel-heading" role="tab" id="headingSix">
 				      <h4 class="panel-title">
 				        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-				          LANGUAGES OFFERED <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span>
+				          LANGUAGES OFFERED <span class="glyphicon glyphicon-plus glyphicon-language pull-right" aria-hidden="true"></span>
 				        </a>
 				      </h4>
 				    </div>
@@ -202,7 +225,7 @@
 						{% for choice in Languages_Choices %}  						
 							<div class="checkbox">
 							  <label>
-							    <input type="checkbox" value="{{ choice }}">
+							    <input type="checkbox" class="Languages_Choices" value="{{ choice }}">
 							    {{ choice }}
 							  </label>
 							</div>
@@ -214,7 +237,7 @@
 				    <div class="panel-heading" role="tab" id="headingSeven">
 				      <h4 class="panel-title">
 				        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
-				          CDAD MEMBERSHIP <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span>
+				          CDAD MEMBERSHIP <span class="glyphicon glyphicon-plus glyphicon-cdadmebership pull-right" aria-hidden="true"></span>
 				        </a>
 				      </h4>
 				    </div>
@@ -222,13 +245,13 @@
 				      <div class="panel-body content-filters">
 							<div class="radio">
 							  <label>
-							    <input type="radio" name="cdadmebership" value="Yes">
+							    <input type="radio" name="cdadmebership" class="cdadmebership" value="Yes">
 							    Yes
 							  </label>
 							</div>
 							<div class="radio">
 							  <label>
-							    <input type="radio" name="cdadmebership" value="No">
+							    <input type="radio" name="cdadmebership" class="cdadmebership" value="No">
 							    No
 							  </label>
 							</div>
@@ -236,12 +259,21 @@
 				    </div>
 				  </div>
 				</div>
+				<button id="clearFilters" class="btn btn-default pull-right" type="submit">CLEAR FILTERS</button>
 	        </div>
 	        <div id="popout-about-content" class="popout-content"></div>
 		</div>
 	</div>
 </div>
 <!-- /#popout-wrapper-->
+
+<!-- #popup-wrapper-->
+<div id="popup-wrapper" class="popup-wrapper">
+	<!-- include page for popup content-->
+	{% include 'cdadmap/popup-content.html' %}
+</div>
+<!-- /#popup-wrapper-->
+
 
 <!-- Page Content -->
 <div id="map"></div>				
@@ -254,16 +286,26 @@
 {% block js_block %}
 	<!-- create locations geojson and include the topojson layers-->
 	<script type="text/javascript">
-		var locations = {% include 'cdadmap/locations-geojson.html' %};
-		var locationsWithoutLatLon = {% include 'cdadmap/locationsWithoutLatLon.html' %};
+		// create array of service areas based on the locations
+		var staticGeoJSON = []; 
+		{% for geoJSON in staticGeoJSONs %}
+			staticGeoJSON[{{ forloop.counter0 }}] = "{% static geoJSON %}";
+		{% endfor %}
+
+		var detlayer = "{% static 'cdadmap/topojsons/detroit_city_boundary.json' %}";			
 		var cdblayer = "{% static 'cdadmap/topojsons/detroit_city_council_district_boundaries.json' %}";	
 		var nblayer = "{% static 'cdadmap/topojsons/detroit_neighborhood_boundaries.json' %}";	
-		var zcblayer = "{% static 'cdadmap/topojsons/detroit_zip_codes.json' %}";	
+		var zcblayer = "{% static 'cdadmap/topojsons/detroit_zip_codes.json' %}";
+		var locations = {% include 'cdadmap/locations-geojson.html' %};
 	</script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/popout.js' %}"></script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/address-dropdown.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/bootstrap-modal-carousel.js' %}"></script>
-	<script type="text/javascript" src="{% static 'cdadmap/js/perfect-scrollbar.js' %}"></script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/perfect-scrollbar.jquery.min.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/d3.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/underscore-min.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/leaflet.js' %}"></script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/leaflet.label-src.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/leaflet-omnivore.min.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/topojson.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/leaflet.markercluster.js' %}"></script>
@@ -271,8 +313,6 @@
 	<script type="text/javascript" src="{% static 'cdadmap/js/CDADMap.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/CDADModalMap.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/application.js' %}"></script>
-	<script type="text/javascript" src="{% static 'cdadmap/js/popout.js' %}"></script>
-	
 	<script type="text/javascript">
 		// globally define maps
 		var maps = [];			
@@ -300,30 +340,28 @@
 
 			});
 
-
-
 			// define mini-maps array
 			{% for location in locations %}
-				var mapid = 'map' + {{ location.idlocation }};
-			    maps[{{ location.idlocation }}] = new CDADModalMap(mapid, {{ location.Lat }}, {{ location.Lon }});			
-					
+				{% if location.Lat != "0" %}
+					var mapid = 'map' + {{ location.idlocation }};
+				    maps[{{ location.idlocation }}] = new CDADModalMap(mapid, {{ location.Lat }}, {{ location.Lon }});
+			    {% endif %}				
 			{% endfor %}
 			
 			// ensure thumbnail maps render in dropdown				
-			$(".carousel-control").click(function() {
-				
+			$(".carousel-control").click(function() {				
 				{% for location in locations %}				
-					// use invalidate size to make maps show appropriately
-					setTimeout(function() {
-						maps[{{ location.idlocation }}].map.invalidateSize();
-						
-						// update modal title
-						if ($( "#modalItem{{ location.idlocation }}").hasClass('next')) {
-							$( "#titleOrgName" ).html('{{ location.Organization_Name }}');						
-						}
-						
-					}, 10);
-					
+						// use invalidate size to make maps show appropriately
+						setTimeout(function() {
+							{% if location.Lat != "0" %}
+								maps[{{ location.idlocation }}].map.invalidateSize();
+							{% endif %}	
+							// update modal title
+							if ($( "#modalItem{{ location.idlocation }}").hasClass('next') || $( "#modalItem{{ location.idlocation }}").hasClass('prev')) {
+								$( "#titleOrgName" ).html('{{ location.Organization_Name }}');			
+							}
+							
+						}, 10);				
 				{% endfor %}
 			});		
 		});

@@ -44,7 +44,8 @@ function CDADMap() {
 	// create empty container for locations
 	this.LOCATIONS = null;
 	
-	// empty containers for ohter layers 
+	// empty containers for other layers 
+	this.DETLAYER = null;
 	this.CDBLAYER = null;
 	this.NBLAYER = null;
 	this.ZCBLAYER = null;
@@ -64,7 +65,8 @@ function CDADMap() {
 		minHeight: 30,
 		closeButton:true 
 	});
-	
+
+
 }
 
 
@@ -106,6 +108,8 @@ CDADMap.onEachFeature_CDBLAYER = function(feature,layer){
         weight: 2,
         opacity: 0.75
 	};
+
+	layer.bindLabel(feature.id, { direction:'auto' });
 	
     //add on hover -- same on hover and mousemove for each layer
     layer.on('mouseover', function(ev) {
@@ -121,17 +125,7 @@ CDADMap.onEachFeature_CDBLAYER = function(feature,layer){
 		layer.setStyle(noHighlight);
 		
     });	
-	
-	// add on click popups for each layer -- these will be different
-	layer.on("click",function(ev){
-		// close all open popups
-		MY_MAP.map.closePopup();
-		
-		// bind popup with data to the feature
-		MY_MAP.popup.setLatLng(MY_MAP.map.layerPointToLatLng(ev.layerPoint));
-		MY_MAP.popup.setContent('<div class="rollover-tooltip">City Council District: '+ feature.id + '</div>');
-		MY_MAP.popup.openOn(MY_MAP.map);
-	});
+
 	
 }
 
@@ -144,6 +138,9 @@ CDADMap.onEachFeature_NBLAYER = function(feature,layer){
         weight: 2,
         opacity: 0.75
 	};
+
+	layer.bindLabel(feature.id, { direction:'auto' });
+
 	
     //add on hover -- same on hover and mousemove for each layer
     layer.on('mouseover', function(ev) {
@@ -159,18 +156,7 @@ CDADMap.onEachFeature_NBLAYER = function(feature,layer){
 		layer.setStyle(noHighlight);
 		
     });	
-	
-	// add on click popups for each layer -- these will be different
-	layer.on("click",function(ev){
-		// close all open popups
-		MY_MAP.map.closePopup();
 		
-		// bind popup with data to the feature
-		MY_MAP.popup.setLatLng(MY_MAP.map.layerPointToLatLng(ev.layerPoint));
-		MY_MAP.popup.setContent('<div class="rollover-tooltip">Neighborhood Name: '+ feature.id + '</div>');
-		MY_MAP.popup.openOn(MY_MAP.map);
-	});
-	
 }
 
 
@@ -183,6 +169,38 @@ CDADMap.onEachFeature_ZCBLAYER = function(feature,layer){
         weight: 2,
         opacity: 0.75
 	};
+
+	layer.bindLabel(feature.id, { direction:'auto' });
+	// set so labels are not hidden
+
+    //add on hover -- same on hover and mousemove for each layer
+    layer.on('mouseover', function(ev) {
+		
+		//highlight polygon
+		layer.setStyle(highlight);		
+		
+    });
+	
+	
+    layer.on('mouseout', function(ev) {
+		//remove highlight for polygon
+		layer.setStyle(noHighlight);
+		
+    });	
+	
+}
+
+CDADMap.onEachFeature_CDOBCLAYER = function(feature,layer){	
+	var highlight = {
+	    weight: 4,
+	    opacity: 1
+	};
+	var noHighlight = {
+        weight: 2,
+        opacity: 0.75
+	};
+
+	layer.bindLabel(feature.properties.OrgName, { direction:'auto' });
 	
     //add on hover -- same on hover and mousemove for each layer
     layer.on('mouseover', function(ev) {
@@ -199,55 +217,78 @@ CDADMap.onEachFeature_ZCBLAYER = function(feature,layer){
 		
     });	
 	
-	// add on click popups for each layer -- these will be different
-	layer.on("click",function(ev){
-		// close all open popups
-		MY_MAP.map.closePopup();
-		
-		// bind popup with data to the feature
-		MY_MAP.popup.setLatLng(MY_MAP.map.layerPointToLatLng(ev.layerPoint));
-		MY_MAP.popup.setContent('<div class="rollover-tooltip">Zip Code: '+ feature.id + '</div>');
-		MY_MAP.popup.openOn(MY_MAP.map);
-	});
-	
 }
 
 
-CDADMap.prototype.loadLayers = function (){
-    var self = this;
-		
+CDADMap.loadLayers = function (){
 	// load topoJSON data
 	// path to data defined in index.html django template
 
 	// define layer styles and oneachfeature popup styling
-	this.CDBLAYER_style = L.geoJson(null, {
+	MY_MAP.DETLAYER_style = L.geoJson(null, {
+	    style: CDADMap.getStyleColorFor_DETLAYER,
+	});
+
+	MY_MAP.CDBLAYER_style = L.geoJson(null, {
 	    style: CDADMap.getStyleColorFor_CDBLAYER,
 		onEachFeature: CDADMap.onEachFeature_CDBLAYER
 	});
 
-	this.NBLAYER_style = L.geoJson(null, {
+	MY_MAP.NBLAYER_style = L.geoJson(null, {
 	    style: CDADMap.getStyleColorFor_NBLAYER,
 		onEachFeature: CDADMap.onEachFeature_NBLAYER
 	});
 
-	this.ZCBLAYER_style = L.geoJson(null, {
+	MY_MAP.ZCBLAYER_style = L.geoJson(null, {
 	    style: CDADMap.getStyleColorFor_ZCBLAYER,
 		onEachFeature: CDADMap.onEachFeature_ZCBLAYER
 	});
 			
 	// load layers
-	this.CDBLAYER = omnivore.topojson(cdblayer, null, this.CDBLAYER_style);
-	this.NBLAYER = omnivore.topojson(nblayer, null, this.NBLAYER_style);
-	this.ZCBLAYER = omnivore.topojson(zcblayer, null, this.ZCBLAYER_style);
-			
+	MY_MAP.DETLAYER = omnivore.topojson(detlayer, null, MY_MAP.DETLAYER_style);
+	MY_MAP.CDBLAYER = omnivore.topojson(cdblayer, null, MY_MAP.CDBLAYER_style);
+	MY_MAP.NBLAYER = omnivore.topojson(nblayer, null, MY_MAP.NBLAYER_style);
+	MY_MAP.ZCBLAYER = omnivore.topojson(zcblayer, null, MY_MAP.ZCBLAYER_style);
+
+	// create a feature group layer for all of the service area polygons
+	MY_MAP.CDOBCLAYER = L.featureGroup();
+
+	// for loop to open, parse and add each layer to the feature group set above
+	for (var i = staticGeoJSON.length - 1; i >= 0; i--) {
+		$.getJSON( staticGeoJSON[i], function( data ) {
+		    var dataset = data;
+		    // draw the dataset on the map
+			var saGeoJSON = L.geoJson(dataset, {
+		        style: CDADMap.getStyleColorFor_CDOBCLAYER,
+		        onEachFeature: CDADMap.onEachFeature_CDOBCLAYER
+		    });
+
+		    // add to the feature group
+			MY_MAP.CDOBCLAYER.addLayer(saGeoJSON);
+		    
+		});
+	
+	};
+		
+}
+
+
+CDADMap.getStyleColorFor_DETLAYER = function (feature){
+    return {
+        weight: 5,
+        opacity: 1,
+        color: '#252525',
+        fillOpacity: 0
+    }
 }
 
 CDADMap.getStyleColorFor_CDBLAYER = function (feature){
     return {
         weight: 2,
         opacity: 0.75,
-        color: '#595959',
-        fillOpacity: 0
+        color: '#386cb0',
+        fillOpacity: 0.25,
+        fill: '#386cb0'
     }
 }
 
@@ -255,8 +296,9 @@ CDADMap.getStyleColorFor_NBLAYER = function (feature){
     return {
         weight: 2,
         opacity: 0.75,
-        color: '#e8826d',
-        fillOpacity: 0
+        color: '#7fc97f',
+        fillOpacity: 0.25,
+        fill: '#7fc97f'
     }
 }
 
@@ -264,13 +306,26 @@ CDADMap.getStyleColorFor_ZCBLAYER = function (feature){
     return {
         weight: 2,
         opacity: 0.75,
+        color: '#beaed4',
+        fillOpacity: 0.25,
+        fill: '#beaed4'
+    }
+}
+
+CDADMap.getStyleColorFor_CDOBCLAYER = function (feature){
+    return {
+        weight: 2,
+        opacity: 0.75,
         color: '#e8c51d',
-        fillOpacity: 0
+        fillOpacity: 0.25,
+        fill: '#e8c51d'
     }
 }
 
 
 CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
+
+	layer.bindLabel('<strong>' + feature.properties.Organization_Name + '</strong><br />' + feature.properties.Address + ' ' + feature.properties.Address2 + '<br />' + feature.properties.City + ', ' + feature.properties.State + ' ' + feature.properties.ZipCode, { direction:'auto', offset:[20,-30] });
 		
 	// add on click popups for locations -- open ino sidebar and populate with data
 	layer.on("click",function(ev){
@@ -280,28 +335,74 @@ CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 		// set up data for popout
 		var commaSpace = /,\s/ig;
 		var pipeSpace = /\|\s/ig;
+
+		// activities available at this location
 		var activityString = feature.properties.Activity.replace(commaSpace, '| ');
 		var activityArray = activityString.split(',');
-		var activityList = activityArray.join('; ');
-		activityList.replace(pipeSpace, ', ');
+		var activityArrayLength = activityArray.length;
+		for (var i = 0; i < activityArrayLength; i++) {
+			// wrap each item in labels
+			if (activityArray[i] !== "undefined" && activityArray[i]) {
+				activityArray[i] = '<span class="label label-filter label-activity">' + activityArray[i].replace(pipeSpace, ', ') + '</span>';
+			} else {
+				activityArray[i] = '';
+			}
+		}
+		var activityList = activityArray.join(' ');
+
 		
+		// activities avialable at this location 
 		var activities_ServicesString = feature.properties.Activities_Services.replace(commaSpace, '| ');
 		var activities_ServicesArray = activities_ServicesString.split(',');
 		var activities_ServicesArrayLength = activities_ServicesArray.length;
 		for (var i = 0; i < activities_ServicesArrayLength; i++) {
 			// wrap each item in labels
-			activities_ServicesArray[i] = '<span class="label label-activity">' + activities_ServicesArray[i].replace(pipeSpace, ', ') + '</span>';
+			if (activities_ServicesArray[i] !== "undefined" && activities_ServicesArray[i]) {
+				activities_ServicesArray[i] = '<span class="label label-filter label-activityservice">' + activities_ServicesArray[i].replace(pipeSpace, ', ') + '</span>';
+			} else {
+				activities_ServicesArray[i] = '';
+			}
 		}
 		var activities_ServicesList = activities_ServicesArray.join(' ');
-		
-		var url = feature.properties.Social_website.replace('http://', '');
-		var printurl = url.replace(/\/$/, "");
-		url = 'http://' + url;
-		
-		
+
+		// organization type
+		var Organization_DescriptionString = feature.properties.Organization_Description.replace(commaSpace, '| ');
+		var Organization_DescriptionArray = Organization_DescriptionString.split(',');
+		var Organization_DescriptionArrayLength = Organization_DescriptionArray.length;
+		for (var i = 0; i < Organization_DescriptionArrayLength; i++) {
+			// wrap each item in labels
+			if (Organization_DescriptionArray[i] !== "undefined" && Organization_DescriptionArray[i]) {
+				Organization_DescriptionArray[i] = '<span class="label label-filter label-orgtype">' + Organization_DescriptionArray[i].replace(pipeSpace, ', ') + '</span>';
+			} else {
+				Organization_DescriptionArray[i] = '';
+			}
+		}
+		var Organization_DescriptionList = Organization_DescriptionArray.join(' ');
+
+		if (typeof feature.properties.Social_website !== 'undefined' && feature.properties.Social_website) {
+			var website = "<p class='info-content'><a href='" + feature.properties.Social_website + "'>" + feature.properties.Social_website + "</a></p>";
+		} else {
+			var website = '';
+		}
+
+
+		// facebook link
+		if (typeof feature.properties.Social_facebook !== 'undefined' && feature.properties.Social_facebook) {
+			var fbwebsite = "<a href='" + feature.properties.Social_facebook + "'><span class='facebook-logo'></span></a>";
+		} else {
+			var fbwebsite = '';
+		}
+
+		// twitter link
+		if (typeof feature.properties.Social_Twitter !== 'undefined' && feature.properties.Social_Twitter) {
+			var twwebsite = "<a href='" + feature.properties.Social_Twitter + "'><span class='twitter-logo'></span></a>";
+		} else {
+			var twwebsite = '';
+		}
+
 		
 		// update sidebar content based on click
-		$( "#popout-info-content" ).html("<div class='info-title-bar text-capitalize'>" + feature.properties.Organization_Name + "</div><div class='info-content-titles'>OFFICE ADDRESS</div><p class='info-content'>" + feature.properties.Address + " " + feature.properties.Address2 + "<br>" + feature.properties.City + ", " + feature.properties.State + " " + feature.properties.ZipCode + "</p><div class='info-content-titles'>DESCRIPTION</div><p class='info-content'>" + feature.properties.Organization_Description + "</p><div class='info-content-titles'>PRIMARY FOCUS AREAS</div><p class='info-content'>" + activityList + "</p><div class='info-content-titles'>SERVICES</div><p class='info-content'>" + activities_ServicesList + "</p><div class='info-content-titles'>CONTACT</div><p class='info-content'>" + feature.properties.Tel + "<br><a href='mailto:" + feature.properties.Email + "'>" + feature.properties.Email + "</a></p><div class='info-content-titles'>WEBSITE</div><p class='info-content'><a href='" + url + "'>" + printurl + "</a></p><br><button type='button' class='btn btn-default btn-block' data-toggle='modal' data-target='#orgModal' data-local='#orgCarousel' id='slideTo" + feature.properties.idlocation + "'><span class='pull-left'>VIEW FULL PROFILE</span><span class='glyphicon glyphicon-fullscreen pull-right' aria-hidden='true'></span></button>");
+		$( "#popout-info-content" ).html("<div class='info-title-bar text-capitalize'>" + feature.properties.Organization_Name + "</div><div class='info-content-titles'>ORGANIZATION ACRONYM</div><p class='info-content'>" + feature.properties.Organizaton_Acronym + "</p><div class='info-content-titles'>ORGANIZATIONAL CONTACT</div><p class='info-content'>" + feature.properties.Address + " " + feature.properties.Address2 + "<br>" + feature.properties.City + ", " + feature.properties.State + " " + feature.properties.ZipCode + "</p><p class='info-content'><a href='mailto:" + feature.properties.Email + "'>" + feature.properties.Email + "</a></p>" + website + "<p class='info-content'>" + twwebsite + fbwebsite + "</p><div class='info-content-titles'>ORGANIZATION TYPE</div><p class='info-content'>" + Organization_DescriptionList + "</p><div class='info-content-titles'>ACTIVITES & SERVICES AT THIS LOCATION</div><p class='info-content'>" + activityList + "</p><div class='info-content-titles'>SERVICES THIS ORGANIZATION PROVIDES</div><p class='info-content'>" + activities_ServicesList + "</p><button type='button' class='btn btn-default btn-block' data-toggle='modal' data-target='#orgModal' data-local='#orgCarousel' id='slideTo" + feature.properties.idlocation + "'><span class='pull-left'>VIEW FULL PROFILE</span><span class='glyphicon glyphicon-fullscreen pull-right' aria-hidden='true'></span></button>");
 				
 		var slideToIdlocation = '#slideTo' + parseInt(feature.properties.idlocation);
 		var modalItemId = '#modalItem' + parseInt(feature.properties.idlocation);
@@ -341,25 +442,29 @@ CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 		$( ".settings" ).removeClass("active");
 		$( ".filters" ).removeClass("active");
 		$( ".about" ).removeClass("active");
+
+		// set up modal for having this org selected
+		$( "#titleOrgName" ).html(feature.properties.Organization_Name);
+
+		CDADMapPopout.checkPopoutOpen();
+
 		
 		// create scrollbars
 		$( "#popout-info-content" ).perfectScrollbar({
 			suppressScrollX: true,
 			includePadding: true
-		});
-				
-		// show yellow bar if scrollbar isn't on
-		if ($( "#popout-info-content" ).hasClass( "ps-active-y" )) {
-			$( ".right-bar-color" ).hide();
-		} else {
-			$( ".right-bar-color" ).show();			
-		}
-		
-		// set up modal for having this org selected
-		$( "#titleOrgName" ).html(feature.properties.Organization_Name);
-		
-		
+		});			
+						
+		$( "#popout-info-content" ).perfectScrollbar('update');
 
+		// show yellow bar if scrollbar isn't on
+		if ($( "#popout-info-content .ps-scrollbar-y-rail .ps-scrollbar-y" ).css( "height" ) == "0px") {
+			$( ".right-bar-color" ).show();
+		} else {
+			$( ".right-bar-color" ).hide();			
+		}
+
+		
 	});
 	
 }
@@ -394,9 +499,9 @@ CDADMap.getStyleFor_LOCATIONS = function(feature, latlng){
 
 CDADMap.loadFilteredLocations = function(data){
 	
-	MY_MAP.SAMPLE_POINT.addData(data);
+	MY_MAP.LOCATIONS.addData(data);
 	// add media to cluster library
-	clusterLocations.addLayer(MY_MAP.SAMPLE_POINT);
+	clusterLocations.addLayer(MY_MAP.LOCATIONS);
 
 }
 
@@ -404,6 +509,10 @@ CDADMap.loadFilteredLocations = function(data){
 
 CDADMap.loadLayerFor = function(layerId){
 	
+    if(layerId == "DetroitBoundary"){
+		MY_MAP.DETLAYER.addTo(MY_MAP.map).bringToBack();
+	}	
+
     if(layerId == "CouncilDistrictBoundaries"){
 		MY_MAP.CDBLAYER.addTo(MY_MAP.map).bringToBack();
 	}	
@@ -414,6 +523,10 @@ CDADMap.loadLayerFor = function(layerId){
 
     if(layerId == "ZipCodeBoundaries"){
 		MY_MAP.ZCBLAYER.addTo(MY_MAP.map).bringToBack();
+	}	
+
+    if(layerId == "CDOBC"){
+		MY_MAP.CDOBCLAYER.addTo(MY_MAP.map).bringToBack();
 	}	
 
 
@@ -434,50 +547,15 @@ CDADMap.prototype.showLocationsOnPageLoad = function(){
 	
 }
 
-CDADMap.loadLocationsLayerFor = function(layerId){
-	// add layer requested based on ID
-	if (layerId == "LOC1") {
-		LOC1 = MY_MAP.LOC1_PAWN_SHOPS.addTo(MY_MAP.map).bringToFront();
-	}
-	if (layerId == "LOC2") {
-		LOC2 = MY_MAP.LOC2_CHECK_CASHING.addTo(MY_MAP.map).bringToFront();
-	}
-	if (layerId == "LOC3") {
-		LOC3 = MY_MAP.LOC3_WIRE_TRANSFER.addTo(MY_MAP.map).bringToFront();
-	}
-	if (layerId == "LOC4") {
-		LOC4 = MY_MAP.LOC4_BANKS.addTo(MY_MAP.map).bringToFront();
-	}
-	if (layerId == "LOC5") {
-		LOC5 = MY_MAP.LOC5_MCDONALDS.addTo(MY_MAP.map).bringToFront();
-	}
-	if (layerId == "LOC6") {
-		// load subway lines and stops together
-		LOC7 = MY_MAP.LOC7_SUBWAY_STATIONS.addTo(MY_MAP.map).bringToFront();
-		LOC6 = MY_MAP.LOC6_SUBWAY_LINES.addTo(MY_MAP.map).bringToFront();
-	}
-	
-}
-
-CDADMap.loadMediaLayers = function(){
-		
-	// set on mouseover interaction for cluster group
-	clusterLocations.on('clustermouseover', function (ev) {
-		// only have on mouseover work if popup2 isn't open
-		if (!MY_MAP.popup2._isOpen) {
-			// close all popups first
-			MY_MAP.map.closePopup();
-		}
-	});
-
-	MY_MAP.map.addLayer(clusterLocations);
-	
-}
 
 CDADMap.removeLayerFor = function(layerId){
 	// remove all popups first
 	MY_MAP.map.closePopup();
 	// then remove layer
+	if (layerId == 'DetroitBoundary') {
+		MY_MAP.map.removeLayer( MY_MAP.DETLAYER ); 		
+	}
+
 	if (layerId == 'CouncilDistrictBoundaries') {
 		MY_MAP.map.removeLayer( MY_MAP.CDBLAYER ); 		
 	}
@@ -489,6 +567,11 @@ CDADMap.removeLayerFor = function(layerId){
 	if (layerId == 'ZipCodeBoundaries') {
 		MY_MAP.map.removeLayer( MY_MAP.ZCBLAYER ); 		
 	}
+
+	if (layerId == 'CDOBC') {
+		MY_MAP.map.removeLayer( MY_MAP.CDOBCLAYER ); 		
+	}
+
 	
 }
 
@@ -501,8 +584,8 @@ CDADMap.removeLocationsLayers = function(){
 }
 
 CDADMap.clearLocationsLayers = function(){
-	// clear data out of cluserMedia when users search by tag
-	MY_MAP.SAMPLE_POINT.clearLayers();	
+	// clear data out of clusterer when users select filters
+	MY_MAP.LOCATIONS.clearLayers();	
 	clusterLocations.clearLayers();	
 	
 }

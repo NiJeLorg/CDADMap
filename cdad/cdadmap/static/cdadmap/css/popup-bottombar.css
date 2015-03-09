@@ -1,0 +1,117 @@
+/*!
+ * Popup popout that includes settings, info, filters, and about 
+ */
+
+.popup-wrapper {
+    z-index: 1001;
+    position: fixed;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    height: 0px;
+    overflow: auto;
+    background: #fff; /*#d9d9d9;*/
+    border-top: #3D3D3D 1px solid;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.popup-wrapper-open {
+	height: 32%;
+}
+
+.popup-heading-text {
+    padding: 0px 5px 5px 0px;
+    font-family: 'Oswald';
+    font-size: 22px;
+    font-style: normal;
+    font-weight: normal;
+    text-align: left;
+    display: inline-block;
+    text-decoration: none;
+    color: #000;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.popup-title {
+    color: #000;
+}
+
+.popup-address {
+    display: inline-block;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 12px;
+}
+
+.location-dot {
+    display: inline-block;
+    vertical-align: top;
+}
+ 
+.popup-content {
+	display: none;
+	text-align: left;
+	width: 100%;
+	padding: 20px;
+    height: 25%;
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: normal;
+    display: block;
+    text-decoration: none;
+    color: #595959;
+	
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+	
+}
+
+.block-link {
+    cursor: pointer;
+}
+
+.popup-filters {
+    vertical-align: center;
+}
+
+.label-filter {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin-right: 4px; 
+}
+
+.label-orgtype {
+    background-color: #1b9e77;
+}
+
+.label-servicearea {
+    background-color: #d95f02;
+}
+
+.label-orgstructure {
+    background-color: #7570b3;
+}
+
+.label-activityservice {
+    background-color: #e7298a;
+}
+
+.label-servicepop {
+    background-color: #66a61e;
+}
+
+.label-language {
+    background-color: #e6ab02;
+}
+
+.label-cdadmebership {
+    background-color: #a6761d;
+}
+
+@media(min-width:768px) {
+    .popup-wrapper {
+        right: 140px;
+    }
+}

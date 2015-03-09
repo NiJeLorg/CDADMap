@@ -8,48 +8,177 @@
 	{% else %}
 	    <div class="item" id="modalItem{{ location.idlocation }}">
 	{% endif %}
-			<div class="container">
+			<div class="container-fluid">
 				<div class="row modalContent">
+				{% if location.Lat == "0" %}
+				  <div class="col-sm-4">
+					  <div class="info-modal-titles">ORGANIZATIONAL CONTACT</div>
+					  <p class="info-modal-content">{{ location.Address }} {{ location.Address2 }}<br>{{ location.City }}, {{ location.State }} {{ location.ZipCode }}</p>
+					  <p class="info-modal-content"><a href="mailto:{{ location.getSurveyObject.Social_Email }}">{{ location.getSurveyObject.Social_Email }}</a></p>
+					  <p class="info-modal-content"><a href="{{ location.getSurveyObject.Social_website }}">{{ location.getSurveyObject.Social_website }}</a></p>
+					  <p class="info-modal-content"><a href="{{ location.getSurveyObject.Social_facebook }}"><span class='facebook-logo'></span></a><a href="{{ location.getSurveyObject.Social_Twitter }}"><span class='twitter-logo'></span></a></p>
+				  </div>
+				  <div class="col-sm-4">
+					  <div class="info-modal-titles">ORGANIZATION TYPE</div>
+					  <p class="info-modal-content">
+					  	{% for Organization_Description in location.getSurveyObject.Organization_Description_as_list %}
+					  		{% if Organization_Description != 'undefined' %}
+						    	<span class="label label-filter label-orgtype">{{ Organization_Description }}</span>
+					  		{% endif %}					  	
+					  	{% endfor %}
+					  </p>				  	
+					  <div class="info-modal-titles">ACTIVITES & SERVICES AT THIS LOCATION</div>
+					  <p class="info-modal-content">
+					  	{% for activity in location.Activity_as_list %}
+					  		{% if activity != 'undefined' %}
+						    	<span class="label label-filter label-activity">{{ activity }}</span>
+					  		{% endif %}
+						{% endfor %}
+					  </p>				  	
+					  <div class="info-modal-titles">SERVICE AREA</div>
+					  <p class="info-modal-content">
+					  	{% for Service_Area_Description in location.getSurveyObject.Service_Area_Description_as_list %}
+					  		{% if Service_Area_Description != 'undefined' %}
+						    	<span class="label label-filter label-servicearea">{{ Service_Area_Description }}</span>
+					  		{% endif %}					  	
+					  	{% endfor %}
+					  </p>				  	
+					  <div class="info-modal-titles">STRUCTURE</div>
+					  <p class="info-modal-content">
+					  	{% for organization_structured in location.getSurveyObject.organization_structured_as_list %}
+					  		{% if organization_structured != 'undefined' %}
+						    	<span class="label label-filter label-orgstructure">{{ organization_structured }}</span>
+					  		{% endif %}					  	
+					  	{% endfor %}
+					  </p>
+					  <div class="info-modal-titles">YEAR FOUNDED</div>
+					  <p class="info-modal-content">{{ location.getSurveyObject.Year_Founded }}</p>
+				  </div>
+				  <div class="col-sm-4">
+					  <div class="info-modal-titles">SERVICES THIS ORGANIZATION PROVIDES</div>
+					  <p class="info-modal-content">
+					  	{% for Activities_Services in location.getSurveyObject.Activities_Services_as_list %}
+					  		{% if Activities_Services != 'undefined' %}
+						    	<span class="label label-filter label-activityservice">{{ Activities_Services }}</span>
+					  		{% endif %}					  	
+					  	{% endfor %}
+					  </p>
+					  <div class="info-modal-titles">SERVICE POPULATION</div>
+					  <p class="info-modal-content">
+					  	{% for Service_Population in location.getSurveyObject.Service_Population_as_list %}
+					  		{% if Service_Population != 'undefined' %}
+						    	<span class="label label-filter label-servicepop">{{ Service_Population }}</span>
+					  		{% endif %}					  	
+					  	{% endfor %}
+					  </p>
+				  </div>
+				{% else %}
 				  <div class="col-sm-3">
 				  	<div class='modalmap' id='map{{ location.idlocation }}'></div>
 				  </div>
 				  <div class="col-sm-3">
-					  <div class="info-modal-titles">ADDRESS</div>
+					  <div class="info-modal-titles">ORGANIZATIONAL CONTACT</div>
 					  <p class="info-modal-content">{{ location.Address }} {{ location.Address2 }}<br>{{ location.City }}, {{ location.State }} {{ location.ZipCode }}</p>
-					  <div class="info-modal-titles">CONTACT</div>
-					  <p class="info-modal-content">{{ location.getContactObject.Tel }}<br><a href="mailto:{{ location.getContactObject.Email }}">{{ location.getContactObject.Email }}</a></p>
-					  <div class="info-modal-titles">WEBSITE</div>
+					  <p class="info-modal-content"><a href="mailto:{{ location.getSurveyObject.Social_Email }}">{{ location.getSurveyObject.Social_Email }}</a></p>
 					  <p class="info-modal-content"><a href="{{ location.getSurveyObject.Social_website }}">{{ location.getSurveyObject.Social_website }}</a></p>
+					  <p class="info-modal-content"><a href="{{ location.getSurveyObject.Social_facebook }}"><span class='facebook-logo'></span></a><a href="{{ location.getSurveyObject.Social_Twitter }}"><span class='twitter-logo'></span></a></p>
 				  </div>
 				  <div class="col-sm-3">
-					  <div class="info-modal-titles">DESCRIPTION</div>
-					  <p class="info-modal-content">{{ location.getSurveyObject.Organization_Description }}</p>				  	
-					  <div class="info-modal-titles">PRIMARY FOCUS AREAS</div>
-					  <p class="info-modal-content">{{ location.Activity }}</p>				  	
+					  <div class="info-modal-titles">ORGANIZATION TYPE</div>
+					  <p class="info-modal-content">
+					  	{% for Organization_Description in location.getSurveyObject.Organization_Description_as_list %}
+					  		{% if Organization_Description != 'undefined' %}
+						    	<span class="label label-filter label-orgtype">{{ Organization_Description }}</span>
+					  		{% endif %}					  	
+					  	{% endfor %}
+					  </p>				  	
+					  <div class="info-modal-titles">ACTIVITES & SERVICES AT THIS LOCATION</div>
+					  <p class="info-modal-content">
+					  	{% for activity in location.Activity_as_list %}
+					  		{% if activity != 'undefined' %}
+						    	<span class="label label-filter label-activity">{{ activity }}</span>
+					  		{% endif %}
+						{% endfor %}
+					  </p>				  	
 					  <div class="info-modal-titles">SERVICE AREA</div>
-					  <p class="info-modal-content">{{ location.getSurveyObject.Service_Area_Description }}</p>				  	
+					  <p class="info-modal-content">
+					  	{% for Service_Area_Description in location.getSurveyObject.Service_Area_Description_as_list %}
+					  		{% if Service_Area_Description != 'undefined' %}
+						    	<span class="label label-filter label-servicearea">{{ Service_Area_Description }}</span>
+					  		{% endif %}					  	
+					  	{% endfor %}
+					  </p>				  	
 					  <div class="info-modal-titles">STRUCTURE</div>
-					  <p class="info-modal-content">{{ location.getSurveyObject.organization_structured }}</p>
+					  <p class="info-modal-content">
+					  	{% for organization_structured in location.getSurveyObject.organization_structured_as_list %}
+					  		{% if organization_structured != 'undefined' %}
+						    	<span class="label label-filter label-orgstructure">{{ organization_structured }}</span>
+					  		{% endif %}					  	
+					  	{% endfor %}
+					  </p>
 					  <div class="info-modal-titles">YEAR FOUNDED</div>
 					  <p class="info-modal-content">{{ location.getSurveyObject.Year_Founded }}</p>
 				  </div>
 				  <div class="col-sm-3">
-					  <div class="info-modal-titles">LOGO HERE</div>
-					  <br><br>
-					  <div class="info-modal-titles">ACTIVITES</div>
-					  <p class="info-modal-content">{{ location.getSurveyObject.Activities_Services }}</p>
-					  <div class="info-modal-titles">INDIVIDUALS SERVED</div>
-					  <p class="info-modal-content">{{ location.getSurveyObject.Service_Population }}</p>
+					  <div class="info-modal-titles">SERVICES THIS ORGANIZATION PROVIDES</div>
+					  <p class="info-modal-content">
+					  	{% for Activities_Services in location.getSurveyObject.Activities_Services_as_list %}
+					  		{% if Activities_Services != 'undefined' %}
+						    	<span class="label label-filter label-activityservice">{{ Activities_Services }}</span>
+					  		{% endif %}					  	
+					  	{% endfor %}
+					  </p>
+					  <div class="info-modal-titles">SERVICE POPULATION</div>
+					  <p class="info-modal-content">
+					  	{% for Service_Population in location.getSurveyObject.Service_Population_as_list %}
+					  		{% if Service_Population != 'undefined' %}
+						    	<span class="label label-filter label-servicepop">{{ Service_Population }}</span>
+					  		{% endif %}					  	
+					  	{% endfor %}
+					  </p>
 				  </div>
+				{% endif %}
 				</div>
 				<div class="row modalContent">
 				  <div class="col-sm-6">
 					  <div class="info-modal-titles">ORGANIATIONAL MISSION</div>
 					  <p class="info-modal-content">{{ location.getSurveyObject.Organizational_Mission }}</p>
 					  <div class="info-modal-titles">LANGUAGES</div>
-					  <p class="info-modal-content">{{ location.getSurveyObject.Languages }}</p>
-					  <div class="info-modal-titles">CONTACTS</div>
-					  <p class="info-modal-content">{{ location.getContactObject.Name }} | {{ location.getContactObject.Title }}<br>{{ location.getContactObject.Email }}<br>{{ location.getContactObject.Tel }}</p>
+					  <p class="info-modal-content">
+					  	{% for Languages in location.getSurveyObject.Languages_as_list %}
+					  		{% if Languages != 'undefined' %}
+						    	<span class="label label-filter label-language">{{ Languages }}</span>
+					  		{% endif %}					  	
+					  	{% endfor %}
+					  </p>
+					  <div class="info-modal-titles">PEOPLE</div>
+					  <p class="info-modal-content">
+					  	{% for contacts in location.getContactObject %}
+					  		{% if contacts.KeepPrivate == 'true' %}
+					  			{{ contacts.Name }}<br />
+					  			{{ contacts.Title }}<br />
+					  			{{ contacts.Tel }}<br />
+					  			{{ contacts.Email|urlize }}<br /><br />
+					  		{% endif %}
+					  	{% endfor %}
+					  </p>
+					  <div class="info-modal-titles">PUBLIC MEETINGS</div>
+					  <p class="info-modal-content">
+					  	{% for meetings in location.getMeetingObject %}
+					  		{% if meetings.hasMeeting == 'Yes' %}
+					  			<strong>{{ meetings.MeetingName }}</strong><br />
+					  			{{ meetings.Address }} {% if meetings.Address2 != 'No Data Yet' %}{{ meetings.Address2 }}{% endif %} <br />
+					  			{{ meetings.City }}, {{ meetings.State }} {{ meetings.ZipCode }} <br />
+					  			{{ meetings.Time1 }} {{ meetings.Repeat1 }}<br />
+					  			<strong><em>Meeting Contact</em></strong><br />
+					  			{{ meetings.MeetingPerson }}<br />
+					  			{{ meetings.MeetingPersonPhone }}<br />
+					  			{{ meetings.MeetingPersonEmail|urlize }}<br /><br />
+					  		{% else %}
+					  			No Regular Public Meetings
+					  		{% endif %}
+					  	{% endfor %}
+					  </p>
 					  
 				  </div>
 				  <div class="col-sm-6">

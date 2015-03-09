@@ -1,0 +1,81 @@
+{% load staticfiles %}
+
+<div class="popup-content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-12">
+					<span class="popup-heading-text">Resources (<img src="{% static 'cdadmap/css/images/cdad-marker.png' %}" /> On Map)</span>
+					<button type="button" class="close right" id="popup-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<p id="popup-filters" class="popup-filters"></p>	
+				</div>
+			</div>
+			{% for location in locations %}
+				{% if forloop.first %}
+					<div class="row">
+				{% endif %}
+						<div class="col-sm-3">
+							<div class="block-link" data-toggle='modal' data-target='#orgModal' data-local='#orgCarousel' id='slideToPopup{{ location.idlocation }}'>
+								<div class="popup-title">
+									{{ location.Organization_Name }}
+								</div>
+								<p class="popup-address">{{ location.Address }} {{ location.Address2 }}2 <br />{{ location.City }}, {{ location.State }} {{ location.ZipCode }}</p>
+								{% if location.Lat != '0' %}
+									<img class="location-dot" src="{% static 'cdadmap/css/images/cdad-marker.png' %}" />
+								{% endif %}
+
+							</div>
+						</div>
+				{% if forloop.counter|divisibleby:4 %}
+					</div>
+					<div class="row">
+				{% endif %}
+				{% if forloop.last %}
+					</div>
+				{% endif %}
+			{% endfor %}
+
+
+
+
+		</div>
+</div>
+
+<!-- dynamic js for launching the carousel modal -->
+<script type="text/javascript">
+
+	{% for location in locations %}
+
+		var slideToIdlocationPopup = '#slideToPopup' + parseInt({{ location.idlocation }});
+		$(slideToIdlocationPopup).click(function() {
+			// show carousel in modal
+			$( "#orgCarousel" ).show();
+
+			// rotate carousel
+			$( "#orgCarousel" ).carousel(parseInt({{ forloop.counter0 }}));
+			
+			setTimeout(function() {
+				
+				maps[{{ location.idlocation }}].map.invalidateSize();
+
+			}, 200);
+
+			// set up modal for having this org selected
+			$( "#titleOrgName" ).html('{{ location.Organization_Name }}');
+
+			
+		});
+
+	{% endfor %}
+
+	// listener to close the popup
+	$( "#popup-close" ).click(function() {
+		$( ".popup-wrapper" ).toggleClass("popup-wrapper-open");
+	});	
+
+
+</script>
+

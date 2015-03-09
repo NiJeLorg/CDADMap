@@ -2,7 +2,13 @@
 	background: white;
 	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
 	line-height: 36px;
-	overflow: hidden;
+	width: 366px;
+}
+
+/* Leaflet Override */
+.dropdown-menu {
+	top: 37px;
+	left: 230px;
 }
 
 .leaflet-touch .leaflet-control-geocoder {
@@ -44,11 +50,18 @@
 }
 
 .leaflet-control-geocoder-dropdown {
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    color: #fff;
 	width: 100px;
 	height: 37px;
 	background-color: #e8c51d;
 	float: right;
 	cursor: pointer;
+	border-radius: 0px;
+
 }
 
 .leaflet-control-geocoder-dropdown > p {

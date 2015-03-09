@@ -2,6 +2,11 @@
  	display: block; 
 }
 
+.ps-container > .ps-scrollbar-x-rail,
+.ps-container > .ps-scrollbar-y-rail {
+  opacity: 0.6;
+}
+
 .ps-container > .ps-scrollbar-y-rail {
 	z-index: 1003;
 	display: none;
@@ -73,9 +78,8 @@
 }
 
 /* to make scrollbars always visible */
-.always-visible.ps-container > .ps-scrollbar-x-rail,
-.always-visible.ps-container > .ps-scrollbar-y-rail {
+.ps-container > .ps-scrollbar-x-rail,
+.ps-container > .ps-scrollbar-y-rail {
   opacity: 1.0;
 }
-
 

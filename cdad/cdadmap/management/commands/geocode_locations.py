@@ -38,9 +38,9 @@ class Command(BaseCommand):
                 location.save()
 
             else:
-                location.Lat = ''
-                location.Lon = ''
-                location.save
+                location.Lat = 0
+                location.Lon = 0
+                location.save()
                                 
 
     def handle(self, *args, **options):

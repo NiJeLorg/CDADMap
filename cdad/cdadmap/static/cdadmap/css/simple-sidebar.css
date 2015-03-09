@@ -27,7 +27,7 @@ html, body, #map {
 }
 
 #sidebar-wrapper {
-    z-index: 1000;
+    z-index: 1004;
     position: fixed;
     right: 140px;
     width: 0;
@@ -64,7 +64,7 @@ html, body, #map {
     font-weight: normal;
     display: block;
     text-decoration: none;
-    color: #595959;
+    color: #969696;
 	
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

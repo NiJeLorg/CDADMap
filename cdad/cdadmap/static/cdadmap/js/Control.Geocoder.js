@@ -58,12 +58,13 @@
 			var className = 'leaflet-control-geocoder',
 			    container = L.DomUtil.create('div', className),
 				icon = L.DomUtil.create('div', 'leaflet-control-geocoder-icon', container),
-				dropdown = L.DomUtil.create('div', 'leaflet-control-geocoder-dropdown', container),
+				dropdown = L.DomUtil.create('div', 'dropdown', container),
 			    form = this._form = L.DomUtil.create('form', className + '-form', container),
 			    input;
 
+			// add attributes to dropdown menu
 			// add text to the dropdown
-			dropdown.innerHTML = '<p>ADDRESS <span class="caret"></span></p>';
+			dropdown.innerHTML = '<button id="dropdown-address-bar" class="btn btn-default dropdown-toggle leaflet-control-geocoder-dropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ADDRESS <span class="caret"></span></button><ul id="topBarSelection" class="dropdown-menu" role="menu" aria-labelledby="dropdown-address-bar"><li id="liAddress" class="menu-item chosen" role="presentation"><a role="menuitem" tabindex="-1" href="#">ADDRESS</a></li><li id="liKeyword" class="menu-item" role="presentation"><a role="menuitem" tabindex="-1" href="#">KEYWORD</a></li></ul>';
 
 			this._map = map;
 			this._container = container;
@@ -85,7 +86,7 @@
 			form.appendChild(this._errorElement);
 			container.appendChild(this._alts);
 
-			L.DomEvent.addListener(form, 'submit', this._geocode, this);
+			L.DomEvent.addListener(form, 'submit', this._geocodeOrKeyword, this);
 
 			if (this.options.collapsed) {
 				if (this.options.expand === 'click') {
@@ -105,7 +106,7 @@
 			}
 			
 			// added click to geocode
-			L.DomEvent.addListener(icon, 'click', this._geocode, this);
+			L.DomEvent.addListener(icon, 'click', this._geocodeOrKeyword, this);
 
 			L.DomEvent.disableClickPropagation(container);
 
@@ -150,12 +151,18 @@
 			return this;
 		},
 
-		_geocode: function(event) {
+		_geocodeOrKeyword: function(event) {
 			L.DomEvent.preventDefault(event);
 
-			L.DomUtil.addClass(this._container, 'leaflet-control-geocoder-throbber');
-			this._clearResults();
-			this.options.geocoder.geocode(this._input.value, this._geocodeResult, this);
+			if ($("#liKeyword").hasClass("chosen")) {
+				// do a ajax keyword search
+				CDADMapPopout.onFilterChange();
+
+			} else {
+				L.DomUtil.addClass(this._container, 'leaflet-control-geocoder-throbber');
+				this._clearResults();
+				this.options.geocoder.geocode(this._input.value, this._geocodeResult, this);
+			}
 
 			return false;
 		},
@@ -167,6 +174,17 @@
 				this._clearResults();
 			}
 			this.markGeocode(result);
+
+			// after geocode, pass result to turf for distance calc
+			// hold off on this 
+			//this._measureDistanceofLocations(result);
+
+			if ($( ".popup-wrapper" ).hasClass( "popup-wrapper-open" )) {
+				// don't toggle classes
+			} else {
+				$( ".popup-wrapper" ).toggleClass("popup-wrapper-open");			
+			}
+
 		},
 
 		_toggle: function() {
