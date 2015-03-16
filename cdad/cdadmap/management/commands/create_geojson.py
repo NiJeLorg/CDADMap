@@ -43,14 +43,14 @@ class Command(BaseCommand):
             survey.MapDissolve = survey.MapDissolve.replace('{"attributes":{', '{"attributes":{"OrgName":"' + survey.Organization_Name + '",');
             
             # open and create file called OrganizationName without spaces in the file name and a new geojson with ogr2ogr
-            with open(os.path.join(__location__, survey.Organization_Name_NoSpaces + '_raw.json'), 'w') as f:
+            with open(os.path.join(__location__, survey.Organization_Name_NoSpaces + "_raw.json"), 'w') as f:
                 f.write(survey.MapDissolve)
                 
-                pathToRaw = os.path.join(__location__,survey.Organization_Name_NoSpaces + '_raw.json')
-                pathToNewJson = os.path.join(__location__,survey.Organization_Name_NoSpaces + '_new.json')
+                pathToRaw = os.path.join(__location__,survey.Organization_Name_NoSpaces + "_raw.json")
+                pathToNewJson = os.path.join(__location__,survey.Organization_Name_NoSpaces + "_new.json")
                   
                 # ogr2ogr -f GeoJSON newfile.json old_file.json OGRGeoJSON                
-                command_line = 'ogr2ogr -f GeoJSON -t_srs EPSG:4326 ' + pathToNewJson + ' ' + pathToRaw + ' OGRGeoJSON'
+                command_line = "ogr2ogr -f GeoJSON -t_srs EPSG:4326 " + pathToNewJson + " " + pathToRaw + " OGRGeoJSON"
                 args = shlex.split(command_line)
                 subprocess.Popen(args)
                                 
