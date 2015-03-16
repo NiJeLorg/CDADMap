@@ -377,6 +377,13 @@ CDADMapPopout.loadData = function (Organization_Description_Choices, Service_Are
         	var geoJSON = $.parseJSON( data );
         	// rebuild the geoJSON files with new data
 			CDADMap.loadFilteredLocations(geoJSON);
+
+			// remove polygons from cdad block groups layer
+        	CDADMap.clearCDOBGLayer();
+
+        	// load only ploygons that match the filtered dataset
+        	CDADMap.loadFilteredCDOBGLayer(geoJSON);
+
         }
     });
 

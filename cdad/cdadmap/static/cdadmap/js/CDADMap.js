@@ -505,6 +505,36 @@ CDADMap.loadFilteredLocations = function(data){
 
 }
 
+CDADMap.loadFilteredCDOBGLayer = function(filteredData){
+	
+	// for loop to open, parse and add each layer to the feature group set above
+	for (var i = staticGeoJSON.length - 1; i >= 0; i--) {
+		$.getJSON( staticGeoJSON[i], function( data ) {
+		    var dataset = data;
+
+		    //loop through each returned feature and check the org name, ifi ti matched add the polygon layer
+		    $.each(filteredData.features, function(i, d) {
+		    	
+		    	if (d.properties.Organization_Name === dataset.features[0].properties.OrgName) {
+					var saGeoJSON = L.geoJson(dataset, {
+				        style: CDADMap.getStyleColorFor_CDOBCLAYER,
+				        onEachFeature: CDADMap.onEachFeature_CDOBCLAYER
+				    });
+
+				    // add to the feature group
+					MY_MAP.CDOBCLAYER.addLayer(saGeoJSON);
+				}
+
+		    });
+
+		    
+		});
+	
+	};
+
+
+}
+
 
 
 CDADMap.loadLayerFor = function(layerId){
@@ -587,6 +617,12 @@ CDADMap.clearLocationsLayers = function(){
 	// clear data out of clusterer when users select filters
 	MY_MAP.LOCATIONS.clearLayers();	
 	clusterLocations.clearLayers();	
+	
+}
+
+CDADMap.clearCDOBGLayer = function(){
+	// clear data out of CDOBG layer when user selects filter
+	MY_MAP.CDOBCLAYER.clearLayers();		
 	
 }
 	
