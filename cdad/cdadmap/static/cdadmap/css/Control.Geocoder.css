@@ -2,7 +2,7 @@
 	background: white;
 	box-shadow: 0 1px 5px rgba(0,0,0,0.65);
 	line-height: 36px;
-	width: 366px;
+	width: 403px;
 }
 
 /* Leaflet Override */
@@ -48,6 +48,19 @@
 	float: right;
 	cursor: pointer;
 }
+
+.leaflet-control-clear-icon {
+	border-left: 1px solid #fff;
+	width: 36px;
+	height: 37px;
+	background-image: url(images/white_x.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-color: #2a2a2a;
+	float: right;
+	cursor: pointer;
+}
+
 
 .leaflet-control-geocoder-dropdown {
     font-family: 'Oswald';
@@ -115,7 +128,7 @@
 }
 
 ul.leaflet-control-geocoder-alternatives {
-	width: 366px;
+	width: 403px;
 	overflow: hidden;
   	text-overflow: ellipsis;
   	white-space: nowrap;

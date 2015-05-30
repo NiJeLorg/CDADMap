@@ -18,11 +18,11 @@
 					<div class="row">
 				{% endif %}
 						<div class="col-sm-3">
-							<div class="block-link" data-toggle='modal' data-target='#orgModal' data-local='#orgCarousel' id='slideToPopup{{ location.idlocation }}'>
+							<div class="block-link" data-toggle='modal' data-target='#orgModal' data-local='#orgCarousel' id='slideToPopup{{ forloop.counter0 }}'>
 								<div class="popup-title">
 									{{ location.Organization_Name }}
 								</div>
-								<p class="popup-address">{{ location.Address }} {{ location.Address2 }}2 <br />{{ location.City }}, {{ location.State }} {{ location.ZipCode }}</p>
+								<p class="popup-address">{{ location.Address }} {{ location.Address2 }}<br />{{ location.City }}, {{ location.State }} {{ location.ZipCode }}</p>
 								{% if location.Lat != '0' %}
 									<img class="location-dot" src="{% static 'cdadmap/css/images/cdad-marker.png' %}" />
 								{% endif %}
@@ -49,23 +49,21 @@
 
 	{% for location in locations %}
 
-		var slideToIdlocationPopup = '#slideToPopup' + parseInt({{ location.idlocation }});
+		var slideToIdlocationPopup = '#slideToPopup' + parseInt({{ forloop.counter0 }});
 		$(slideToIdlocationPopup).click(function() {
 			// show carousel in modal
 			$( "#orgCarousel" ).show();
 
-			// rotate carousel
 			$( "#orgCarousel" ).carousel(parseInt({{ forloop.counter0 }}));
 			
 			setTimeout(function() {
 				
-				maps[{{ location.idlocation }}].map.invalidateSize();
+				maps[{{ forloop.counter0 }}].map.invalidateSize();
 
 			}, 200);
 
 			// set up modal for having this org selected
-			$( "#titleOrgName" ).html('{{ location.Organization_Name }}');
-
+			$( "#titleOrgName" ).html('{{ location.Organization_Name }} ({{ location.getSurveyObject.Organizaton_Acronym }})');
 			
 		});
 

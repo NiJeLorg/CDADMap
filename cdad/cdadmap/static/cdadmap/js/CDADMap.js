@@ -109,13 +109,14 @@ CDADMap.onEachFeature_CDBLAYER = function(feature,layer){
         opacity: 0.75
 	};
 
-	layer.bindLabel(feature.id, { direction:'auto' });
+	layer.bindLabel(CDADMap.CouncilDistrictNames(feature.id), { direction:'auto' });
 	
     //add on hover -- same on hover and mousemove for each layer
     layer.on('mouseover', function(ev) {
 		
 		//highlight polygon
-		layer.setStyle(highlight);		
+		layer.setStyle(highlight);	
+		layer.bringToFront();	
 		
     });
 	
@@ -286,9 +287,9 @@ CDADMap.getStyleColorFor_CDBLAYER = function (feature){
     return {
         weight: 2,
         opacity: 0.75,
-        color: '#386cb0',
+        color: CDADMap.CouncilDistrictColors(feature.id),
         fillOpacity: 0.25,
-        fill: '#386cb0'
+        fill: CDADMap.CouncilDistrictColors(feature.id)
     }
 }
 
@@ -320,6 +321,28 @@ CDADMap.getStyleColorFor_CDOBCLAYER = function (feature){
         fillOpacity: 0.25,
         fill: '#e8c51d'
     }
+}
+
+CDADMap.CouncilDistrictColors = function (d){
+    return d == "D1" ? '#dbec3b' :
+           d == "D2" ? '#73a40a' :
+           d == "D3" ? '#ffab00' :
+           d == "D4" ? '#004da9' :
+           d == "D5" ? '#d41711' :
+           d == "D6" ? '#68e3ff' :
+           d == "D7" ? '#790398' :
+                    '#000';	
+}
+
+CDADMap.CouncilDistrictNames = function (d){
+    return d == "D1" ? 'District 1' :
+           d == "D2" ? 'District 2' :
+           d == "D3" ? 'District 3' :
+           d == "D4" ? 'District 4' :
+           d == "D5" ? 'District 5' :
+           d == "D6" ? 'District 6' :
+           d == "D7" ? 'District 7' :
+                    '';	
 }
 
 
@@ -402,10 +425,9 @@ CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 
 		
 		// update sidebar content based on click
-		$( "#popout-info-content" ).html("<div class='info-title-bar text-capitalize'>" + feature.properties.Organization_Name + "</div><div class='info-content-titles'>ORGANIZATION ACRONYM</div><p class='info-content'>" + feature.properties.Organizaton_Acronym + "</p><div class='info-content-titles'>ORGANIZATIONAL CONTACT</div><p class='info-content'>" + feature.properties.Address + " " + feature.properties.Address2 + "<br>" + feature.properties.City + ", " + feature.properties.State + " " + feature.properties.ZipCode + "</p><p class='info-content'><a href='mailto:" + feature.properties.Email + "'>" + feature.properties.Email + "</a></p>" + website + "<p class='info-content'>" + twwebsite + fbwebsite + "</p><div class='info-content-titles'>ORGANIZATION TYPE</div><p class='info-content'>" + Organization_DescriptionList + "</p><div class='info-content-titles'>ACTIVITES & SERVICES AT THIS LOCATION</div><p class='info-content'>" + activityList + "</p><div class='info-content-titles'>SERVICES THIS ORGANIZATION PROVIDES</div><p class='info-content'>" + activities_ServicesList + "</p><button type='button' class='btn btn-default btn-block' data-toggle='modal' data-target='#orgModal' data-local='#orgCarousel' id='slideTo" + feature.properties.idlocation + "'><span class='pull-left'>VIEW FULL PROFILE</span><span class='glyphicon glyphicon-fullscreen pull-right' aria-hidden='true'></span></button>");
+		$( "#popout-info-content" ).html("<div class='info-title-bar text-capitalize'>" + feature.properties.Organization_Name + " (" + feature.properties.Organizaton_Acronym + ")</div><div class='info-content-titles'>ORGANIZATIONAL CONTACT</div><p class='info-content'>" + feature.properties.Address + " " + feature.properties.Address2 + "<br>" + feature.properties.City + ", " + feature.properties.State + " " + feature.properties.ZipCode + "</p><p class='info-content'><a href='mailto:" + feature.properties.Email + "'>" + feature.properties.Email + "</a></p>" + website + "<p class='info-content'>" + twwebsite + fbwebsite + "</p><div class='info-content-titles'>ORGANIZATION TYPE</div><p class='info-content'>" + Organization_DescriptionList + "</p><div class='info-content-titles'>ACTIVITES & SERVICES AT THIS LOCATION</div><p class='info-content'>" + activityList + "</p><div class='info-content-titles'>SERVICES THIS ORGANIZATION PROVIDES</div><p class='info-content'>" + activities_ServicesList + "</p><button type='button' class='btn btn-default btn-block' data-toggle='modal' data-target='#orgModal' data-local='#orgCarousel' id='slideTo" + feature.properties.counterId + "'><span class='pull-left'>VIEW FULL PROFILE</span><span class='glyphicon glyphicon-fullscreen pull-right' aria-hidden='true'></span></button>");
 				
-		var slideToIdlocation = '#slideTo' + parseInt(feature.properties.idlocation);
-		var modalItemId = '#modalItem' + parseInt(feature.properties.idlocation);
+		var slideToIdlocation = '#slideTo' + parseInt(feature.properties.counterId);
 		$(slideToIdlocation).click(function() {
 			// show carousel in modal
 			$( "#orgCarousel" ).show();
@@ -415,7 +437,7 @@ CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 			
 			setTimeout(function() {
 				
-				maps[feature.properties.idlocation].map.invalidateSize();
+				maps[feature.properties.counterId].map.invalidateSize();
 
 			}, 200);
 			
@@ -444,7 +466,7 @@ CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 		$( ".about" ).removeClass("active");
 
 		// set up modal for having this org selected
-		$( "#titleOrgName" ).html(feature.properties.Organization_Name);
+		$( "#titleOrgName" ).html(feature.properties.Organization_Name + " (" + feature.properties.Organizaton_Acronym + ")");
 
 		CDADMapPopout.checkPopoutOpen();
 
@@ -492,7 +514,7 @@ CDADMap.getStyleFor_LOCATIONS = function(feature, latlng){
 		iconAnchor: [12, 30], 
 	});
 
-	return L.marker(latlng, {icon: locationIcon});
+	return L.marker(latlng, {icon: locationIcon, riseOnHover: true});
 	
 }
 
@@ -544,23 +566,74 @@ CDADMap.loadLayerFor = function(layerId){
 	}	
 
     if(layerId == "CouncilDistrictBoundaries"){
-		MY_MAP.CDBLAYER.addTo(MY_MAP.map).bringToBack();
+		MY_MAP.CDBLAYER.addTo(MY_MAP.map).bringToFront();
+		if (MY_MAP.map.hasLayer(MY_MAP.DETLAYER)) {
+			MY_MAP.DETLAYER.bringToBack();
+		}
+		if (MY_MAP.map.hasLayer(MY_MAP.NBLAYER)) {
+			MY_MAP.NBLAYER.bringToBack();
+		}
+		if (MY_MAP.map.hasLayer(MY_MAP.ZCBLAYER)) {
+			MY_MAP.ZCBLAYER.bringToBack();
+		}
+		if (MY_MAP.map.hasLayer(MY_MAP.CDOBCLAYER)) {
+			MY_MAP.CDOBCLAYER.bringToBack();
+		}
 	}	
 
     if(layerId == "NeighborhoodBoundaries"){
-		MY_MAP.NBLAYER.addTo(MY_MAP.map).bringToBack();
+		MY_MAP.NBLAYER.addTo(MY_MAP.map).bringToFront();
+		if (MY_MAP.map.hasLayer(MY_MAP.DETLAYER)) {
+			MY_MAP.DETLAYER.bringToBack();
+		}
+		if (MY_MAP.map.hasLayer(MY_MAP.CDBLAYER)) {
+			MY_MAP.CDBLAYER.bringToBack();
+		}
+		if (MY_MAP.map.hasLayer(MY_MAP.ZCBLAYER)) {
+			MY_MAP.ZCBLAYER.bringToBack();
+		}
+		if (MY_MAP.map.hasLayer(MY_MAP.CDOBCLAYER)) {
+			MY_MAP.CDOBCLAYER.bringToBack();
+		}
 	}	
 
     if(layerId == "ZipCodeBoundaries"){
-		MY_MAP.ZCBLAYER.addTo(MY_MAP.map).bringToBack();
+		MY_MAP.ZCBLAYER.addTo(MY_MAP.map).bringToFront();
+		if (MY_MAP.map.hasLayer(MY_MAP.DETLAYER)) {
+			MY_MAP.DETLAYER.bringToBack();
+		}
+		if (MY_MAP.map.hasLayer(MY_MAP.NBLAYER)) {
+			MY_MAP.NBLAYER.bringToBack();
+		}
+		if (MY_MAP.map.hasLayer(MY_MAP.CDBLAYER)) {
+			MY_MAP.CDBLAYER.bringToBack();
+		}
+		if (MY_MAP.map.hasLayer(MY_MAP.CDOBCLAYER)) {
+			MY_MAP.CDOBCLAYER.bringToBack();
+		}
 	}	
 
     if(layerId == "CDOBC"){
-		MY_MAP.CDOBCLAYER.addTo(MY_MAP.map).bringToBack();
-	}	
+		MY_MAP.CDOBCLAYER.addTo(MY_MAP.map).bringToFront();
+		if (MY_MAP.map.hasLayer(MY_MAP.DETLAYER)) {
+			MY_MAP.DETLAYER.bringToBack();
+		}
+		if (MY_MAP.map.hasLayer(MY_MAP.NBLAYER)) {
+			MY_MAP.NBLAYER.bringToBack();
+		}
+		if (MY_MAP.map.hasLayer(MY_MAP.ZCBLAYER)) {
+			MY_MAP.ZCBLAYER.bringToBack();
+		}
+		if (MY_MAP.map.hasLayer(MY_MAP.CDBLAYER)) {
+			MY_MAP.CDBLAYER.bringToBack();
+		}
+	}
+
+	MY_MAP.LOCATIONS.bringToFront();
 
 
 }
+
 
 CDADMap.prototype.showLocationsOnPageLoad = function(){
 	

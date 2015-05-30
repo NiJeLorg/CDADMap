@@ -99,7 +99,7 @@
 				<ul class="list-group toggle-maps">
 				  <li class="list-group-item">CITY OF DETROIT BOUNDARY <span id="DetroitBoundary" class="toggle-off"></span></li>
 				  <li class="list-group-item">COUNCIL DISTRICT BOUNDARIES <span id="CouncilDistrictBoundaries" class="toggle-off"></span></li>
-				  <li class="list-group-item">MASTER PLAN BOUNDARIES <span id="NeighborhoodBoundaries" class="toggle-off"></span></li>
+				  <li class="list-group-item"><span class="dashedUnderline" data-toggle="tooltip" data-placement="top" title="Detriot Master Plan Neighborhoods are the official neighborhoods used by the City's Planning and Development Department.">MASTER PLAN NEIGHBORHOODS</span> <span id="NeighborhoodBoundaries" class="toggle-off"></span></li>
 				  <li class="list-group-item">ZIP CODE BOUNDARIES <span id="ZipCodeBoundaries" class="toggle-off"></span></li>
 				  <li class="list-group-item">CDO & BLOCK CLUB SERVICE AREAS <span id="CDOBC" class="toggle-off"></span></li>
 				</ul>
@@ -237,7 +237,7 @@
 				    <div class="panel-heading" role="tab" id="headingSeven">
 				      <h4 class="panel-title">
 				        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
-				          CDAD MEMBERSHIP <span class="glyphicon glyphicon-plus glyphicon-cdadmebership pull-right" aria-hidden="true"></span>
+				          CURRENT CDAD MEMBER <span class="glyphicon glyphicon-plus glyphicon-cdadmebership pull-right" aria-hidden="true"></span>
 				        </a>
 				      </h4>
 				    </div>
@@ -261,7 +261,9 @@
 				</div>
 				<button id="clearFilters" class="btn btn-default pull-right" type="submit">CLEAR FILTERS</button>
 	        </div>
-	        <div id="popout-about-content" class="popout-content"></div>
+	        <div id="popout-about-content" class="popout-content">
+	        	<p class="about-content"><strong>Community</strong> is CDAD's interactive map and directory for all of Detroit’s community-based organizations working to make our neighborhoods strong and vibrant.  You can find out who is working in your area, search for existing groups, and make sure your organization is listed. This resource will help Detroit organizations, institutions, and residents connect and learn about the activities and services of block clubs, neighborhood associations, community development organizations, and neighborhood improvement organizations throughout the city.</p>
+	        </div>
 		</div>
 	</div>
 </div>
@@ -280,9 +282,6 @@
 <!-- /#page-content-wrapper -->
 {% endblock %}
 
-{% block modal_block %}
-{% include 'cdadmap/org-modal.html' %}
-{% endblock %}
 {% block js_block %}
 	<!-- create locations geojson and include the topojson layers-->
 	<script type="text/javascript">
@@ -313,61 +312,59 @@
 	<script type="text/javascript" src="{% static 'cdadmap/js/CDADMap.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/CDADModalMap.js' %}"></script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/application.js' %}"></script>
+	<script type="text/javascript" src="{% static 'cdadmap/js/jquery.cookie.js' %}"></script>
+
+	<!-- open introductory modal on page load -->
 	<script type="text/javascript">
-		// globally define maps
-		var maps = [];			
-		
-		// modal maps: loop through each location and create a map for each on the modal
-		$().ready(new function(){
-			// hide the carousel
-			$('#orgCarousel').hide();
-
-			// set up a listener for hiding the carousel when the modal is closed
-			$('#orgModal').on('hidden.bs.modal', function (e) {
-			  $('#orgCarousel').hide();
-			});
-
-			// after carousel completes sliding 
-			$('#orgCarousel').on('slid.bs.carousel', function () {
-				// set modal backrop height if the modal height is bigger than the window height
-				var modalHeightValue = $('.modal-body').height() + $('.modal-header').height() + $('.modal-footer').height() + 205;
-				var windowHeight = $(window).height();
-				if (modalHeightValue < windowHeight) {
-					modalHeightValue = windowHeight;
-				}
-				var modalHeightString = modalHeightValue + 'px';
-				$(".modal-backdrop").css('height', modalHeightString);
-
-			});
-
-			// define mini-maps array
-			{% for location in locations %}
-				{% if location.Lat != "0" %}
-					var mapid = 'map' + {{ location.idlocation }};
-				    maps[{{ location.idlocation }}] = new CDADModalMap(mapid, {{ location.Lat }}, {{ location.Lon }});
-			    {% endif %}				
-			{% endfor %}
-			
-			// ensure thumbnail maps render in dropdown				
-			$(".carousel-control").click(function() {				
-				{% for location in locations %}				
-						// use invalidate size to make maps show appropriately
-						setTimeout(function() {
-							{% if location.Lat != "0" %}
-								maps[{{ location.idlocation }}].map.invalidateSize();
-							{% endif %}	
-							// update modal title
-							if ($( "#modalItem{{ location.idlocation }}").hasClass('next') || $( "#modalItem{{ location.idlocation }}").hasClass('prev')) {
-								$( "#titleOrgName" ).html('{{ location.Organization_Name }}');			
-							}
-							
-						}, 10);				
-				{% endfor %}
-			});		
+		$( document ).ready(function() {
+			if (!$.cookie('noIntro')) {
+				$('#introduction').modal('show');
+				// close if button clicked
+				$('#closeIntroModal').click(function() {
+					$('#introduction').modal('hide');
+				});
+				// set cookie if don't show this message is checked
+				$('#toggleIntroCookie').change(function() {
+					if($(this).is(":checked")) {
+						$.cookie('noIntro', 'noIntro', { expires: 365, path: '/' });
+					} else {
+						$.removeCookie('noIntro', { path: '/' });
+					}
+				});
+			}
 		});
 	</script>
 
 {% endblock %}
+
+{% block modal_block %}
+<div id="modal-wrapper" class="modal-wrapper">
+	{% include 'cdadmap/org-modal.html' %}
+</div>
+
+<!-- ajax loading page modal -->
+<div class="modal fade" id="introduction" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body modalContent">
+      	<h3 class="text-center text-uppercase">Welcome to Community<br />A Project of CDAD</h3>
+      	<p class="text-center">
+			Welcome to Community, CDAD’s interactive map and directory for all of Detroit’s community-based organizations working to make our neighborhoods strong and vibrant.  You can find out who is working in your area, search for existing groups, and make sure your organization is listed. This resource will help Detroit organizations, institutions, and residents connect and learn about the activities and services of block clubs, neighborhood associations, community development organizations, and neighborhood improvement organizations throughout the city.</p>
+		<div class="clearfix"></div>
+        <button id="closeIntroModal" class="btn btn-primary btn-lg center-block" type="submit">START USING COMMUNITY</button>
+        <div class="checkbox text-center text-uppercase">
+		  <label>
+		    <input type="checkbox" id="toggleIntroCookie" value="NoShow">
+		   Don't Show This Message
+		  </label>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
 
 
 	

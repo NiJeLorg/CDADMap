@@ -57,6 +57,7 @@
 			
 			var className = 'leaflet-control-geocoder',
 			    container = L.DomUtil.create('div', className),
+				clear = L.DomUtil.create('div', 'leaflet-control-clear-icon', container),
 				icon = L.DomUtil.create('div', 'leaflet-control-geocoder-icon', container),
 				dropdown = L.DomUtil.create('div', 'dropdown', container),
 			    form = this._form = L.DomUtil.create('form', className + '-form', container),
@@ -73,8 +74,8 @@
 			input.placeholder = this.options.placeholder;
 
 			L.DomEvent.addListener(input, 'keydown', this._keydown, this);
-			//L.DomEvent.addListener(input, 'onpaste', this._clearResults, this);
-			//L.DomEvent.addListener(input, 'oninput', this._clearResults, this);
+			L.DomEvent.addListener(input, 'onpaste', this._clearResults, this);
+			L.DomEvent.addListener(input, 'oninput', this._clearResults, this);
 
 			this._errorElement = document.createElement('div');
 			this._errorElement.className = className + '-form-no-error';
@@ -107,6 +108,7 @@
 			
 			// added click to geocode
 			L.DomEvent.addListener(icon, 'click', this._geocodeOrKeyword, this);
+			L.DomEvent.addListener(clear, 'click', this._clearResultsButton, this);
 
 			L.DomEvent.disableClickPropagation(container);
 
@@ -210,6 +212,26 @@
 			L.DomUtil.addClass(this._alts, 'leaflet-control-geocoder-alternatives-minimized');
 			this._selection = null;
 			L.DomUtil.removeClass(this._errorElement, 'leaflet-control-geocoder-error');
+			// remove the geocoded marker from the map
+			if (this._geocodeMarker) {
+				this._map.removeLayer(this._geocodeMarker);
+			}
+
+		},
+
+		_clearResultsButton: function () {
+			L.DomUtil.addClass(this._alts, 'leaflet-control-geocoder-alternatives-minimized');
+			this._selection = null;
+			L.DomUtil.removeClass(this._errorElement, 'leaflet-control-geocoder-error');
+			// remove the geocoded marker from the map
+			if (this._geocodeMarker) {
+				this._map.removeLayer(this._geocodeMarker);
+			}
+
+			// clear text from input
+			$('.undefined').val('');
+
+			CDADMapPopout.onFilterChange();
 		},
 
 		_createAlt: function(result, index) {

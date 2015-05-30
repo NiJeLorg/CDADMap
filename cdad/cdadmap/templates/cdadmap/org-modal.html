@@ -4,77 +4,14 @@
   <div class="carousel-inner">
 {% for location in locations %}
 	{% if forloop.first %}
-	    <div class="item active" id="modalItem{{ location.idlocation }}">
+	    <div class="item active" id="modalItem{{ forloop.counter0 }}">
 	{% else %}
-	    <div class="item" id="modalItem{{ location.idlocation }}">
+	    <div class="item" id="modalItem{{ forloop.counter0 }}">
 	{% endif %}
 			<div class="container-fluid">
 				<div class="row modalContent">
-				{% if location.Lat == "0" %}
-				  <div class="col-sm-4">
-					  <div class="info-modal-titles">ORGANIZATIONAL CONTACT</div>
-					  <p class="info-modal-content">{{ location.Address }} {{ location.Address2 }}<br>{{ location.City }}, {{ location.State }} {{ location.ZipCode }}</p>
-					  <p class="info-modal-content"><a href="mailto:{{ location.getSurveyObject.Social_Email }}">{{ location.getSurveyObject.Social_Email }}</a></p>
-					  <p class="info-modal-content"><a href="{{ location.getSurveyObject.Social_website }}">{{ location.getSurveyObject.Social_website }}</a></p>
-					  <p class="info-modal-content"><a href="{{ location.getSurveyObject.Social_facebook }}"><span class='facebook-logo'></span></a><a href="{{ location.getSurveyObject.Social_Twitter }}"><span class='twitter-logo'></span></a></p>
-				  </div>
-				  <div class="col-sm-4">
-					  <div class="info-modal-titles">ORGANIZATION TYPE</div>
-					  <p class="info-modal-content">
-					  	{% for Organization_Description in location.getSurveyObject.Organization_Description_as_list %}
-					  		{% if Organization_Description != 'undefined' %}
-						    	<span class="label label-filter label-orgtype">{{ Organization_Description }}</span>
-					  		{% endif %}					  	
-					  	{% endfor %}
-					  </p>				  	
-					  <div class="info-modal-titles">ACTIVITES & SERVICES AT THIS LOCATION</div>
-					  <p class="info-modal-content">
-					  	{% for activity in location.Activity_as_list %}
-					  		{% if activity != 'undefined' %}
-						    	<span class="label label-filter label-activity">{{ activity }}</span>
-					  		{% endif %}
-						{% endfor %}
-					  </p>				  	
-					  <div class="info-modal-titles">SERVICE AREA</div>
-					  <p class="info-modal-content">
-					  	{% for Service_Area_Description in location.getSurveyObject.Service_Area_Description_as_list %}
-					  		{% if Service_Area_Description != 'undefined' %}
-						    	<span class="label label-filter label-servicearea">{{ Service_Area_Description }}</span>
-					  		{% endif %}					  	
-					  	{% endfor %}
-					  </p>				  	
-					  <div class="info-modal-titles">STRUCTURE</div>
-					  <p class="info-modal-content">
-					  	{% for organization_structured in location.getSurveyObject.organization_structured_as_list %}
-					  		{% if organization_structured != 'undefined' %}
-						    	<span class="label label-filter label-orgstructure">{{ organization_structured }}</span>
-					  		{% endif %}					  	
-					  	{% endfor %}
-					  </p>
-					  <div class="info-modal-titles">YEAR FOUNDED</div>
-					  <p class="info-modal-content">{{ location.getSurveyObject.Year_Founded }}</p>
-				  </div>
-				  <div class="col-sm-4">
-					  <div class="info-modal-titles">SERVICES THIS ORGANIZATION PROVIDES</div>
-					  <p class="info-modal-content">
-					  	{% for Activities_Services in location.getSurveyObject.Activities_Services_as_list %}
-					  		{% if Activities_Services != 'undefined' %}
-						    	<span class="label label-filter label-activityservice">{{ Activities_Services }}</span>
-					  		{% endif %}					  	
-					  	{% endfor %}
-					  </p>
-					  <div class="info-modal-titles">SERVICE POPULATION</div>
-					  <p class="info-modal-content">
-					  	{% for Service_Population in location.getSurveyObject.Service_Population_as_list %}
-					  		{% if Service_Population != 'undefined' %}
-						    	<span class="label label-filter label-servicepop">{{ Service_Population }}</span>
-					  		{% endif %}					  	
-					  	{% endfor %}
-					  </p>
-				  </div>
-				{% else %}
 				  <div class="col-sm-3">
-				  	<div class='modalmap' id='map{{ location.idlocation }}'></div>
+				  	<div class='modalmap' id='map{{ forloop.counter0 }}'></div>
 				  </div>
 				  <div class="col-sm-3">
 					  <div class="info-modal-titles">ORGANIZATIONAL CONTACT</div>
@@ -137,21 +74,12 @@
 					  	{% endfor %}
 					  </p>
 				  </div>
-				{% endif %}
 				</div>
 				<div class="row modalContent">
 				  <div class="col-sm-6">
 					  <div class="info-modal-titles">ORGANIZATIONAL MISSION</div>
 					  <p class="info-modal-content">{{ location.getSurveyObject.Organizational_Mission }}</p>
-					  <div class="info-modal-titles">LANGUAGES</div>
-					  <p class="info-modal-content">
-					  	{% for Languages in location.getSurveyObject.Languages_as_list %}
-					  		{% if Languages != 'undefined' %}
-						    	<span class="label label-filter label-language">{{ Languages }}</span>
-					  		{% endif %}					  	
-					  	{% endfor %}
-					  </p>
-					  <div class="info-modal-titles">PEOPLE</div>
+					  <div class="info-modal-titles">KEY CONTACT PEOPLE</div>
 					  <p class="info-modal-content">
 					  	{% for contacts in location.getContactObject %}
 					  		{% if contacts.KeepPrivate == 'true' %}
@@ -160,6 +88,14 @@
 					  			{{ contacts.Tel }}<br />
 					  			{{ contacts.Email|urlize }}<br /><br />
 					  		{% endif %}
+					  	{% endfor %}
+					  </p>
+					  <div class="info-modal-titles">LANGUAGES</div>
+					  <p class="info-modal-content">
+					  	{% for Languages in location.getSurveyObject.Languages_as_list %}
+					  		{% if Languages != 'undefined' %}
+						    	<span class="label label-filter label-language">{{ Languages }}</span>
+					  		{% endif %}					  	
 					  	{% endfor %}
 					  </p>
 					  <div class="info-modal-titles">PUBLIC MEETINGS</div>
@@ -246,3 +182,58 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<script type="text/javascript">
+	// globally define maps
+	var maps = [];			
+	
+	// modal maps: loop through each location and create a map for each on the modal
+	$().ready(new function(){
+		// hide the carousel
+		$('#orgCarousel').hide();
+
+		// set up a listener for hiding the carousel when the modal is closed
+		$('#orgModal').on('hidden.bs.modal', function (e) {
+		  $('#orgCarousel').hide();
+		});
+
+		// after carousel completes sliding 
+		$('#orgCarousel').on('slid.bs.carousel', function () {
+			// set modal backrop height if the modal height is bigger than the window height
+			var modalHeightValue = $('.modal-body').height() + $('.modal-header').height() + $('.modal-footer').height() + 205;
+			var windowHeight = $(window).height();
+			if (modalHeightValue < windowHeight) {
+				modalHeightValue = windowHeight;
+			}
+			var modalHeightString = modalHeightValue + 'px';
+			$(".modal-backdrop").css('height', modalHeightString);
+
+		});
+
+		// define mini-maps array
+		{% for location in locations %}
+			{% if location.Lat != "0" %}
+				var mapid = 'map' + {{ forloop.counter0 }};
+			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, {{ location.Lat }}, {{ location.Lon }}, 16);
+		    {% else %}
+				var mapid = 'map' + {{ forloop.counter0 }};
+			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, 42.38, -83.1, 9);
+		   	{% endif %}				
+		{% endfor %}
+		
+		// ensure thumbnail maps render in dropdown				
+		$(".carousel-control").click(function() {				
+			{% for location in locations %}				
+					// use invalidate size to make maps show appropriately
+					setTimeout(function() {
+						maps[{{ forloop.counter0 }}].map.invalidateSize();
+						// update modal title
+						if ($( "#modalItem{{ forloop.counter0 }}").hasClass('next') || $( "#modalItem{{ forloop.counter0 }}").hasClass('prev')) {
+							$( "#titleOrgName" ).html('{{ location.Organization_Name }} ({{ location.getSurveyObject.Organizaton_Acronym}})');			
+						}
+						
+					}, 10);				
+			{% endfor %}
+		});		
+	});
+</script>

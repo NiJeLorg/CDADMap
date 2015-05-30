@@ -80,6 +80,20 @@
 		.about:focus > a > .about-button {
 			background-image: url({% static 'cdadmap/css/images/about-white.png' %});
 		}
+
+		.survey > a > .survey-button {
+			display: inline-block;
+			margin-left: 12px;
+			margin-right: 2px;
+			width: 14px;
+			height: 14px;
+			background-image: url({% static 'cdadmap/css/images/about-grey.png' %});
+		}
+
+		.survey:hover > a > .survey-button,
+		.survey:focus > a > .survey-button {
+			background-image: url({% static 'cdadmap/css/images/about-white.png' %});
+		}
 		
 		.sidebar-nav li a .active > .hover-triangle {
 			display: inline-block;
@@ -128,19 +142,26 @@
                 <li class="sidebar-brand">
 					<!-- Can add a brand here later if desired -->
                 </li>
+                <li class="about">
+                    <a href="#"><span class="hover-triangle"></span>ABOUT <span class="about-button"></span><span class="hover-color"></span></a>
+                </li>
                 <li class="settings">
                     <a href="#"><span class="hover-triangle"></span>SETTINGS <span class="settings-button"></span><span class="hover-color"></span></a>
-                </li>
-                <li class="info">
-                    <a href="#"><span class="hover-triangle"></span>INFO <span class="info-button"></span><span class="hover-color"></span></a> 
                 </li>
                 <li class="filters">
                     <a href="#"><span class="hover-triangle"></span>FILTERS <span class="filters-button"></span><span class="hover-color"></span></a>
                 </li>
-                <li class="about">
-                    <a href="#"><span class="hover-triangle"></span>ABOUT <span class="about-button"></span><span class="hover-color"></span></a>
+                <li class="info">
+                    <a href="#"><span class="hover-triangle"></span>INFO <span class="info-button"></span><span class="hover-color"></span></a> 
+                </li>
+                <li class="survey">
+                    <a href="#"><span class="hover-triangle"></span>TAKE SURVEY <span class="survey-button"></span><span class="hover-color"></span></a> 
                 </li>
             </ul>
+            <div id="cdadlogo" class="center-block">
+            	<p><a href="http://cdad-online.org/"><img src="{% static 'cdadmap/css/images/cdadlogo4.png' %}" /></a></p>
+            	<p class="logotext">A Project of CDAD</p>
+            </div>
         </div>
         <!-- /#sidebar-wrapper -->
 
@@ -149,9 +170,6 @@
 
     </div>
     <!-- /#wrapper -->
-
-	{% block modal_block %}
-	{% endblock %}
 	
     <!--  javascript
     ================================================== -->
@@ -161,6 +179,8 @@
 	{% block js_block %}
 	{% endblock %}
 
+	{% block modal_block %}
+	{% endblock %}
 		
   </body>
 </html>

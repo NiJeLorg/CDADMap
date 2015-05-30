@@ -186,8 +186,10 @@ def filterLocations(request):
     template = request.GET.get("template","All")
     if (template == "locations"):
         renderTemplate = 'cdadmap/locations-geojson.html'
-    else:
+    elif (template == "popup"):
         renderTemplate = 'cdadmap/popup-content.html'
+    else:
+        renderTemplate = 'cdadmap/org-modal.html'
 
             
     context_dict = {'locations': locations}
