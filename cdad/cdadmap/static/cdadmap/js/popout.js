@@ -366,6 +366,20 @@ CDADMapPopout.onFilterChange = function (){
 
 	// ajax call to server to reload data when filters are chosen
 CDADMapPopout.loadData = function (Organization_Description_Choices, Service_Area_Choices, organization_structured_Choices, Activities_Services_Choices, Service_Population_Choices, Languages_Choices, cdadmebership, Organization_Description_Choices_String, Service_Area_Choices_String, organization_structured_Choices_String, Activities_Services_Choices_String, Service_Population_Choices_String, Languages_Choices_String, cdadmebership_String, keyword){
+
+	// first ajax call to reload the modals - makes sure these are all the way loaded before other things get clicked
+    $.ajax({
+        type: 'GET',
+        url:  'filter/?Organization_Description_Choices=' + Organization_Description_Choices_String + '&Service_Area_Choices=' + Service_Area_Choices_String + '&organization_structured_Choices=' + organization_structured_Choices_String + '&Activities_Services_Choices=' + Activities_Services_Choices_String + '&Service_Population_Choices=' + Service_Population_Choices_String + '&Languages_Choices=' + Languages_Choices_String + '&cdadmebership=' + cdadmebership_String + '&keyword=' + keyword + '&template=modals',
+        success: function(data){
+        	// remove data in popup content
+        	$("#modal-wrapper").html('');
+        	// add new data to popup content
+			$("#modal-wrapper").html(data);
+
+        }
+    });
+
     $.ajax({
         type: 'GET',
         url:  'filter/?Organization_Description_Choices=' + Organization_Description_Choices_String + '&Service_Area_Choices=' + Service_Area_Choices_String + '&organization_structured_Choices=' + organization_structured_Choices_String + '&Activities_Services_Choices=' + Activities_Services_Choices_String + '&Service_Population_Choices=' + Service_Population_Choices_String + '&Languages_Choices=' + Languages_Choices_String + '&cdadmebership=' + cdadmebership_String + '&keyword=' + keyword + '&template=locations',
@@ -387,7 +401,7 @@ CDADMapPopout.loadData = function (Organization_Description_Choices, Service_Are
         }
     });
 
-	// second ajax call to reload the popup data when filters are chosen
+	// second call to reload the popup data when filters are chosen
     $.ajax({
         type: 'GET',
         url:  'filter/?Organization_Description_Choices=' + Organization_Description_Choices_String + '&Service_Area_Choices=' + Service_Area_Choices_String + '&organization_structured_Choices=' + organization_structured_Choices_String + '&Activities_Services_Choices=' + Activities_Services_Choices_String + '&Service_Population_Choices=' + Service_Population_Choices_String + '&Languages_Choices=' + Languages_Choices_String + '&cdadmebership=' + cdadmebership_String + '&keyword=' + keyword + '&template=popup',
@@ -405,19 +419,6 @@ CDADMapPopout.loadData = function (Organization_Description_Choices, Service_Are
 			} else {
 				$( ".popup-wrapper" ).toggleClass("popup-wrapper-open");			
 			}
-
-        }
-    });
-
-	// third ajax call to reload the modals
-    $.ajax({
-        type: 'GET',
-        url:  'filter/?Organization_Description_Choices=' + Organization_Description_Choices_String + '&Service_Area_Choices=' + Service_Area_Choices_String + '&organization_structured_Choices=' + organization_structured_Choices_String + '&Activities_Services_Choices=' + Activities_Services_Choices_String + '&Service_Population_Choices=' + Service_Population_Choices_String + '&Languages_Choices=' + Languages_Choices_String + '&cdadmebership=' + cdadmebership_String + '&keyword=' + keyword + '&template=modals',
-        success: function(data){
-        	// remove data in popup content
-        	$("#modal-wrapper").html('');
-        	// add new data to popup content
-			$("#modal-wrapper").html(data);
 
         }
     });
