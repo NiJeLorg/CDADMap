@@ -3,9 +3,15 @@ from django.shortcuts import render
 import operator
 from django.db.models import TextField
 from django.db.models import Q
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
-# import all cdadmap models
+# import all cdadmap models and forms
+from cdadmap.forms import *
 from cdadmap.models import *
+
+# login required decorator
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
@@ -194,4 +200,125 @@ def filterLocations(request):
             
     context_dict = {'locations': locations}
     return render(request, renderTemplate, context_dict)
+
+
+# survey views
+@login_required
+def surveyPage1(request, id=None):
+
+    if id:
+        surveyObject = SurveyPanel.objects.get(id=id)
+    else:
+        surveyObject = SurveyPanel()
+
+    # A HTTP POST?
+    if request.method == 'POST':
+        form = Page1Form(request.POST, instance=surveyObject)
+
+        # Have we been provided with a valid form?
+        if form.is_valid():
+            # Save the new data to the database.
+            f = form.save(commit=False)
+            # add current user
+            f.user = request.user
+            # mark as draft
+            f.verified = False
+            f.save()
+            lookupObject = SurveyPanel.objects.get(Organization_Name=f.Organization_Name)
+            return HttpResponseRedirect(reverse('surveyPage2', args=(lookupObject.pk,)))
+            #return surveyPage2(request, lookupObject.pk, True)
+        else:
+            # The supplied form contained errors - just print them to the terminal.
+            print form.errors
+    else:
+        # If the request was not a POST, display the form to enter details.
+        form = Page1Form(instance=surveyObject)
+
+    # Bad form (or form details), no form supplied...
+    # Render the form with error messages (if any).
+    return render(request, 'cdadsurvey/surveyPage1.html', {'form': form})
+
+
+@login_required
+def surveyPage2(request, id=None, passed=False):
+
+    surveyObject = SurveyPanel.objects.get(id=id)
+
+    # A HTTP POST?
+    if request.method == 'POST' and passed == False:
+        form = Page2Form(request.POST, request.FILES, instance=surveyObject)
+
+        # Have we been provided with a valid form?
+        if form.is_valid():
+            # Save the new data to the database.
+            form.save(commit=True)
+
+            return HttpResponseRedirect(reverse('surveyPage3', args=(id,)))
+            #return surveyPage3(request, id, True)
+        else:
+            # The supplied form contained errors - just print them to the terminal.
+            print form.errors
+    else:
+        # If the request was not a POST, display the form to enter details.
+        form = Page2Form(instance=surveyObject)
+
+    # Bad form (or form details), no form supplied...
+    # Render the form with error messages (if any).
+    return render(request, 'cdadsurvey/surveyPage2.html', {'form': form, 'id':id})
+
+
+@login_required
+def surveyPage3(request, id=None, passed=False):
+
+    surveyObject = SurveyPanel.objects.get(id=id)
+
+    # A HTTP POST?
+    if request.method == 'POST' and passed == False:
+        form = Page3Form(request.POST, request.FILES, instance=surveyObject)
+
+        # Have we been provided with a valid form?
+        if form.is_valid():
+            # Save the new data to the database.
+            form.save(commit=True)
+
+            return HttpResponseRedirect(reverse('surveyPage4', args=(id,)))
+            #return surveyPage3(request, id, True)
+        else:
+            # The supplied form contained errors - just print them to the terminal.
+            print form.errors
+    else:
+        # If the request was not a POST, display the form to enter details.
+        form = Page3Form(instance=surveyObject)
+
+    # Bad form (or form details), no form supplied...
+    # Render the form with error messages (if any).
+    return render(request, 'cdadsurvey/surveyPage3.html', {'form': form, 'id':id})
+
+
+@login_required
+def surveyPage4(request, id=None, passed=False):
+
+    surveyObject = SurveyPanel.objects.get(id=id)
+
+    # A HTTP POST?
+    if request.method == 'POST' and passed == False:
+        form = Page4Form(request.POST, request.FILES, instance=surveyObject)
+
+        # Have we been provided with a valid form?
+        if form.is_valid():
+            # Save the new data to the database.
+            form.save(commit=True)
+
+            return HttpResponseRedirect(reverse('surveyPage5', args=(id,)))
+            #return surveyPage3(request, id, True)
+        else:
+            # The supplied form contained errors - just print them to the terminal.
+            print form.errors
+    else:
+        # If the request was not a POST, display the form to enter details.
+        form = Page4Form(instance=surveyObject)
+
+    # Bad form (or form details), no form supplied...
+    # Render the form with error messages (if any).
+    return render(request, 'cdadsurvey/surveyPage4.html', {'form': form, 'id':id})
    

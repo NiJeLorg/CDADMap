@@ -31,7 +31,7 @@ $().ready(new function(){
     CDADMap.loadLayers();
 
     // initialize all page tooltips
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip();
 
 		
 });

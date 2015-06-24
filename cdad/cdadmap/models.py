@@ -1,6 +1,10 @@
 from django.db import models
+# import User model
+from django.contrib.auth.models import User
+
 
 # CDAD models below
+# Survey model retired
 class Survey(models.Model):
     id = models.IntegerField(null=False, primary_key=True)
     Organization_Name = models.TextField()
@@ -50,9 +54,15 @@ class Survey(models.Model):
     def __str__(self):
         return self.Organization_Name        
 
+
+# Default user for syncing, users can be linked to surveys later
+DEFAULT_USER_ID = 1
+
 # SurveyPanel defined first to allow foreign key relationship to come late        
 class SurveyPanel(models.Model):
     id = models.IntegerField(null=False, primary_key=True)
+    user = models.ForeignKey(User, default=DEFAULT_USER_ID)
+    verified = models.BooleanField(default=False)
     Organization_Name = models.TextField(unique=True)
     Organizaton_Acronym = models.TextField()
     Survey_Taker_Name = models.TextField()
@@ -61,6 +71,7 @@ class SurveyPanel(models.Model):
     Organization_Description = models.TextField()
     Year_Founded = models.TextField()
     Organization_Logo = models.TextField()
+    Organization_Logo_Image = models.ImageField(upload_to="img/%Y_%m_%d_%h_%M_%s", null=True, blank=True)
     Organizational_Mission = models.TextField()
     Social_Email = models.TextField()
     AddSocial_Email = models.TextField()

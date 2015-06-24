@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/bootstrap.min.css' %}">
     <link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
     <!--<link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/oswald-font.css' %}">-->
     <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/simple-sidebar.css' %}">
@@ -155,7 +155,7 @@
                     <a href="#"><span class="hover-triangle"></span>INFO <span class="info-button"></span><span class="hover-color"></span></a> 
                 </li>
                 <li class="survey">
-                    <a href="#"><span class="hover-triangle"></span>TAKE SURVEY <span class="survey-button"></span><span class="hover-color"></span></a> 
+                    <a href="{% url 'surveyView' %}"><span class="hover-triangle"></span>TAKE SURVEY <span class="survey-button"></span><span class="hover-color"></span></a> 
                 </li>
             </ul>
             <div id="cdadlogo" class="center-block">
@@ -178,6 +178,9 @@
 	<script type="text/javascript" src="{% static 'cdadmap/js/jquery-ui.min.js' %}"></script>
 	{% block js_block %}
 	{% endblock %}
+
+	<!-- ajax loading page modal -->
+	<div class="loading-modal"></div>
 
 	{% block modal_block %}
 	{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'cdadsurvey/base.html' %}
+{% load staticfiles %}
+{% load bootstrap_tags %}
+
+{% block css_block %}
+{% endblock %}
+
+{% block head_js_block %}
+{% endblock %}
+	
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-11">
+      <h3>General Organization Information Continued</h3>
+		<form method="post" action="." enctype="multipart/form-data">
+			{% csrf_token %}
+			{{ form|as_bootstrap }}
+			<a class="btn btn-default" href="/survey/{{ id }}/">Back</a>
+			<input type="submit" class="btn btn-primary" value="Save and Continue" />
+		</form>
+    </div>
+	<div class="col-md-1">
+		<div class="percent">
+			<em>7</em>
+			<sup>%</sup>
+		</div>
+	</div>
+  </div>
+</div> <!-- /container -->
+
+{% endblock %}
+
+
+
+	
+	
+

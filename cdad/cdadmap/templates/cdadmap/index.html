@@ -262,7 +262,7 @@
 				<button id="clearFilters" class="btn btn-default pull-right" type="submit">CLEAR FILTERS</button>
 	        </div>
 	        <div id="popout-about-content" class="popout-content">
-	        	<p class="about-content"><strong>Community</strong> is CDAD's interactive map and directory for all of Detroit’s community-based organizations working to make our neighborhoods strong and vibrant.  You can find out who is working in your area, search for existing groups, and make sure your organization is listed. This resource will help Detroit organizations, institutions, and residents connect and learn about the activities and services of block clubs, neighborhood associations, community development organizations, and neighborhood improvement organizations throughout the city.</p>
+	        	<p class="about-content"><strong>d[COM]munity</strong> is CDAD's interactive map and directory for all of Detroit’s community-based organizations working to make our neighborhoods strong and vibrant.  You can find out who is working in your area, search for existing groups, and make sure your organization is listed. This resource will help Detroit organizations, institutions, and residents connect and learn about the activities and services of block clubs, neighborhood associations, community development organizations, and neighborhood improvement organizations throughout the city.</p>
 	        </div>
 		</div>
 	</div>
@@ -280,6 +280,33 @@
 <!-- Page Content -->
 <div id="map"></div>				
 <!-- /#page-content-wrapper -->
+{% endblock %}
+
+{% block modal_block %}
+<div id="modal-wrapper" class="modal-wrapper">
+	{% include 'cdadmap/org-modal.html' %}
+</div>
+
+<!-- ajax loading page modal -->
+<div class="modal fade" id="introduction" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body modalContent">
+      	<h3 class="text-center">Welcome to d[COM]munity<br />A Project of CDAD</h3>
+      	<p class="text-justify">
+			Welcome to d[COM]munity, CDAD’s interactive map and directory for all of Detroit’s community-based organizations working to make our neighborhoods strong and vibrant.  You can find out who is working in your area, search for existing groups, and make sure your organization is listed. This resource will help Detroit organizations, institutions, and residents connect and learn about the activities and services of block clubs, neighborhood associations, community development organizations, and neighborhood improvement organizations throughout the city.</p>
+		<div class="clearfix"></div>
+        <button id="closeIntroModal" class="btn btn-primary btn-lg btn-block" type="submit">START USING D[COM]MUNITY</button>
+        <div class="checkbox text-center text-uppercase">
+		  <label>
+		    <input type="checkbox" id="toggleIntroCookie" value="NoShow">
+		   Don't Show This Message
+		  </label>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block js_block %}
@@ -337,32 +364,7 @@
 
 {% endblock %}
 
-{% block modal_block %}
-<div id="modal-wrapper" class="modal-wrapper">
-	{% include 'cdadmap/org-modal.html' %}
-</div>
 
-<!-- ajax loading page modal -->
-<div class="modal fade" id="introduction" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-body modalContent">
-      	<h3 class="text-center text-uppercase">Welcome to Community<br />A Project of CDAD</h3>
-      	<p class="text-center">
-			Welcome to Community, CDAD’s interactive map and directory for all of Detroit’s community-based organizations working to make our neighborhoods strong and vibrant.  You can find out who is working in your area, search for existing groups, and make sure your organization is listed. This resource will help Detroit organizations, institutions, and residents connect and learn about the activities and services of block clubs, neighborhood associations, community development organizations, and neighborhood improvement organizations throughout the city.</p>
-		<div class="clearfix"></div>
-        <button id="closeIntroModal" class="btn btn-primary btn-lg center-block" type="submit">START USING COMMUNITY</button>
-        <div class="checkbox text-center text-uppercase">
-		  <label>
-		    <input type="checkbox" id="toggleIntroCookie" value="NoShow">
-		   Don't Show This Message
-		  </label>
-		</div>
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
 
 
 

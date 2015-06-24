@@ -309,6 +309,9 @@ CDADMapPopout.checkPopoutOpen = function () {
 }	
 
 CDADMapPopout.onFilterChange = function (){
+	// add loading modal
+	$("body").addClass("loading");
+
 	//get keyword
 	var keyword = '';
 	if ($("#liKeyword").hasClass("chosen")) {
@@ -418,6 +421,10 @@ CDADMapPopout.loadData = function (Organization_Description_Choices, Service_Are
         	$("#modal-wrapper").html('');
         	// add new data to popup content
 			$("#modal-wrapper").html(data);
+
+			// remove the loading modal 
+        	$("body").removeClass("loading");
+
 
         }
     });

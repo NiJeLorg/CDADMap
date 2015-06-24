@@ -1,2 +1,5 @@
 Django==1.7.1
+Pillow==2.8.2
+django-forms-bootstrap==3.0.1
+django-registration-redux==1.2
 wsgiref==0.1.2

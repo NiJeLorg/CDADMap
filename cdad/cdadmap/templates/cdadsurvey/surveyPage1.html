@@ -1,0 +1,93 @@
+{% extends 'cdadsurvey/base.html' %}
+{% load staticfiles %}
+{% load bootstrap_tags %}
+
+{% block css_block %}
+{% endblock %}
+
+{% block head_js_block %}
+{% endblock %}
+	
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-11">
+      <h3>General Organization Information</h3>
+		<form method="post" action=".">
+			{% csrf_token %}
+			{{ form|as_bootstrap }}
+			<input type="submit" class="btn btn-primary" value="Save and Continue" />
+		</form>
+    </div>
+	<div class="col-md-1">
+		<div class="percent">
+			<em>0</em>
+			<sup>%</sup>
+		</div>
+	</div>
+  </div>
+</div> <!-- /container -->
+
+
+{% endblock %}
+
+{% block modal_block %}
+<!-- ajax loading page modal -->
+<div class="modal fade" id="introductionSurvey" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body modalContent">
+      	<h3 class="text-center text-uppercase">A note to survey participants</h3>
+      	<p class="text-justify">
+	      	Again, thank you for participating in d[COM]munity! If you get started on the survey, but need to finish later, you can save your progress and return at a later time to finish with your login information.  Once the survey is submitted to d[COM]munity you will be able to use the same login information to edit and update the information as necessary.	
+		</p>
+		<div class="clearfix"></div>
+        <button id="closeIntroModalSurvey" class="btn btn-primary btn-lg center-block" type="submit">Begin the Survey</button>
+        <div class="checkbox text-center text-uppercase">
+		  <label>
+		    <input type="checkbox" id="toggleIntroCookieSurvey" value="NoShow" checked>
+		   Don't Show This Message
+		  </label>
+		</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block js_block %}
+
+	<script type="text/javascript" src="{% static 'cdadmap/js/jquery.cookie.js' %}"></script>
+
+	<!-- open introductory modal on page load -->
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			if (!$.cookie('noIntroSurvey')) {
+				$('#introductionSurvey').modal('show');
+				// close if button clicked
+				$('#closeIntroModalSurvey').click(function() {
+					$('#introductionSurvey').modal('hide');
+				});
+				// set cookie if don't show this message is checked
+				$('#toggleIntroCookieSurvey').change(function() {
+					if($(this).is(":checked")) {
+						$.cookie('noIntroSurvey', 'noIntroSurvey', { expires: 365, path: '/' });
+					} else {
+						$.removeCookie('noIntroSurvey', { path: '/' });
+					}
+				});
+			}
+			// set cookie on page load -- remove only if user elects to remove
+			$.cookie('noIntroSurvey', 'noIntroSurvey', { expires: 365, path: '/' });
+		});
+	</script>
+{% endblock %}
+
+
+
+
+	
+	
+

@@ -2,6 +2,33 @@
  * Main css for CDAD Detroit Mapping Site
  */
 
+ /*
+* loading screen modals
+*/
+
+body.loading {
+    overflow: hidden;   
+}
+
+body.loading .loading-modal {
+    display: block;
+}
+
+.loading-modal {
+    display:    none;
+    position:   fixed;
+    z-index:    10000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    opacity:  .7;
+    background: url('images/spinner.gif') 
+                50% 50% 
+                no-repeat;
+    background-color: #fff;
+}
+
 .rollover-tooltip {
     text-align: center;
     font-family: 'Oswald';
@@ -164,5 +191,39 @@
 	opacity: .5;
 }
 
+/*
+* Survey CSS
+*/
+
+.navbar-brand {
+  padding: 15px 15px;
+}
+
+.navbar-fixed-top {
+  border-width: 0 0 10px;
+}
+
+.navbar-brand-padtop {
+	padding-top: 25px;
+}
+
+.paddingTop140Bottom70 {
+	padding-top: 140px;
+	padding-bottom: 70px;
+}
+
+.percent {
+	top: 150px;
+	right: 20px;
+	width: 80px;
+	height: 80px;
+	text-align: center;
+	font: italic bold 30px/80px Times,serif;
+	position: fixed;
+	color: white;
+	background: url("images/percent.png") no-repeat center;
+	word-spacing: -6px;
+	z-index: 5;
+}
 
 
