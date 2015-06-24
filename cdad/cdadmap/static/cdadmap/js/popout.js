@@ -426,7 +426,6 @@ CDADMapPopout.loadData = function (Organization_Description_Choices, Service_Are
         }
     });
 
-<<<<<<< HEAD
 	// third ajax call to reload the modals
     $.ajax({
         type: 'GET',
@@ -444,8 +443,6 @@ CDADMapPopout.loadData = function (Organization_Description_Choices, Service_Are
         }
     });
 
-=======
->>>>>>> origin/master
 	
 }
 
