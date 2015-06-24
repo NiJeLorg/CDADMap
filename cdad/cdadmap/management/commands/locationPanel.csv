@@ -1,15 +1,49 @@
-idlocation,Organization_Name,Address,Address2,City,ZipCode,State,MailingAddress,KeepPrivate,Activity
-1,Southwest Detroit Environmental Vision,PO Box 9400,,Detroit,48209,MI,true,false,N/A
-2,Kids-TALK Childrens Advocacy Center,40 E Ferry St.,,Detroit,48202,MI,false,false,Youth Programs/Services
-3,Healthy Neighborhoods Detroit,"4777 E. Outer Drive, Suite 1371",,Detroit,48234,MI,false,false,"Health and Wellness Services,Computer and/or "
-4,Test NiJeL,926 Fulton,#1,Brooklyn,11238,NY,true,true,Computer and/or Technology Resources
-5,Black Mothers Breastfeeding Association,9641 Harper Ave,,Detroit,48213,MI,false,false,Health and Wellness Services
-6,North Corktown Neighborhood Association,3005 Rosa Parks Blvd,,Detroit,48216,MI,false,true,N/A
-7,The Center for Entrepreneurship & Innovation,7650 Second Avenue,,Detroit,48202,MI,false,false,Entrepreneurship/Business Development Service
-8,Framework and Resources for Empowering Environments,24111 Meridian Rd.,Apt. 120,Grosse Ile.,48138,MI,true,true,N/A
-9,Detroit Greenways Coalition,PO Box 32013,,Detroit,48232,MI,true,false,undefined
-10,Detroit Food Policy Council,2934 Russell,,Detroit,48207,MI,false,false,undefined
-11,"Stafford House, Inc",2990 West Grand Blvd,Suite M23,Detroit,48202,MI,true,false,"Youth Programs/Services,Entrepreneurship/Busi"
-12,U.S. Green Building Council Detroit Regional Chapter,461 Burroughs,,Detroit,48202,MI,false,false,N/A
-13,Virginia Park Block Club,909 Virginia Park St,,Detroit,48202,MI,false,true,N/A
-14,OHair Park Community Association,19800 Pembroke,,Detroit,48219,MI,true,false,"Youth Programs/Services,block development and"
+idlocation|Organization_Name|Address|Address2|City|ZipCode|State|MailingAddress|KeepPrivate|Activity
+16|Southwest Detroit Environmental Vision|PO Box 9400||Detroit|undefined|MI|true|false|N/A
+17|Kids-TALK Childrens Advocacy Center|40 E Ferry St.||Detroit|48202|MI|false|false|Youth Programs/Services
+18|Healthy Neighborhoods Detroit|4777 E. Outer Drive, Suite 1371||Detroit|48234|MI|false|false|Health and Wellness Services,Computer and/or 
+19|Test NiJeL|926 Fulton|#1|Brooklyn|11238|NY|true|true|Computer and/or Technology Resources
+20|Black Mothers Breastfeeding Organization|9641 Harper Ave||Detroit|48213|MI|false|false|Health and Wellness Services
+21|North Corktown Neighborhood Association|3005 Rosa Parks Blvd||Detroit|undefined|MI|false|true|N/A
+22|The Center for Entrepreneurship & Innovation|7650 Second Avenue||Detroit|undefined|MI|false|false|Entrepreneurship/Business Development Service
+26|Detroit Greenways Coalition|PO Box 32013||Detroit|undefined|MI|true|false|N/A
+28|Detroit Food Policy Council|2934 Russell||Detroit|undefined|MI|false|false|N/A
+29|Stafford House, Inc|2990 West Grand Blvd|Suite M23|Detroit|undefined|MI|true|false|Youth Programs/Services,Entrepreneurship/Busi
+30|USGBC Detroit Regional Chapter|461 Burroughs||Detroit|undefined|MI|false|false|N/A
+31|Virginia Park Block Club|909 Virginia Park St||Detroit|undefined|MI|false|true|N/A
+32|OHair Park Community Association|19800 Pembroke||Detroit|undefined|MI|true|false|Youth Programs/Services,block development and
+33|Greater Sandhill Neighborhood Organization|PO Box 19063||Detroit|undefined|MI|true|false|N/A
+34|Nortown Community Development Corporation|20017 Van Dyke|P.O. Box 34102 (mailing address)|Detroit|undefined|MI|false|false|Youth Programs/Services,Senior Programs/Servi
+35|Teppert & State Fair Block Club|Arneatha Reynolds|P.O. Box 57|Eastpointe|undefined|MI|true|true|N/A
+36|200 Lakewood block club|224 Lakewood||Detroit|undefined|MI|false|false|N/A
+37|Great Lakes Bioneers Detroit|4750 Woodward Ave. 3306||Detroit|undefined|MI|true|false|Information and collaboration services
+38|Midtown Alliance|4142 Cass, Apt. 202||Detroit|undefined|MI|false|false|N/A
+39|Test Kenyetta at D3|440 Burroughs Street|Ste 125|Detroit|undefined|MI|false|false|Computer and/or Technology Resources,Analysis
+40|Test D3 Kenyetta Second Test|123 Main Street||Detroit|undefined|MI|false|true|Entrepreneurship/Business Development Service
+41|Test Third Attempt Kenyetta|246 Old Time Road||Detroit|undefined|MI|false|true|Senior Programs/Services
+42|Urban Partnership Bank|4830 Cass Avenue|Wayne State University|Detroit|undefined|MI|false|false|Financial Products and Services
+43|West Euclid Express Block Club|750 W Euclid||Detroit|undefined|MI|true|false|undefined
+44|Bagley Community Council, Inc|18011 Woodingham|P.O. Box 21363|Detroit|undefined|MI|true|false|Community and block club support: patrol, sch
+45|Open Book Block Club|276 King Street|341 Westminster|Detroit|undefined|MI|false|true|Youth Programs/Services,Senior Programs/Servi
+46|Open Book Block|276 King Street|341 Westminster|Detroit|undefined|MI|false|true|Youth Programs/Services,Senior Programs/Servi
+47|#LETSDOSOMETHING|error||error|undefined|error|false|false|undefined
+48|Focus: HOPE|1355 Oakman Boulevard||Detroit|undefined|MI|false|false|Youth Programs/Services,Senior Programs/Servi
+49|Bridging Communities, Inc|6900 McGraw||Detroit|undefined|MI|true|false|Youth Programs/Services,Senior Programs/Servi
+50|Vanguard Community Development Corporation|2795 East Grand Boulevard||Detroit|undefined|MI|false|false|Entrepreneurship/Business Development Service
+51|Residents Restoring Riverdale|16875 Chatham||Detroit|undefined|MI|false|true|N/A
+52|Michigan Historic Preservation Network|313 East Grand River Avenue||Lansing|undefined|MI|true|false|Education and advocacy
+53|U SNAP BAC|14901 E. Warren||Detroit|undefined|MI|true|false|Entrepreneurship/Business Development Service
+54|Preservation Detroit|4735 Cass Ave.||Detroit|undefined|MI|false|false|Archival Research
+55|Mohican Regent Homeowners Association|14720 Carlisle St||Detroit|undefined|MI|false|true|N/A
+56|Marygrove Community Association|8901 Marygrove||Detroit|undefined|MI|false|true|N/A,Block club organization
+58|Resource Community Development Corporation|P.O. Box 3064||Southfield|undefined|MI|true|false|undefined
+59|Belle Isle Conservancy|300 River Place Drive|Suite 2800|Detroit|undefined|MI|true|false|N/A
+60|Belvidere Community Youth Block Club|5012 Belvidere||Detroit|undefined|MI|false|true|Youth Programs/Services,Health and Wellness S
+61|Voices for Earth Justice|15894 Greydale ST||Detroit|undefined|MI|false|false|Youth Programs/Services,Environmental and Gar
+62|International Union of Painters and Allied Trades|7234 Parkway Drive||Hanover|undefined|MD|false|false|Entrepreneurship/Business Development Service
+63|MorningSide|P. O. Box 24690||Detroit|undefined|MI|true|false|N/A
+64|Palmer Woods Association|PO Box 21086||Detroit|undefined|MI|true|false|neighborhood programs
+65|Framework and Resources for Empowering Environments|1060 W. Fort St.||Detroit|undefined|MI|true|true|Youth Programs/Services,Entrepreneurship/Busi
+66|Algonquin Block Club|880 Algonquin St||Detroit|undefined|MI|false|true|N/A
+67|West Village Association|PO Box 14912||Detroit|undefined|MI|true|false|N/A
+68|Detroit Wayne County Health Authority|3031 West Grand Boulevard|Suite 450|Detroit|undefined|MI|false|false|Health and Wellness Services

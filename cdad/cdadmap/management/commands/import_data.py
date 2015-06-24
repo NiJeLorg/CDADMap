@@ -13,7 +13,7 @@ class Command(BaseCommand):
         __location__ = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
         # open contact.csv and dump into Contact table
         with open(os.path.join(__location__, 'contact.csv'), 'rb') as f:
-            reader = csv.reader(f)
+            reader = csv.reader(f,delimiter='|')
             for row in reader:
                 if row[0] != 'id': # Ignore the header row, import everything else
                     contact = Contact()
@@ -30,7 +30,7 @@ class Command(BaseCommand):
 
         # open contactPanel.csv and dump into ContactPanel table
         with open(os.path.join(__location__, 'contactPanel.csv'), 'rb') as f:
-            reader = csv.reader(f)
+            reader = csv.reader(f,delimiter='|')
             for row in reader:
                 if row[0] != 'id': # Ignore the header row, import everything else
                     contactpanel = ContactPanel()
@@ -51,7 +51,7 @@ class Command(BaseCommand):
 
         # open location.csv and dump into Location table
         with open(os.path.join(__location__, 'location.csv'), 'rb') as f:
-            reader = csv.reader(f)
+            reader = csv.reader(f,delimiter='|')
             for row in reader:
                 if row[0] != 'id': # Ignore the header row, import everything else
                     location = Location()
@@ -70,7 +70,7 @@ class Command(BaseCommand):
                 
         # open locationPanel.csv and dump into LocationPanel table
         with open(os.path.join(__location__, 'locationPanel.csv'), 'rb') as f:
-            reader = csv.reader(f)
+            reader = csv.reader(f,delimiter='|')
             for row in reader:
                 if row[0] != 'idlocation': # Ignore the header row, import everything else
                     locationpanel = LocationPanel()
@@ -96,7 +96,7 @@ class Command(BaseCommand):
 
         # open meeting.csv and dump into Meeting table
         with open(os.path.join(__location__, 'meeting.csv'), 'rb') as f:
-            reader = csv.reader(f)
+            reader = csv.reader(f,delimiter='|')
             for row in reader:
                 if row[0] != 'id': # Ignore the header row, import everything else
                     meeting = Meeting()
@@ -125,7 +125,7 @@ class Command(BaseCommand):
                 
         # open meetingPanel.csv and dump into MeetingPanel table
         with open(os.path.join(__location__, 'meetingPanel.csv'), 'rb') as f:
-            reader = csv.reader(f)
+            reader = csv.reader(f,delimiter='|')
             for row in reader:
                 if row[0] != 'id': # Ignore the header row, import everything else
                     meetingpanel = MeetingPanel()
@@ -156,7 +156,7 @@ class Command(BaseCommand):
 
         # open survey.csv and dump into Survey table
         with open(os.path.join(__location__, 'survey.csv'), 'rb') as f:
-            reader = csv.reader(f)
+            reader = csv.reader(f,delimiter='|')
             for row in reader:
                 if row[0] != 'id': # Ignore the header row, import everything else
                     survey = Survey()
@@ -206,7 +206,7 @@ class Command(BaseCommand):
 
         # open surveyPanel.csv and dump into SurveyPanel table
         with open(os.path.join(__location__, 'surveyPanel.csv'), 'rb') as f:
-            reader = csv.reader(f)
+            reader = csv.reader(f,delimiter='|')
             for row in reader:
                 if row[0] != 'id': # Ignore the header row, import everything else
                     surveypanel = SurveyPanel()

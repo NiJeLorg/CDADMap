@@ -1,6 +1,7 @@
 import sys,os,urllib,urllib2,json
 from django.core.management.base import BaseCommand, CommandError
 from cdadmap.models import LocationPanel
+import time
 
 
 """
@@ -14,9 +15,10 @@ class Command(BaseCommand):
     	base_url = "http://maps.googleapis.com/maps/api/geocode/json?";
         
         
-        for location in LocationPanel.objects.filter(Address__isnull=False, Lat__exact='', Lon__exact=''):
+        for counter, location in enumerate(LocationPanel.objects.filter(Address__isnull=False, Lat__exact='', Lon__exact='')):
             # ignore location if address is a P.O. Box
-            if "P.O." not in location.Address and "PO" not in location.Address:
+            print location
+            if "P.O." not in location.Address and "PO" not in location.Address and "error" not in location.Address:
 
                 if bool(location.City) is True:
                     fullAddress = location.Address + ' ' + location.City + ', ' + location.State
@@ -41,6 +43,9 @@ class Command(BaseCommand):
                 location.Lat = 0
                 location.Lon = 0
                 location.save()
+            if counter % 10 == 0:
+                print "Sleeping at counter" + str(counter)
+                time.sleep(20)
                                 
 
     def handle(self, *args, **options):

@@ -1,30 +1,93 @@
-"id","Organization_Name","Name","Title","Tel","Email","KeepPrivate","AddListPermission","MyTrace"
-12,"The Greening of Detroit","Rebecca Salminen Witt","President","313-237-8733","rebecca@greeningofdetroit.com","true","false",0
-21,"Southwest Detroit Environmental Vision","Kathy Stott","Executive Director","313-842-1961","kathy.sdev@gmail.com","true","false",1
-22,"Southwest Detroit Environmental Vision","Sarah Hoogterp","Director of Programs","313-842-1961","sarah.sdev@gmail.com","false","undefined",1
-26,"Kids-TALK Childrens Advocacy Center","Rebecca Minardi","Community Organizer","734-785-7705","rminardi@iamtgc.net","false","false",1
-27,"Healthy Neighborhoods Detroit","Dawn Calloway","Office Coordinator","313-369-5600","dawn.calloway@stjohn.org","false","true",1
-28,"Test NiJeL","Lela Prashad","Chief Data Scientist","602-412-1553","lprashad@nijel.org","true","true",1
-29,"Black Mothers Breastfeeding Organization","Kiddada Green","Founding Executive Director","800-313-6141","KiddadaG@bmbfa.org","false","false",0
-30,"Black Mothers Breastfeeding Organization","Jayne Jackson","Program Aide","800-313-6141","JayneJ@bmbfa.org","false","undefined",0
-31,"Black Mothers Breastfeeding Organization","Lauren Powers","Program Coordinator","800-313-6141","LaurenP@bmbfa.org","false","undefined",0
-32,"North Corktown Neighborhood Association","Nicole Knight","Secretary","313-384-9678","nicole.r.knight@gmail.com","true","false",1
-33,"The Center for Entrepreneurship & Innovation","Edward Foxworth III","CEO","313-355-0839","Center4entrepreneurs@gmail.com","true","true",1
-34,"Grandmont Rosedale Development Corporation","Tom Goddeeris","Executive Director","313-387-4732","tgoddeeris@grandmontrosedale.com","true","false",0
-36,"Framework and Resources for Empowering Environments","Joseph Gruber","Professional Consultant","734-818-9438","gruberjk@gmail.com","true","true",1
-37,"Detroit Greenways Coalition","Todd Scott","Executive Director","313-649-7249","todd@detroitgreenways.org","true","false",1
-38,"Detroit Food Policy Council","Kibibi Blount-Dorn","Interim Coordinator","313-833-0396","kibibi.dfpc@gmail.com","false","false",1
-39,"Stafford House, Inc","Patricia Dockery","Executive Director","313-377-2596","pdockery@staffordhouseinc.org","true","false",1
-40,"GenesisHOPE Community Development Corporation","Jeanine Hatcher","Executive Director","313-571-0937","jhatcher@genesishope.org","false","false",0
-41,"GenesisHOPE Community Development Corporation","Gwen Gell","Program Manager","313-571-0937","ggell@genesishope.org","false","undefined",0
-42,"USGBC Detroit Regional Chapter","Maria Kramer","Membership & Communications Manager","313-355-9020","mariakramer@usgbcdetroit.org","false","true",0
-43,"Bridging Communities, Inc.","Phyllis Edwards","Executive Director","313-361-6377","phyllis.edwards@bridgingcommunities.org","false","true",0
-44,"Virginia Park Block Club","Paul Mack","President","517-755-7087","bioethicsman@gmail.com","true","false",1
-45,"Virginia Park Block Club","Jeff Cowin","Vice-President","313-354-1868","jeffcowin58@gmail.com","true","undefined",1
-46,"OHair Park Community Association","Colleen Flaherty","Secretary","248-557-0862","flaherty28@att.net","false","true",1
-47,"OHair Park Community Association","Donald Archambault","Board member","313-537-5770","archambaultdon@hotmail.com","false","undefined",1
-48,"Greater Sandhill Neighborhood Organization","John Tiley","Communications","248-635-4126","Fungisdad@aol.com","false","false",0
-49,"Nortown Community Development Corporation","patricia bosch","executive director","313-891-7709","villagendet@aol.com","false","true",0
-50,"Bleeding Heart Design","Rebecca Willis","Founder and Director","313-718-4044","bucky@bleedingheartdesign.org","true","false",0
-51,"Teppert & State Fair Block Club","Arneatha Reynolds","Vice President","313-585-4431","Arneatha456@yahoo.com","false","true",0
-52,"200 Lakewood block club","Frank Bach","Treasurer","313-822-4303","frank@frankbach.com","false","false",0
+id|Organization_Name|Name|Title|Tel|Email|KeepPrivate|AddListPermission|MyTrace
+12|The Greening of Detroit|Rebecca Salminen Witt|President|313-237-8733|rebecca@greeningofdetroit.com|true|false|0
+21|Southwest Detroit Environmental Vision|Kathy Stott|Executive Director|313-842-1961|kathy.sdev@gmail.com|true|false|1
+22|Southwest Detroit Environmental Vision|Sarah Hoogterp|Director of Programs|313-842-1961|sarah.sdev@gmail.com|false|undefined|1
+26|Kids-TALK Childrens Advocacy Center|Rebecca Minardi|Community Organizer|734-785-7705|rminardi@iamtgc.net|false|false|1
+27|Healthy Neighborhoods Detroit|Dawn Calloway|Office Coordinator|313-369-5600|dawn.calloway@stjohn.org|false|true|1
+28|Test NiJeL|Lela Prashad|Chief Data Scientist|602-412-1553|lprashad@nijel.org|true|true|1
+29|Black Mothers Breastfeeding Organization|Kiddada Green|Founding Executive Director|800-313-6141|KiddadaG@bmbfa.org|false|false|1
+30|Black Mothers Breastfeeding Organization|Jayne Jackson|Program Aide|800-313-6141|JayneJ@bmbfa.org|false|undefined|1
+31|Black Mothers Breastfeeding Organization|Lauren Powers|Program Coordinator|800-313-6141|LaurenP@bmbfa.org|false|undefined|1
+32|North Corktown Neighborhood Association|Nicole Knight|Secretary|313-384-9678|nicole.r.knight@gmail.com|true|false|1
+33|The Center for Entrepreneurship & Innovation|Edward Foxworth III|CEO|313-355-0839|Center4entrepreneurs@gmail.com|true|true|1
+34|Grandmont Rosedale Development Corporation|Tom Goddeeris|Executive Director|313-387-4732|tgoddeeris@grandmontrosedale.com|true|false|0
+36|Framework and Resources for Empowering Environments|Joseph Gruber|Professional Consultant|734-818-9438|gruberjk@gmail.com|true|true|1
+37|Detroit Greenways Coalition|Todd Scott|Executive Director|313-649-7249|todd@detroitgreenways.org|true|false|1
+38|Detroit Food Policy Council|Kibibi Blount-Dorn|Interim Coordinator|313-833-0396|kibibi.dfpc@gmail.com|false|false|1
+39|Stafford House, Inc|Patricia Dockery|Executive Director|313-377-2596|pdockery@staffordhouseinc.org|true|false|1
+40|GenesisHOPE Community Development Corporation|Jeanine Hatcher|Executive Director|313-571-0937|jhatcher@genesishope.org|false|false|0
+41|GenesisHOPE Community Development Corporation|Gwen Gell|Program Manager|313-571-0937|ggell@genesishope.org|false|undefined|0
+42|USGBC Detroit Regional Chapter|Maria Kramer|Membership & Communications Manager|313-355-9020|mariakramer@usgbcdetroit.org|false|true|1
+43|Bridging Communities, Inc.|Phyllis Edwards|Executive Director|313-361-6377|phyllis.edwards@bridgingcommunities.org|false|true|0
+44|Virginia Park Block Club|Paul Mack|President|517-755-7087|bioethicsman@gmail.com|true|false|1
+45|Virginia Park Block Club|Jeff Cowin|Vice-President|313-354-1868|jeffcowin58@gmail.com|true|undefined|1
+46|OHair Park Community Association|Colleen Flaherty|Secretary|248-557-0862|flaherty28@att.net|false|true|1
+47|OHair Park Community Association|Donald Archambault|Board member|313-537-5770|archambaultdon@hotmail.com|false|undefined|1
+48|Greater Sandhill Neighborhood Organization|John Tiley|Communications|248-635-4126|Fungisdad@aol.com|false|false|1
+49|Nortown Community Development Corporation|patricia bosch|executive director|313-891-7709|villagendet@aol.com|false|true|1
+50|Bleeding Heart Design|Rebecca Willis|Founder and Director|313-718-4044|bucky@bleedingheartdesign.org|true|false|0
+51|Teppert & State Fair Block Club|Arneatha Reynolds|Vice President|313-585-4431|Arneatha456@yahoo.com|false|true|1
+52|200 Lakewood block club|Frank Bach|Treasurer|313-822-4303|frank@frankbach.com|false|false|1
+53|Great Lakes Bioneers Detroit|Gloria Rivera IHM|Coordinator|313-717-6151|river1143@comcast.net|false|true|1
+54|Midtown Alliance|Leslie Malcolmson|Communications|313-831-7931|lrmalcolmson@gmail.com|false|true|1
+57|Test Kenyetta at D3|Kenyetta|Office Assoiciate|313-777-9311|kenyetta@datadrivendetroit.org|false|false|1
+62|Test D3 Kenyetta Second Test|Kenyetta Walker|office assoicate|313-777-9311|kenyetta@datadrivendetroit.org|true|false|1
+63|Test Third Attempt Kenyetta|Kenyetta|Staff|248-564-5231|kenyettaels@gmail.com|true|false|1
+64|Test FOURTH D3|Kenyetta|staff|313-777-9311|kenyetta@datadrivendetroit.org|true|false|0
+65|Test FOURTH D3|Kenyetta|staff|313-777-9311|kenyetta@datadrivendetroit.org|true|false|0
+66|TEST D3 - Fifth|kenyetta|staff|313-777-9311|kenyetta@datadrivendetoit.org|false|false|0
+67|Urban Partnership Bank|Kimberly Jones|Director, Government Relations|773-420-5142|kjones@upbnk.com|false|true|1
+68|Urban Partnership Bank|Mark Clark|Financial Center Manager|313-886-2050|mclark@upbnk.com|false|undefined|1
+69|Urban Partnership Bank|Kevin Sweeney|Detroit Market Manager|313-886-2065|ksweeney@upbnk.com|false|undefined|1
+70|West Euclid Express Block Club|Norma Heat|Block Club President|313-228-3025|nkaakh@msn.com|false|true|1
+71|Bagley Community Council, Inc|Alicia Biggers|President|313-701-2693|abiggers3@comcast.net|true|false|1
+72|Open Book Block|Phillis Judkins|President|313-875-9151|phillisjudkins@gmail.com|true|false|1
+73|Open Book Block|Sherryl Ausbrooks|Vic President|313-515-9352|sra1225@sbcblobal.net|true|undefined|1
+74|Open Book Block|Paige Alston|Communications|313-989-6360|pushpaige@gmail.com|true|undefined|1
+75|Open Book Block|Myrtha Grice|Member|313-694-6632|mgrice_3@yahoo.com|true|undefined|1
+76|#LETSDOSOMETHING|Ekanem N. Obong|Member|313-258-1378|ekanem.n.obong@gmail.com|false|true|1
+77|#LETSDOSOMETHING|Victor Robinson|Secretary|313-712-2225|vicrob15@gmail.com|true|undefined|1
+78|#LETSDOSOMETHING|Ekanem N. Obong|Member|313-258-1378|ekanem.n.obong@gmail.com|false|true|1
+79|#LETSDOSOMETHING|Victor Robinson|Secretary|313-712-2225|vicrob15@gmail.com|true|undefined|1
+80|Focus: HOPE|William F. Jones|CEO|313-494-5500|jonesw@focushope.edu|true|false|1
+81|Bridging Communities, Inc|Phyllis Edwards|Executive Director|313-361-6377|phyllis.edwards@bridgingcommunities.org|false|true|1
+82|Vanguard Community Development Corporation|Eleanore Eveleth|Interim Executive Director|313-556-2014|EEveleth@VanguardCDC.org|false|true|1
+83|Residents Restoring Riverdale|Diane Hanks|Community Organizer|313-534-0146|hanksdv@sbcglobal.net|true|false|1
+84|Michigan Historic Preservation Network|Nancy Finegood|Executive Director|517-371-8080|finegood@mhpn.org|false|true|1
+85|U SNAP BAC|Linda Smith|Executive Director|313-640-1100|ls@usnapbac.org|false|true|1
+86|Eastside Community Network|Sarida Scott|ED|313-555-5555|sarida@cdad-online.org|true|false|0
+87|Eastside Community Network|Aaron Goodman|CO|313-555-5555|aaron@gmail.com|false|undefined|0
+88|Preservation Detroit|Amy Elliott Bragg|President, Board of Directors|248-885-2282|aelliottbragg@preservationdetroit.org|true|true|1
+89|Mohican Regent Homeowners Association|George Preston|President|313-715-6206|GP121345@AOL.COM|true|true|1
+90|Marygrove Community Association|Barbara Askew|Member|313-861-7328|bjwa313@aol.com|true|true|1
+91|Marygrove Community Association|Herbert Russell|President|313-717-3782|larrock2003@yahoo.com|true|undefined|1
+92|Marygrove Community Association|Brock|Green|313-739-6216|brock1205@yahoo.com|true|undefined|1
+93|Marygrove Community Association|Sandra|Battle|313-492-3002|tig579er@aol.com|true|undefined|1
+94|MorningSide|Monique Tate|Board Member At Large|313-282-1760|mbtate1@gmail.com|false|false|1
+95|Resource Community Development Corporation|Ada Jackson|COO|248-224-0139|teediphone@gmail.com|false|true|1
+96|Belle Isle Conservancy|Michele Hodges|President|313-331-7760|hodgesm@belleisleconservancy.org|false|true|1
+97|Belle Isle Conservancy|Katy Wyerman|Director of Fund Development|313-331-7760|wyermank@belleisleconservancy.org|false|undefined|1
+98|Belle Isle Conservancy|Erica Hill|Volunteer Coordinator|313-331-7760|hillE@belleisleconservancy.org|false|undefined|1
+99|Belle Isle Conservancy|Tess Miller|Adminstrative Assistant|313-331-7760|millert@belleisleconservancy.org|false|undefined|1
+100|Belvidere Community Youth Block Club|Tammara Howard|Director|313-918-9604|howardtammara@yahoo.com|true|true|1
+101|Voices for Earth Justice|Patty Gillis|Executive Director|313-399-8320|voices4earth@juno.com|true|false|1
+102|Voices for Earth Justice|Naim Edwards|Community Garden and Outreach Coordinator|717-364-2378|naiedwards@gmail.com|false|undefined|1
+103|International Union of Painters and Allied Trades|Doug Claypool|Regional Organizing Coordinator|410-292-6495|dclaypool@iupat.org|false|true|1
+104|MorningSide|Zelda Anderson|President|313-881-4704|President@our-morningside.org|false|true|1
+105|MorningSide|Claudia Meeks|Secretary|313-881-4704|Secretary@our-morningside.org|false|undefined|1
+106|MorningSide|Paul Phillips|Communications|313-881-4704|Communications@our-morningside.org|false|undefined|1
+107|Palmer Woods Association|Craig|Vanderburg|313-891-3306|president@palmerwoods.org|true|false|1
+108|Activate313.org|Mark Dilley|Detroit Curator|313-942-9454|markwdilley@gmail.com|true|false|0
+109|Framework and Resources for Empowering Environments|Joe Gruber|Co-Founder|248-508-4426|joe@freeprojectdetroit.com|true|false|1
+110|Algonquin Block Club|Oyin O. Zuri|Captrain|586-467-5743|algonquinblockclub@gmail.com|true|false|1
+111|Algonquin Block Club|Oyin O. Zuri|Captrain|586-467-5743|algonquinblockclub@gmail.com|true|false|1
+112|West Village Association|Vas Jacobs|President of WVA|313-510-5523|vassilis.jacobs@gmail.com|false|true|1
+113|MiRoad2Work.org|Renee Prewitt|President, The Prewitt Group|248-515-1941|rprewitt@theprewittgroup.com|false|true|0
+114|Detroit Wayne County Health Authority|Chris Allen|Executive Director & CEO|313-871-3751|callen@dwcha.org|false|false|1
+115|Detroit Wayne County Health Authority|Dennis Archambault|Director, Public Relations|313-871-3751|darchambault@dwcha.org|false|undefined|1
+116|Eastside Community Network|Maggie DeSantis|CEO|313-571-2800|mdesantis@ecn-detroit.org|false|false|0
+117|Eastside Community Network|Ky Lindberg|Communications and Resource Director|313-571-2800|klindberg@ecn-detroit.org|false|undefined|0
+118|Eastside Community Network|Sherita Smith|Community Engagement Director|313-571-2800|ssmith@ecn-detroit.org|true|undefined|0
+119|Eastside Community Network|Orlando Bailey|Community Engagement Manager|313-331-3499|obailey@ecn-detroit.org|false|undefined|0
+120|Mack Alive Community Resource Center|Richard Todd Smith|Executive Director|313-824-3900|keepmackalive@yahoo.com|false|true|0
+121|Kentucky Joy Association, Inc.|Esther Collins|Community Organizer|313-931-3226|esthercollins3226@yahoo.com|false|true|0
