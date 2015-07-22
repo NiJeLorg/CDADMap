@@ -1,0 +1,62 @@
+{% extends 'cdadsurvey/base.html' %}
+{% load staticfiles %}
+{% load bootstrap_tags %}
+
+{% block css_block %}
+{% endblock %}
+
+{% block head_js_block %}
+{% endblock %}
+	
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-11">
+      <h3>Who is CDAD?</h3>
+      <p>As Detroit's association of Community Development and Neighborhood Improvement Organizations, Community Development Advocates of Detroit (CDAD) is a catalyst for the trasformation of our neighborhoods, led and inspired by residents, community-based organizations, and ohter community stakeholders.</p>
+      <p>CDAD works to enhance the capacity and effectiveness of Detroit's commmunity-based organizations, initiatives, and residents through advocacy, training, technical assistance, networking opportunities, information sharing, and facilitating common action.</p>
+		<form method="post" action=".">
+			{% csrf_token %}
+			{{ form|as_bootstrap }}
+			<a class="btn btn-default" href="/survey8/{{ id }}/">Back</a>
+			<input type="submit" class="btn btn-primary" value="Save and Continue" />
+		</form>
+    </div>
+	<div class="col-md-1">
+		<div class="percent">
+			<em>93</em>
+			<sup>%</sup>
+		</div>
+	</div>
+  </div>
+</div> <!-- /container -->
+{% endblock %}
+
+{% block js_block %}
+<script type="text/javascript">
+	$( document ).ready(function() {
+		$('#div_id_CDAD_Services_Other').addClass('hidden');
+
+		$('#id_CDAD_Services_6').change(function() {
+			if ($(this).is(':checked')) {
+				$('#div_id_CDAD_Services_Other').removeClass('hidden');
+			} else {
+				$('#div_id_CDAD_Services_Other').addClass('hidden');
+			}
+			
+		});
+
+	});
+</script>
+{% endblock %}
+
+
+
+
+
+
+	
+	
+

@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block head_js_block %}
+{{ formset.media }}
 {% endblock %}
 	
 
@@ -14,31 +15,32 @@
 <div class="container">
   <div class="row">
     <div class="col-md-11">
-      <h3>Organization Contact Information</h3>
-      <p>Please add the names and positions of key leadership and/or contact people within the organization. These individuals will be listed in the directory as primary contacts, but you may choose to keep individual phone numbers and email addresses private.</p>
+      <h3>Regular Public Meeting Schedule</h3>
 		<form method="post" action=".">
 			{% csrf_token %}
 			{{ formset.management_form }}
 			{% for form in formset %}
 				<div id="section{{ forloop.counter0 }}">
-				{% if forloop.first %}
-					<p><strong>(Required)</strong></p>
-				{% else %}
-				{% endif %}
 				{{ form|as_bootstrap }}
-					<button id="clear{{ forloop.counter0 }}" class="btn btn-warning" type="button">Remove Contact</button>
+					<button id="clear{{ forloop.counter0 }}" class="btn btn-warning" type="button">Remove Meeting</button>
 				{% if forloop.last %}
 				{% else %}
-					<button id="new{{ forloop.counter }}" class="btn btn-success">Add Additional Contact</button>
+					<button id="new{{ forloop.counter }}" class="btn btn-success">Add Additional Meeting</button>
 				{% endif %}
 					<hr />
 				</div>
 					<script type="text/javascript">
 						$( document ).ready(function() {
 							// hide sections that don't have data
-							if (!$('#id_form-{{ forloop.counter }}-Name').val()) {
+							if (!$('#id_form-{{ forloop.counter }}-MeetingName').val()) {
 								$('#section{{ forloop.counter }}').addClass('hidden');
 							}
+
+							// hide these two questions after the first form
+							{% if forloop.counter0 != 0 %}
+								$('#div_id_form-{{ forloop.counter0 }}-hasMeeting').addClass('hidden');
+								$('#div_id_form-{{ forloop.counter0 }}-MeetAlways').addClass('hidden');
+							{% endif %}
 
 							// hide all delete check boxes
 							$('#div_id_form-{{ forloop.counter0 }}-DELETE').addClass('hidden');
@@ -46,13 +48,21 @@
 							// clear button
 							$('#clear{{ forloop.counter0 }}').click(function(e) {
 								e.preventDefault();
-								$('#id_form-{{ forloop.counter0 }}-Name').val('');
-								$('#id_form-{{ forloop.counter0 }}-Title').val('');
-								$('#id_form-{{ forloop.counter0 }}-Tel').val('');
-								$('#id_form-{{ forloop.counter0 }}-KeepPrivateTel').prop( "checked", false );
-								$('#id_form-{{ forloop.counter0 }}-Email').val('');
-								$('#id_form-{{ forloop.counter0 }}-KeepPrivateEmail').prop( "checked", false );
-								$('#id_form-{{ forloop.counter0 }}-AddListPermission').prop( "checked", false );
+								$('#id_form-{{ forloop.counter0 }}-hasMeeting').prop( "checked", false );
+								$('#id_form-{{ forloop.counter0 }}-MeetingName').val('');
+								$('#id_form-{{ forloop.counter0 }}-Address').val('');
+								$('#id_form-{{ forloop.counter0 }}-Address2').val('');
+								$('#id_form-{{ forloop.counter0 }}-City').val('');
+								$('#id_form-{{ forloop.counter0 }}-ZipCode').val('');
+								$('#id_form-{{ forloop.counter0 }}-StartOn input').val('');
+								$('#id_form-{{ forloop.counter0 }}-EndsOn input').val('');
+								$('#id_form-{{ forloop.counter0 }}-all_day').prop( "checked", false );
+								$('#id_form-{{ forloop.counter0 }}-repeat').val('NEVER');
+								$('#id_form-{{ forloop.counter0 }}-end_repeat input').val('');
+								$('#id_form-{{ forloop.counter0 }}-MeetingPerson').val('');
+								$('#id_form-{{ forloop.counter0 }}-MeetingPersonPhone').val('');
+								$('#id_form-{{ forloop.counter0 }}-MeetingPersonEmail').val('');
+								$('#id_form-{{ forloop.counter0 }}-MeetAlways').prop( "checked", false );
 								//check deleted
 								$('#id_form-{{ forloop.counter0 }}-DELETE').prop("checked", true);
 								// hide this part of form umless it's the first one
@@ -77,7 +87,7 @@
     </div>
 	<div class="col-md-1">
 		<div class="percent">
-			<em>21</em>
+			<em>71</em>
 			<sup>%</sup>
 		</div>
 	</div>

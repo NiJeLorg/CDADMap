@@ -1,0 +1,53 @@
+{% extends 'cdadsurvey/base.html' %}
+{% load staticfiles %}
+{% load bootstrap_tags %}
+
+{% block css_block %}
+{% endblock %}
+
+{% block head_js_block %}
+{% endblock %}
+	
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-11">
+      <h3>Organizational Structure</h3>
+		<form method="post" action=".">
+			{% csrf_token %}
+			{{ form|as_bootstrap }}
+			<a class="btn btn-default" href="/survey7/{{ id }}/">Back</a>
+			<input type="submit" class="btn btn-primary" value="Save and Continue" />
+		</form>
+    </div>
+	<div class="col-md-1">
+		<div class="percent">
+			<em>50</em>
+			<sup>%</sup>
+		</div>
+	</div>
+  </div>
+</div> <!-- /container -->
+{% endblock %}
+
+{% block js_block %}
+<script type="text/javascript">
+	$( document ).ready(function() {
+		// if no is selected, add 0 to board member number values
+		$('#id_governance_board_2').click(function(e) {
+			$('#id_No_of_board_members').val(0);
+		});
+	});
+</script>
+
+
+{% endblock %}
+
+
+
+
+	
+	
+

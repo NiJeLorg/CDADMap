@@ -1,0 +1,39 @@
+{% extends 'cdadsurvey/base.html' %}
+{% load staticfiles %}
+{% load bootstrap_tags %}
+
+{% block css_block %}
+{% endblock %}
+
+{% block head_js_block %}
+{% endblock %}
+	
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-11">
+      <h3>Programs, Projects, and Accomplishments</h3>
+      <p>Please highlight up to 5 key programs, projects, or accomplishments for your organization in the past three years.</p>
+		<form method="post" action=".">
+			{% csrf_token %}
+			{{ form|as_bootstrap }}
+			<a class="btn btn-default" href="/survey11/{{ id }}/">Back</a>
+			<input type="submit" class="btn btn-primary" value="Save and Continue" />
+		</form>
+    </div>
+	<div class="col-md-1">
+		<div class="percent">
+			<em>79</em>
+			<sup>%</sup>
+		</div>
+	</div>
+  </div>
+</div> <!-- /container -->
+{% endblock %}
+
+
+
+
+	

@@ -14,8 +14,8 @@
 <div class="container">
   <div class="row">
     <div class="col-md-11">
-      <h3>Organization Contact Information</h3>
-      <p>Please add the names and positions of key leadership and/or contact people within the organization. These individuals will be listed in the directory as primary contacts, but you may choose to keep individual phone numbers and email addresses private.</p>
+      <h3>Organization Location</h3>
+      <p>Enter all physical and mailing addresses for your organization.</p>
 		<form method="post" action=".">
 			{% csrf_token %}
 			{{ formset.management_form }}
@@ -26,17 +26,17 @@
 				{% else %}
 				{% endif %}
 				{{ form|as_bootstrap }}
-					<button id="clear{{ forloop.counter0 }}" class="btn btn-warning" type="button">Remove Contact</button>
+					<button id="clear{{ forloop.counter0 }}" class="btn btn-warning" type="button">Remove Location</button>
 				{% if forloop.last %}
 				{% else %}
-					<button id="new{{ forloop.counter }}" class="btn btn-success">Add Additional Contact</button>
+					<button id="new{{ forloop.counter }}" class="btn btn-success">Add An Additional Address or Location</button>
 				{% endif %}
 					<hr />
 				</div>
 					<script type="text/javascript">
 						$( document ).ready(function() {
 							// hide sections that don't have data
-							if (!$('#id_form-{{ forloop.counter }}-Name').val()) {
+							if (!$('#id_form-{{ forloop.counter }}-Address').val()) {
 								$('#section{{ forloop.counter }}').addClass('hidden');
 							}
 
@@ -46,13 +46,17 @@
 							// clear button
 							$('#clear{{ forloop.counter0 }}').click(function(e) {
 								e.preventDefault();
-								$('#id_form-{{ forloop.counter0 }}-Name').val('');
-								$('#id_form-{{ forloop.counter0 }}-Title').val('');
-								$('#id_form-{{ forloop.counter0 }}-Tel').val('');
-								$('#id_form-{{ forloop.counter0 }}-KeepPrivateTel').prop( "checked", false );
-								$('#id_form-{{ forloop.counter0 }}-Email').val('');
-								$('#id_form-{{ forloop.counter0 }}-KeepPrivateEmail').prop( "checked", false );
-								$('#id_form-{{ forloop.counter0 }}-AddListPermission').prop( "checked", false );
+								$('#id_form-{{ forloop.counter0 }}-Address').val('');
+								$('#id_form-{{ forloop.counter0 }}-Address2').val('');
+								$('#id_form-{{ forloop.counter0 }}-City').val('');
+								$('#id_form-{{ forloop.counter0 }}-State').val('');
+								$('#id_form-{{ forloop.counter0 }}-ZipCode').val('');
+								$('#id_form-{{ forloop.counter0 }}-MailingAddress').prop( "checked", false );
+								$('#id_form-{{ forloop.counter0 }}-KeepPrivate').prop( "checked", false );
+								for (var i = 1; i <= 9 ; i++) {
+									$('#id_form-{{ forloop.counter0 }}-Activity_' + i).prop( "checked", false );
+								};
+								
 								//check deleted
 								$('#id_form-{{ forloop.counter0 }}-DELETE').prop("checked", true);
 								// hide this part of form umless it's the first one
@@ -71,13 +75,13 @@
 					</script>
 
 			{% endfor %}
-			<a class="btn btn-default" href="/survey3/{{ id }}/">Back</a>
+			<a class="btn btn-default" href="/survey4/{{ id }}/">Back</a>
 			<input type="submit" class="btn btn-primary" value="Save and Continue" />
 		</form>
     </div>
 	<div class="col-md-1">
 		<div class="percent">
-			<em>21</em>
+			<em>29</em>
 			<sup>%</sup>
 		</div>
 	</div>

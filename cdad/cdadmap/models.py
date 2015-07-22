@@ -4,6 +4,15 @@ from django.contrib.auth.models import User
 
 
 # CDAD models below
+
+#names of partners
+class Partners(models.Model):
+    partner_name = models.CharField(max_length=255, default='')
+
+    def __str__(self):
+        return self.partner_name        
+
+
 # Survey model retired
 class Survey(models.Model):
     id = models.IntegerField(null=False, primary_key=True)
@@ -81,6 +90,7 @@ class SurveyPanel(models.Model):
     Social_other_media = models.TextField()
     Service_Area_Description = models.TextField()
     Service_Area_Geographic_Boundaries = models.TextField()
+    CouncilDistricts = models.TextField()
     MapDissolve = models.TextField()
     organization_structured = models.TextField()
     governance_board = models.TextField()
@@ -89,20 +99,23 @@ class SurveyPanel(models.Model):
     Activities_Services = models.TextField()
     Service_Population = models.TextField()
     Languages = models.TextField()
+    Languages_Other = models.TextField(null=True, blank=True)
     accomplish_one_title = models.TextField()
     accomplish_one_description = models.TextField()
-    accomplish_two_title = models.TextField()
-    accomplish_two_description = models.TextField()
-    accomplish_three_title = models.TextField()
-    accomplish_three_description = models.TextField()
-    accomplish_four_title = models.TextField()
-    accomplish_four_description = models.TextField()
-    accomplish_five_title = models.TextField()
-    accomplish_five_description = models.TextField()
+    accomplish_two_title = models.TextField(null=True, blank=True)
+    accomplish_two_description = models.TextField(null=True, blank=True)
+    accomplish_three_title = models.TextField(null=True, blank=True)
+    accomplish_three_description = models.TextField(null=True, blank=True)
+    accomplish_four_title = models.TextField(null=True, blank=True)
+    accomplish_four_description = models.TextField(null=True, blank=True)
+    accomplish_five_title = models.TextField(null=True, blank=True)
+    accomplish_five_description = models.TextField(null=True, blank=True)
     CDAD_MemberShip = models.TextField()
     CDAD_Services = models.TextField()
-    CDAD_Comments = models.TextField()
-    CDAD_FeedBack = models.TextField()
+    CDAD_Services_Other = models.TextField(null=True, blank=True)
+    CDAD_Comments = models.TextField(null=True, blank=True)
+    CDAD_FeedBack = models.TextField(null=True, blank=True)
+    partners = models.ManyToManyField(Partners, null=True, blank=True)
         
     class Meta:
         db_table = 'surveyPanel'
@@ -153,6 +166,7 @@ class SurveyPanel(models.Model):
         return Languagess
 
 
+
 class Contact(models.Model):
     id = models.IntegerField(null=False, primary_key=True)
     Organization_Name = models.TextField()
@@ -178,8 +192,9 @@ class ContactPanel(models.Model):
     Title = models.TextField()
     Tel = models.TextField()
     Email = models.TextField()
-    KeepPrivate = models.TextField()
-    AddListPermission = models.TextField()
+    KeepPrivateTel = models.BooleanField(default=False)
+    KeepPrivateEmail = models.BooleanField(default=False)
+    AddListPermission = models.BooleanField(default=False)
     
     class Meta:
         db_table = 'contactPanel'
@@ -217,27 +232,36 @@ class Meeting(models.Model):
     def __str__(self):
         return self.Organization_Name
 
+REPEAT_CHOICES = (
+    ('NEVER', 'Never'),
+    ('DAILY', 'Every Day'),
+    ('WEEKDAY', 'Every Weekday'),
+    ('WEEKLY', 'Every Week'),
+    ('BIWEEKLY', 'Every 2 Weeks'),
+    ('MONTHLY', 'Every Month'),
+    ('YEARLY', 'Every Year'),
+)
+
+
 class MeetingPanel(models.Model):
     id = models.IntegerField(null=False, primary_key=True)
     Organization_Name = models.TextField()
-    hasMeeting = models.TextField()
+    hasMeeting = models.BooleanField(default=False)
     MeetingName = models.TextField()
     Address = models.TextField()
-    Address2 = models.TextField()
+    Address2 = models.TextField(null=True, blank=True)
     City = models.TextField()
     ZipCode = models.TextField()
     State = models.TextField()
-    Repeat1 = models.TextField()
-    RepeatEvery = models.TextField()
-    Time1 = models.TextField()
-    StartOn = models.TextField()
-    EndsOn = models.TextField()
-    Occurances = models.TextField()
-    On1 = models.TextField()
+    all_day = models.BooleanField(default=False)
+    repeat = models.CharField(max_length=15, choices=REPEAT_CHOICES, default='NEVER')
+    end_repeat = models.DateField(null=True, blank=True)
+    StartOn = models.DateTimeField()
+    EndsOn = models.DateTimeField()
     MeetingPerson = models.TextField()
     MeetingPersonPhone = models.TextField()
     MeetingPersonEmail = models.TextField()
-    MeetAlways = models.TextField()
+    MeetAlways = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'meetingpanel'
@@ -274,8 +298,8 @@ class LocationPanel(models.Model):
     City = models.TextField()
     ZipCode = models.TextField()
     State = models.TextField()
-    MailingAddress = models.TextField()
-    KeepPrivate = models.TextField()
+    MailingAddress = models.BooleanField(default=False)
+    KeepPrivate = models.BooleanField(default=False)
     Activity = models.TextField()
     Lat = models.CharField(max_length=255, null=False, blank=True, default='')
     Lon = models.CharField(max_length=255, null=False, blank=True, default='')

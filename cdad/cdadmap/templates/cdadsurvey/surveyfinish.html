@@ -1,0 +1,47 @@
+{% extends 'cdadsurvey/base.html' %}
+{% load staticfiles %}
+
+{% block css_block %}
+{% endblock %}
+
+{% block head_js_block %}
+{% endblock %}
+	
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-11">
+      <h3>Thank you for completing the Detroit Community Organization Mapping Survey!</h3>
+      <p>Your answers are critical to building the d[COM]munity directory and map that will be a valuable resource to all Detroiters!</p>
+      <p>By clicking "submit," you acknowledge the following</p>
+      <ol>
+      	<li>You are authorized to represent and enter information for your organization.</li>
+      	<li>The information you provided is accurate to the best of your knowledge.</li>
+      	<li>The information you entered will be publicaly accessible on the Detroit Community Orgnanization Mapping "d[COM]munity" website.</li>
+      </ol>
+      <p>If you have any questions about this survey or the Detroit Community Organization Mapping project, please contact:</p>
+      <p><a href="mailto:aarongoodman@cdad-online.org">Arron Goodman: aarongoodman@cdad-online.org</a></p>
+      <p>Find CDAD on the web: <a href="http://cdad-online.org/">http://cdad-online.org/</a></p>
+      <p>Like CDAD on Facebook: <a href="http://www.facebook.com/CDADDetroit">http://www.facebook.com/CDADDetroit</a></p>
+      <p>Follow CDAD on Twitter: <a href="http://twitter.com/CDADDetroit">http://twitter.com/CDADDetroit</a></p>
+      <a class="btn btn-default" href="/survey14/{{ id }}/" role="button">Back</a>
+      <button class="btn btn-primary" type="submit">Submit</button>
+    </div>
+	<div class="col-md-1">
+		<div class="percent">
+			<em>100</em>
+			<sup>%</sup>
+		</div>
+	</div>
+  </div>
+</div> <!-- /container -->
+{% endblock %}
+
+
+
+
+	
+	
+

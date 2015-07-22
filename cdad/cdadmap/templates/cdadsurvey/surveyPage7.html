@@ -1,0 +1,81 @@
+{% extends 'cdadsurvey/base.html' %}
+{% load staticfiles %}
+
+{% block css_block %}
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/leaflet.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/leaflet.draw.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/leaflet.label.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/Orig.Control.Geocoder.css' %}">	
+    <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/drawMap.css' %}">	
+
+{% endblock %}
+
+{% block head_js_block %}
+{% endblock %}
+	
+
+{% block content %}
+
+<div id="map" class="map"></div>
+<button id="imFinished" class="btn btn-primary hidden" type="submit">Save and Continue</button>
+<button id="startOver" class="btn btn-warning hidden" type="submit">Start Over</button>
+
+
+<div class="container">
+  <div class="row">
+	<div class="col-md-1">
+		<div class="percent">
+			<em>44</em>
+			<sup>%</sup>
+		</div>
+	</div>
+  </div>
+</div> <!-- /container -->
+
+{% endblock %}
+
+{% block modal_block %}
+<!-- intro how to modal -->
+<div class="modal fade" id="introduction" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body modalContent">
+        <h3 class="text-center text-uppercase">Please Use the Map Tool to Draw Your Service Areas</h3>
+        <p class="text-justify">
+          Trace all of the areas where your organization offers any services. Click on the <span class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top"><a class="leaflet-draw-draw-polygon" href="#" title="Draw a polygon"></a></span> icon under the zoom tools in the upper-left corner to begin drawing your organizations service area(s), and follow the on screen instructions. 
+        </p>
+        <p class="text-justify">
+          If you need to edit any of your drawn service areas, please click on the <span class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top"><a class="leaflet-draw-edit-edit" href="#" title="Edit layers."></a></span> icon, and edit any of your service areas. To remove any service areas, click on the <span class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top"><a class="leaflet-draw-edit-remove" href="#" title="Delete layers."></a></span> icon and follow the instructions.
+        </p>
+        <p class="text-justify">
+          When you're done drawing your service areas, please click on the <strong>Save and Continue</strong> button. If you need to clear your polygons and begin again, on the <strong>Start Over</strong> button. Thank you!!
+        </p>
+        <div class="clearfix"></div>
+        <button id="closeIntroModal" class="btn btn-primary btn-lg center-block" type="submit">Start Drawing!</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block js_block %}
+  <script type="text/javascript" src="{% static 'cdadmap/js/jquery.cookie.js' %}"></script>
+	<script type="text/javascript">
+    var id = "{{ id }}"
+	var cdblayer = "{% static 'cdadmap/topojsons/detroit_city_council_district_boundaries.json' %}";
+	</script>
+  <script type="text/javascript" src="{% static 'cdadmap/js/d3.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'cdadmap/js/leaflet.js' %}"></script>
+  <script type="text/javascript" src="{% static 'cdadmap/js/topojson.js' %}"></script>
+  <script type="text/javascript" src="{% static 'cdadmap/js/leaflet.draw.js' %}"></script>
+  <script type="text/javascript" src="{% static 'cdadmap/js/leaflet.label-src.js' %}"></script>
+  <script type="text/javascript" src="{% static 'cdadmap/js/Orig.Control.Geocoder.js' %}"></script>
+  <script type="text/javascript" src="{% static 'cdadmap/js/OrgDraw.js' %}"></script>
+  <script type="text/javascript" src="{% static 'cdadmap/js/OrgDrawApp.js' %}"></script>
+  <script type="text/javascript" src="{% static 'cdadmap/js/OrgDrawControllers.js' %}"></script>
+
+{% endblock %}
+	
+	
+

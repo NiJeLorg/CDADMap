@@ -1,0 +1,41 @@
+{% extends 'cdadsurvey/base.html' %}
+{% load staticfiles %}
+{% load bootstrap_tags %}
+
+{% block css_block %}
+{% endblock %}
+
+{% block head_js_block %}
+{% endblock %}
+	
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-11">
+      <h3>Organizational Service Area</h3>
+		<form method="post" action=".">
+			{% csrf_token %}
+			{{ form|as_bootstrap }}
+			<p class="help-block">To see a map of the council districts please <a href="{% static 'cdadmap/pdfs/DetroitCouncilDistricts.pdf' %}" target="_blank">click here</a>.</p>
+			<a class="btn btn-default" href="/survey5/{{ id }}/">Back</a>
+			<input type="submit" class="btn btn-primary" value="Save and Continue" />
+		</form>
+    </div>
+	<div class="col-md-1">
+		<div class="percent">
+			<em>36</em>
+			<sup>%</sup>
+		</div>
+	</div>
+  </div>
+</div> <!-- /container -->
+
+{% endblock %}
+
+
+
+	
+	
+

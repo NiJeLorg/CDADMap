@@ -1,0 +1,31 @@
+/*!
+ * Main css for CDAD Detroit Draw Map
+ */
+
+html, body, .paddingTop140Bottom70, #map {
+	height: 100%;
+}
+
+.paddingTop140Bottom70 {
+	padding-bottom: 0px !important;
+}
+
+.percent {
+	top: 200px !important;
+}
+
+/*
+* draw maps buttons
+*/
+
+#imFinished {
+	position: absolute;
+	top: 322px;
+	left: 10px;
+}
+
+#startOver {
+	position: absolute;
+	top: 362px;
+	left: 10px;
+}
