@@ -424,7 +424,7 @@ class AddParner(forms.ModelForm):
 
 class Page14Form(forms.ModelForm):
 
-    CDAD_MemberShip = forms.MultipleChoiceField(choices=MEMBERSHIP_CHOICES, widget=forms.CheckboxSelectMultiple(), label="Are you a member of CDAD or interested in becoming a member? (Required)")
+    CDAD_MemberShip = forms.ChoiceField(choices=MEMBERSHIP_CHOICES, widget=forms.RadioSelect(), label="Are you a member of CDAD or interested in becoming a member? (Required)")
 
     CDAD_Services = forms.MultipleChoiceField(choices=CDAD_SERVICES_CHOICES, widget=forms.CheckboxSelectMultiple(), label="How do you believe that CDAD could assist your organization in advancing its work? (Required)")
 
