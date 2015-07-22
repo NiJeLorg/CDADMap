@@ -514,8 +514,9 @@ def surveyPage10(request, id=None, passed=False):
 
 	surveyObject = SurveyPanel.objects.get(id=id)
 	# creating a Python list from string 
-	surveyObject.Languages_Other = surveyObject.Languages_Other.strip('[]').replace("u'","").replace("'","").split(', ')
-	surveyObject.Languages_Other = ", ".join(str(lang) for lang in surveyObject.Languages_Other)
+	if surveyObject.Languages_Other:
+		surveyObject.Languages_Other = surveyObject.Languages_Other.strip('[]').replace("u'","").replace("'","").split(', ')
+		surveyObject.Languages_Other = ", ".join(str(lang) for lang in surveyObject.Languages_Other)
 
 	# A HTTP POST?
 	if request.method == 'POST' and passed == False:
