@@ -743,7 +743,7 @@
 			var bounds = "42.075291,-83.660889|42.813033,-82.644653";
 			var params = {
 				address: query,
-				,
+				bounds: bounds,
 			};
 			if(this._key && this._key.length)
 			{
