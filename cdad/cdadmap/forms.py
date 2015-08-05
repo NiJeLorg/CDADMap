@@ -244,19 +244,24 @@ class Page2Form(forms.ModelForm):
 
 class Page3Form(forms.ModelForm):
     AddSocial_Email = forms.ChoiceField(choices=YES_NO_CHOICES, widget=forms.RadioSelect(), label="Add contact to CDAD's email list. You will receive important updates and information from CDAD including our monthly newsletter. (Required)")
-    Social_website = forms.CharField(required=False, widget=forms.TextInput(), label="Website Address", help_text="How can we find your organization on the web?")
-    Social_facebook = forms.CharField(required=False, widget=forms.TextInput(), label="Facebook", help_text="Please enter your organization's Facebook page address or name.")
-    Social_Twitter = forms.CharField(required=False, widget=forms.TextInput(), label="Twitter", help_text="Please enter your organization's Twitter \"handle\" or name.")
     Social_other_media = forms.CharField(required=False, widget=forms.Textarea(), label="Other Social Media Presence", help_text="Please tell us how to find your organization on any other social media platforms (Instagram, Tumblr, YouTube, Next-door, etc.")
 
     class Meta:
         model = SurveyPanel
-        fields = ('Social_Email', 'AddSocial_Email', 'Social_website', 'Social_facebook', 'Social_Twitter', 'Social_other_media')
+        fields = ('Social_Email', 'AddSocial_Email', 'Social_Phone', 'Social_Phone_KeepPrivate', 'Social_website', 'Social_facebook', 'Social_Twitter', 'Social_other_media')
         labels = {
             'Social_Email': 'Email Address (Required)',
+            'Social_Phone': 'Main Organizational Phone Number (Required)',
+            'Social_Phone_KeepPrivate': 'Keep this phone number private',
+            'Social_website': 'Website Address',
+            'Social_facebook': 'Facebook Page',
+            'Social_Twitter': 'Twitter Page',
         }
         help_texts = {
             'Social_Email': 'What is the general email address for contacting your organization?',
+            'Social_website': 'How can we find your organization on the web? Please include the full URL including the leading http:// or https://',
+            'Social_facebook': 'Please enter your organization\'s Facebook page address. Please include the full URL including the leading http:// or https://',
+            'Social_Twitter': 'Please enter your organization\'s Twitter page. Please include the full URL including the leading http:// or https://',
         }
         widgets = {
             'Social_Email': forms.widgets.EmailInput(),

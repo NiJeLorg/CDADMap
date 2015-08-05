@@ -20,6 +20,7 @@
 			        "Organization_Description": "{{ location.getSurveyObject.Organization_Description }}",
 			        "Activities_Services": "{{ location.getSurveyObject.Activities_Services }}",
 			        "Email": "{{ location.getSurveyObject.Social_Email }}",
+			        "Phone": "{% if location.getSurveyObject.Social_Phone_KeepPrivate %}{% else %}{{ location.getSurveyObject.Social_Phone }}{% endif %}",
 			        "Social_website": "{{ location.getSurveyObject.Social_website }}",
 			        "Social_facebook": "{{ location.getSurveyObject.Social_facebook }}",
 			        "Social_Twitter": "{{ location.getSurveyObject.Social_Twitter }}",
