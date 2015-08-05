@@ -225,7 +225,7 @@ def adminSurveyPage1(request, id=None):
 		# Have we been provided with a valid form?
 		if form.is_valid():
 			# Save the new data to the database.
-			form.save(commit=True)
+			f = form.save(commit=True)
 			lookupObject = SurveyPanel.objects.get(Organization_Name=f.Organization_Name)
 			return HttpResponseRedirect(reverse('surveyPage2', args=(lookupObject.pk,)))
 		else:
