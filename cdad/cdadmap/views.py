@@ -225,10 +225,7 @@ def adminSurveyPage1(request, id=None):
 		# Have we been provided with a valid form?
 		if form.is_valid():
 			# Save the new data to the database.
-			f = form.save(commit=False)
-			# mark as draft
-			f.verified = False
-			f.save()
+			form.save(commit=True)
 			lookupObject = SurveyPanel.objects.get(Organization_Name=f.Organization_Name)
 			return HttpResponseRedirect(reverse('surveyPage2', args=(lookupObject.pk,)))
 		else:
@@ -796,7 +793,7 @@ def surveyfinish(request, id=None):
 		html_message = "Dear "+ surveyObject.Survey_Taker_Name +",<br /><br />Thank you for completing the survey and adding your organization, " + surveyObject.Organization_Name + " to the d[COM]munity system! A representative from CDAD will review your survey submission shortly, and you will receieve an email at this address when your information is avialable on the d[COM]munity webesite.<br /><br />Again, thank you!<br />Community Development Advocates of Detroit<br /><a href=\"http://cdad-online.org/\">http://cdad-online.org/</a>"
 		message = "Dear "+ surveyObject.Survey_Taker_Name +", Thank you for completing the survey and adding your organization, " + surveyObject.Organization_Name + " to the d[COM]munity system! A representative from CDAD will review your survey submission shortly, and you will receieve an email at this address when your information is avialable on the d[COM]munity webesite. Again, thank you! Community Development Advocates of Detroit, http://cdad-online.org/"
 
-		send_mail(subject, message, 'dcommunity.cdad@gmail.com', [surveyObject.Survey_Taker_Email_Address], fail_silently=True, html_message=html_message)
+		#send_mail(subject, message, 'dcommunity.cdad@gmail.com', [surveyObject.Survey_Taker_Email_Address], fail_silently=True, html_message=html_message)
 
 		# send another email to CDAD superusers
 		group = Group.objects.get(name='superusers')
@@ -806,7 +803,7 @@ def surveyfinish(request, id=None):
 			html_message = "Dear "+ superuser.first_name +" "+ superuser.last_name +",<br /><br />The group, " + surveyObject.Organization_Name + " just submitted their completed survey to CDAD for their review. Please log in to the d[COM]munity system when you have a moment and verify their work.<br /><br />Thank you!"
 			message = "Dear "+ superuser.first_name +" "+ superuser.last_name +", The group, " + surveyObject.Organization_Name + " just submitted their completed survey to CDAD for their review. Please log in to the d[COM]munity system when you have a moment and verify their work. Thank you!"
 
-			send_mail(subject, message, 'dcommunity.cdad@gmail.com', [superuser.email], fail_silently=True, html_message=html_message)
+			#send_mail(subject, message, 'dcommunity.cdad@gmail.com', [superuser.email], fail_silently=True, html_message=html_message)
 
 		return HttpResponseRedirect('/dashboard/')
 	else:
@@ -910,7 +907,7 @@ def verifysurvey(request, id=None):
 					html_message = "Dear "+ surveyObject.Survey_Taker_Name +",<br /><br />The survey you submitted for " + surveyObject.Organization_Name + " to the d[COM]munity system had been verified by CDAD and will now appear on the d[COM]munity website. Please visit <a href=\"http://cdad-online.org/\">http://cdad-online.org/</a> and click on d[COM]munity to see your information displayed in our mapping tool. Again, thank you for your time and energy in completing our survey!<br /><br />Thank you!<br />Community Development Advocates of Detroit<br /><a href=\"http://cdad-online.org/\">http://cdad-online.org/</a>"
 					message = "Dear "+ surveyObject.Survey_Taker_Name +", The survey you submitted for " + surveyObject.Organization_Name + " to the d[COM]munity system had been verified by CDAD and will now appear on the d[COM]munity website. Please visit http://cdad-online.org/ and click on d[COM]munity to see your information displayed in our mapping tool. Again, thank you for your time and energy in completing our survey! Thank you! Community Development Advocates of Detroit, http://cdad-online.org/"
 
-					send_mail(subject, message, 'dcommunity.cdad@gmail.com', [surveyObject.Survey_Taker_Email_Address], fail_silently=True, html_message=html_message)
+					#send_mail(subject, message, 'dcommunity.cdad@gmail.com', [surveyObject.Survey_Taker_Email_Address], fail_silently=True, html_message=html_message)
 
 				return HttpResponseRedirect('/dashboard/')
 			else:
@@ -946,7 +943,9 @@ def removesurvey(request, id=None):
 			# Have we been provided with a valid form?
 			if form.is_valid():
 				# Save the new data to the database.
-				form.save(commit=True)
+				f = form.save(commit=False)
+				f.verified = False
+				f.save()
 
 				return HttpResponseRedirect('/dashboard/')
 			else:
