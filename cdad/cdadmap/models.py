@@ -1,7 +1,7 @@
 from django.db import models
 # import User model
 from django.contrib.auth.models import User
-
+import datetime
 
 # CDAD models below
 
@@ -72,6 +72,7 @@ class SurveyPanel(models.Model):
     id = models.IntegerField(null=False, primary_key=True)
     user = models.ForeignKey(User, default=DEFAULT_USER_ID)
     verified = models.BooleanField(default=False)
+    removed = models.BooleanField(default=False)
     Organization_Name = models.TextField(unique=True)
     Organizaton_Acronym = models.TextField()
     Survey_Taker_Name = models.TextField()
@@ -122,49 +123,6 @@ class SurveyPanel(models.Model):
 
     def __str__(self):
         return self.Organization_Name
-
-    def Organization_Description_as_list(self):
-        Organization_Descriptions = self.Organization_Description.replace(', ','| ')
-        Organization_Descriptions = Organization_Descriptions.split(',')
-        for Organization_Description in Organization_Descriptions:
-            Organization_Description.replace('|', ',')
-        return Organization_Descriptions
-
-    def Service_Area_Description_as_list(self):
-        Service_Area_Descriptions = self.Service_Area_Description.replace(', ','| ')
-        Service_Area_Descriptions = Service_Area_Descriptions.split(',')
-        for Service_Area_Description in Service_Area_Descriptions:
-            Service_Area_Description.replace('|', ',')
-        return Service_Area_Descriptions
-
-    def organization_structured_as_list(self):
-        organization_structureds = self.organization_structured.replace(', ','| ')
-        organization_structureds = organization_structureds.split(',')
-        for organization_structured in organization_structureds:
-            organization_structured.replace('|', ',')
-        return organization_structureds
-
-    def Activities_Services_as_list(self):
-        Activities_Servicess = self.Activities_Services.replace(', ','| ')
-        Activities_Servicess = Activities_Servicess.split(',')
-        for Activities_Services in Activities_Servicess:
-            Activities_Services = Activities_Services.replace("|", ",")
-        return Activities_Servicess
-
-    def Service_Population_as_list(self):
-        Service_Populations = self.Service_Population.replace(', ','| ')
-        Service_Populations = Service_Populations.split(',')
-        for Service_Population in Service_Populations:
-            Service_Population.replace('|', ',')
-        return Service_Populations
-
-    def Languages_as_list(self):
-        Languagess = self.Languages.replace(', ','| ')
-        Languagess = Languagess.split(',')
-        for Languages in Languagess:
-            Languages.replace('|', ',')
-        return Languagess
-
 
 
 class Contact(models.Model):
@@ -237,7 +195,6 @@ REPEAT_CHOICES = (
     ('DAILY', 'Every Day'),
     ('WEEKDAY', 'Every Weekday'),
     ('WEEKLY', 'Every Week'),
-    ('BIWEEKLY', 'Every 2 Weeks'),
     ('MONTHLY', 'Every Month'),
     ('YEARLY', 'Every Year'),
 )
@@ -268,6 +225,24 @@ class MeetingPanel(models.Model):
 
     def __str__(self):
         return self.Organization_Name
+
+    def getStartWeekDay(self):
+        day_of_month = self.StartOn.day
+        week_number = (day_of_month - 1) // 7 + 1
+        if week_number == 1:
+            week_number = '1st'
+        elif week_number == 2:
+            week_number = '2nd'
+        elif week_number == 3:
+            week_number = '3rd'
+        else:
+            week_number = week_number + 'th'
+        return week_number
+
+    def checkRepeat(self):
+        if datetime.datetime.now().day < self.end_repeat.day:
+            return True
+        return False
 
 
 class Location(models.Model):
@@ -317,7 +292,19 @@ class LocationPanel(models.Model):
         """
             get survey object linked to this location object
         """
-        return SurveyPanel.objects.get(Organization_Name=self.Organization_Name_SurveyPanel_FK)
+        surveyObject = SurveyPanel.objects.get(Organization_Name=self.Organization_Name_SurveyPanel_FK)
+        surveyObject.Organization_Description = surveyObject.Organization_Description.strip('[]').replace("u'","").replace("'","").split(', ')
+        surveyObject.Service_Area_Description = surveyObject.Service_Area_Description.strip('[]').replace("u'","").replace("'","").split(', ')
+        surveyObject.CouncilDistricts = surveyObject.CouncilDistricts.strip('[]').replace("u'","").replace("'","").split(', ')
+        surveyObject.organization_structured = surveyObject.organization_structured.strip('[]').replace("u'","").replace("'","").split(', ')
+        surveyObject.Activities_Services = surveyObject.Activities_Services.strip('[]').replace("u'","").replace("'","").split(', ')
+        surveyObject.Service_Population = surveyObject.Service_Population.strip('[]').replace("u'","").replace("'","").split(', ')
+        surveyObject.Languages = surveyObject.Languages.strip('[]').replace("u'","").replace("'","").split(', ')
+        if surveyObject.Languages_Other:
+            surveyObject.Languages_Other = surveyObject.Languages_Other.strip('[]').replace("u'","").replace("'","").split(', ')
+        surveyObject.CDAD_MemberShip = surveyObject.CDAD_MemberShip.strip('[]').replace("u'","").replace("'","").split(', ')
+        surveyObject.CDAD_Services = surveyObject.CDAD_Services.strip('[]').replace("u'","").replace("'","").split(', ')
+        return surveyObject
         
     def getContactObject(self):
         """
@@ -331,9 +318,4 @@ class LocationPanel(models.Model):
         """
         return MeetingPanel.objects.filter(Organization_Name__contains=self.Organization_Name)
 
-    def Activity_as_list(self):
-        activities = self.Activity.replace(', ','| ')
-        activities = activities.split(',')
-        for activity in activities:
-            activity.replace('| ', ', ')
-        return activities
+

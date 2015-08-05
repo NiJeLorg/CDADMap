@@ -1,0 +1,85 @@
+{% extends 'cdadsurvey/base.html' %}
+{% load staticfiles %}
+
+{% block css_block %}
+<link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/bootstrap-sortable.css' %}">
+{% endblock %}
+
+{% block head_js_block %}
+{% endblock %}
+	
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Admin Dashboard</h3>
+      <a class="btn btn-default btn-lg" href="/adminsurvey/" role="button">Create a New Survey</a>
+      <a class="btn btn-default btn-lg" href="{% url 'registration_register' %}" role="button">Register a New User</a>
+      <a class="btn btn-default btn-lg" href="{% url 'adminRegister' %}" role="button">Register an Administrator</a>
+    </div>
+  </div>
+  <br />
+  <div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped table-condensed sortable">
+		    <thead>
+		      <th>Status</th>
+		      <th>Edit</th>
+		      <th>Remove</th>
+		      <th>Organization Name</th>
+		      <th>Acronym</th>
+		      <th>User Account</th>
+		      <th>Survey Taker Name & Email</th>
+		    </thead>
+		    <tbody>
+		      {% for survey in surveyObjects %}
+		        <tr>
+		          <td>
+		            {% if survey.verified %}
+		              <p class="text-success"><strong>VERIFIED</strong> <small><a href="/verifysurvey/{{ survey.id }}/">Remove verification?</a></small></p>
+		            {% elif survey.removed %}
+		              <p class="text-danger"><strong>REMOVED</strong> <small><a href="/removesurvey/{{ survey.id }}/">Recover?</a></small></p>
+		            {% elif survey.CDAD_MemberShip %}
+		              <a class="btn btn-warning" href="/verifysurvey/{{ survey.id }}/" role="button">Awaiting Verification</a>
+		            {% else %}
+		              <p class="text-info"><strong>IN PROGRESS</strong></p>
+		            {% endif %}
+		          </td>
+		          <td>
+		          	<a class="btn btn-default" href="/survey/{{ survey.id }}" role="button">Edit</a>
+		          </td>
+		          <td>
+		          	<a class="btn btn-danger" href="/removesurvey/{{ survey.id }}" role="button">Remove</a>
+		          </td>
+		          <td>{{ survey.Organization_Name }}</td>
+		          <td>{{ survey.Organizaton_Acronym }}</td>
+		          <td>
+		            {{ survey.user.username }} ({{ survey.user.email }})
+		          </td>
+		          <td>
+		            {{ survey.Survey_Taker_Name }} ({{ survey.Survey_Taker_Email_Address }})
+		          </td>
+		        </tr>
+		      {% endfor %}
+		    </tbody>
+		  </table>
+    </div>
+  </div>
+</div> <!-- /container -->
+{% endblock %}
+
+
+{% block js_block %}
+<script type="text/javascript" src="{% static 'cdadmap/js/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'cdadmap/js/bootstrap-sortable.js' %}"></script>
+{% endblock %}
+
+
+
+
+
+	
+	
+

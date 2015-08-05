@@ -18,7 +18,11 @@
 		<form method="post" action="." enctype="multipart/form-data">
 			{% csrf_token %}
 			{{ form|as_bootstrap }}
-			<a class="btn btn-default" href="/survey/{{ id }}/">Back</a>
+			{% if is_su %}
+				<a class="btn btn-default" href="/adminsurvey/{{ id }}/">Back</a>
+			{% else %}
+				<a class="btn btn-default" href="/survey/{{ id }}/">Back</a>
+			{% endif %}
 			<input type="submit" class="btn btn-primary" value="Save and Continue" />
 		</form>
     </div>

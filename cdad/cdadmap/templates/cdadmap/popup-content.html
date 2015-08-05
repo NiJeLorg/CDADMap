@@ -36,6 +36,8 @@
 				{% if forloop.last %}
 					</div>
 				{% endif %}
+			{% empty %}
+				<p>No resources match your search criteria. Please try again.</p> 
 			{% endfor %}
 
 

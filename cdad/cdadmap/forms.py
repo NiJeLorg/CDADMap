@@ -1,6 +1,8 @@
 from django.db import models
 from django import forms
 from datetime import datetime
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 # import all cdadmap models
 from cdadmap.models import *
@@ -52,7 +54,7 @@ ACTIVITY_CHOICES = (
 )
 
 SERVICE_AREA_CHOICES = (
-    ('Council District(s), Neighborhood(s), or Block(s)', 'Council District(s), Neighborhood(s), or Block(s)'),
+    ('Council District(s) / Neighborhood(s) / Block(s)', 'Council District(s), Neighborhood(s), or Block(s)'),
     ('City of Detroit', 'City of Detroit'),
     ('Wayne County', 'Wayne County'),
     ('Regional (Metro Detroit)', 'Regional (Metro Detroit)'),
@@ -94,12 +96,12 @@ STAFF_CHOICES = (
     ('More than 50', 'More than 50'),
 )
 
-ACTIVITY_CHOICES = (
+ACTIVITY_SERVICES_CHOICES = (
     ('Housing and/or Commercial Development', 'Housing and/or Commercial Development'),
     ('Community Organizing and Engagement', 'Community Organizing and Engagement'),
     ('Economic Development', 'Economic Development'),
     ('Land Use and/or Community Planning', 'Land Use and/or Community Planning'),
-    ('Public Spaces, Parks, or Recreation', 'Public Spaces, Parks, or Recreation (e.g. streetscapes, community cleanups, green/open space development)'),
+    ('Public Spaces / Parks / Recreation', 'Public Spaces, Parks, or Recreation (e.g. streetscapes, community cleanups, green/open space development)'),
     ('Neighborhood Safety', 'Neighborhood Safety'),
     ('Education', 'Education'),
     ('Youth Services', 'Youth Services'),
@@ -107,11 +109,11 @@ ACTIVITY_CHOICES = (
     ('Health Care', 'Health Care'),
     ('Community Mental Health', 'Community Mental Health'),
     ('Policy Advocacy and/or Research', 'Policy Advocacy and/or Research'),
-    ('Community Gardening, Agriculture and/or Food Systems', 'Community Gardening, Agriculture and/or Food Systems'),
+    ('Community Gardening / Agriculture / Food Systems', 'Community Gardening, Agriculture and/or Food Systems'),
     ('Labor and/or Workers\' Rights' , 'Labor and/or Workers\' Rights'),
     ('Environmental', 'Environmental'),
-    ('Construction, Deconstruction, or Demolition', 'Construction, Deconstruction, or Demolition'),
-    ('Civil Rights, Civic Society', 'Civil Rights, Civic Society'),
+    ('Construction / Deconstruction / Demolition', 'Construction, Deconstruction, or Demolition'),
+    ('Civil Rights / Civic Society', 'Civil Rights, Civic Society'),
     ('Vacant Property / Blight Removal', 'Vacant Property / Blight Removal'),
     ('Neighborhood Beautification', 'Neighborhood Beautification'),
     ('Property Management', 'Property Management'),
@@ -128,7 +130,7 @@ POPULATION_CHOICES = (
     ('Homeless', 'Homeless'),
     ('People with Disabilities or Special Needs', 'People with Disabilities or Special Needs'),
     ('Seniors', 'Seniors'),
-    ('Immigrants, Refugees or non-English speakers', 'Immigrants, Refugees or non-English speakers'),
+    ('Immigrants / Refugees / non-English speakers', 'Immigrants, Refugees or non-English speakers'),
     ('Businesses', 'Businesses'),
     ('Job Seekers', 'Job Seekers'),
     ('Schools', 'Schools'),
@@ -155,7 +157,7 @@ MEMBERSHIP_CHOICES = (
 
 CDAD_SERVICES_CHOICES = (
     ('Policy Advocacy', 'Policy Advocacy'),
-    ('Community/Neighborhood Planning', 'Community/Neighborhood Planning'),
+    ('Community / Neighborhood Planning', 'Community/Neighborhood Planning'),
     ('Community Engagement', 'Community Engagement'),
     ('Technical Assitance', 'Technical Assitance'),
     ('Training', 'Training'),
@@ -185,6 +187,39 @@ class Page1Form(forms.ModelForm):
             'Survey_Taker_Name': forms.widgets.TextInput(),
             'Survey_Taker_Email_Address': forms.widgets.EmailInput(),
         }
+
+class CustomUserChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        usernameEmail = obj.get_username() + ' (' + obj.email + ')'
+        return usernameEmail
+
+class AdminPage1Form(forms.ModelForm):
+    user = CustomUserChoiceField(queryset=User.objects.all(), label="Administrators, please select the user in the system that you would like to attach this survey to.")
+    Organizaton_Acronym = forms.CharField(required=False, widget=forms.TextInput(), label="Organizaton Acronym", help_text="e.g. 'CDAD'")
+    Survey_Taker_Email_AddToList = forms.ChoiceField(choices=YES_NO_CHOICES, widget=forms.RadioSelect(), label="Add my contact to CDAD\'s email list. You will receive important updates and information from CDAD including our monthly newsletter. (Required)")
+    Organization_Description = forms.MultipleChoiceField(choices=ORG_DESCRIPTION_CHOICES, widget=forms.CheckboxSelectMultiple(), label="Organization Description (Required)", help_text="Please choose the one option that best fits. Please only select the Community Development Organization option if your organization fits the CDAD criteria for a Community Development Organization. Please <a href='http://cdad-online.org/membership/membership-categories/' target='_blank'>click here</a> for that description.")
+
+    class Meta:
+        model = SurveyPanel
+        fields = ('user', 'Organization_Name', 'Organizaton_Acronym', 'Survey_Taker_Name', 'Survey_Taker_Email_Address', 'Survey_Taker_Email_AddToList', 'Organization_Description')
+        labels = {
+            'user': 'Administrators, please select the user in the system that you would like to attach this survey to.',
+            'Organization_Name': 'Organization Name (Required)',
+            'Survey_Taker_Name': 'Survey Taker Name (Required)',
+            'Survey_Taker_Email_Address': 'Survey Taker Email Address (Required)',
+        }
+        help_texts = {
+            'Organization_Name': 'Please enter the full name of your organization. e.g. \'Community Development Advocates of Detroit\'',
+            'Survey_Taker_Name': 'e.g. \'John Doe\'',
+            'Survey_Taker_Email_Address': 'e.g. \'john@google.com\'',
+        }
+        widgets = {
+            'Organization_Name': forms.widgets.TextInput(),
+            'Survey_Taker_Name': forms.widgets.TextInput(),
+            'Survey_Taker_Email_Address': forms.widgets.EmailInput(),
+        }
+
+
 
 
 class Page2Form(forms.ModelForm):
@@ -308,7 +343,7 @@ class Page8Form(forms.ModelForm):
 
 class Page9Form(forms.ModelForm):
 
-    Activities_Services = forms.MultipleChoiceField(choices=ACTIVITY_CHOICES, widget=forms.CheckboxSelectMultiple(), label="What are the primary focus areas or your organization\'s activities? (Required)", help_text="Check all that apply")
+    Activities_Services = forms.MultipleChoiceField(choices=ACTIVITY_SERVICES_CHOICES, widget=forms.CheckboxSelectMultiple(), label="What are the primary focus areas or your organization\'s activities? (Required)", help_text="Check all that apply")
 
     class Meta:
         model = SurveyPanel
@@ -444,5 +479,42 @@ class Page14Form(forms.ModelForm):
         widgets = {
             'CDAD_Services_Other': forms.widgets.TextInput(),
         }
+
+class Page15Form(forms.ModelForm):
+
+    class Meta:
+        model = SurveyPanel
+        fields = ()
+
+
+class VerifyForm(forms.ModelForm):
+
+    class Meta:
+        model = SurveyPanel
+        fields = ('verified',)
+        labels = {
+            'verified': 'Check the box to verify.',
+        }
+
+
+class RemoveForm(forms.ModelForm):
+
+    class Meta:
+        model = SurveyPanel
+        fields = ('removed',)        
+        labels = {
+            'removed': 'Check the box to remove this survey.',
+        }
+        help_texts = {
+            'removed': 'Please note that removing this survey doesn not delete it permantly from the database, and it can be recovered at a later date.',
+        }
+
+
+class AdminUserOverrideCreationForm(UserCreationForm):
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)
+
 
 

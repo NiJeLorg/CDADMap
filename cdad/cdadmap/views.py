@@ -8,6 +8,9 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.forms.models import modelformset_factory
+from django.contrib.auth.models import User, Group
+from django.contrib.auth.forms import UserCreationForm
+from django.core.mail import send_mail
 
 # import all cdadmap models and forms
 from cdadmap.forms import *
@@ -26,87 +29,30 @@ def index(request):
 	#build query
 	kwargs = {}
 	# show only public locations 
-	kwargs['KeepPrivate__exact'] = 'false'
-	
+	kwargs['KeepPrivate__exact'] = False
+
+	#get locations only from verified surveys
+	kwargs['Organization_Name_SurveyPanel_FK__verified__exact'] = True
+
 	#get locations 
 	locations = LocationPanel.objects.filter(**kwargs).order_by('Organization_Name')
+
+	# create Activity list
+	for location in locations:
+		location.Activity = location.Activity.strip('[]').replace("u'","").replace("'","").split(', ')
+
+	# figure out which Surveys have geojsons
+	surveys_with_maps_ids = []
+	for location in locations:
+		survey = SurveyPanel.objects.get(Organization_Name=location.Organization_Name)
+		if survey.MapDissolve:
+			surveys_with_maps_ids.append(survey.id)
+
+
+	surveys_with_maps_ids = set(surveys_with_maps_ids)
+	surveys_with_maps_ids = list(surveys_with_maps_ids)
 		
-	# get lists of options for filters
-	Organization_Description_Choices_Array = []
-	Organization_Description_Choices_List = SurveyPanel.objects.values_list('Organization_Description', flat=True)
-	for choice in Organization_Description_Choices_List:
-		choice_string = str(choice)
-		split_choices = choice_string.split(', ');
-		Organization_Description_Choices_Array.extend(split_choices)   
-		
-	Organization_Description_Choices = list(set(Organization_Description_Choices_Array))
-	Organization_Description_Choices.sort()
-
-
-	Service_Area_Choices_Array = []
-	Service_Area_Choices_List = SurveyPanel.objects.values_list('Service_Area_Description', flat=True)    
-	for choice in Service_Area_Choices_List:
-		choice_string = str(choice)
-		split_choices = choice_string.split(',');
-		Service_Area_Choices_Array.extend(split_choices)   
-
-	Service_Area_Choices = list(set(Service_Area_Choices_Array))
-	Service_Area_Choices.sort()
-
-
-	organization_structured_Choices_Array = []
-	organization_structured_Choices_List = SurveyPanel.objects.values_list('organization_structured', flat=True)
-	for choice in organization_structured_Choices_List:
-		choice_string = str(choice)
-		choice_string_replace = choice_string.replace(', ', '| ')
-		split_choices = choice_string_replace.split(',')
-		organization_structured_Choices_Array.extend(s.replace('| ', ', ') for s in split_choices)   
-
-	organization_structured_Choices = list(set(organization_structured_Choices_Array))        
-	organization_structured_Choices.sort()
-
-	Activities_Services_Choices_Array = []
-	Activities_Services_Choices_List = SurveyPanel.objects.values_list('Activities_Services', flat=True)    
-	for choice in Activities_Services_Choices_List:
-		choice_string = str(choice)
-		choice_string_replace = choice_string.replace(', ', '| ')
-		split_choices = choice_string_replace.split(',')
-		Activities_Services_Choices_Array.extend(s.replace('| ', ', ') for s in split_choices)   
-
-	Activities_Services_Choices = list(set(Activities_Services_Choices_Array))        
-	Activities_Services_Choices.sort()
-
-	Service_Population_Choices_Array = []
-	Service_Population_Choices_List = SurveyPanel.objects.values_list('Service_Population', flat=True)    
-	for choice in Service_Population_Choices_List:
-		choice_string = str(choice)
-		choice_string_replace = choice_string.replace(', ', '| ')
-		split_choices = choice_string_replace.split(',')
-		Service_Population_Choices_Array.extend(s.replace('| ', ', ') for s in split_choices)   
-
-	Service_Population_Choices = list(set(Service_Population_Choices_Array))        
-	Service_Population_Choices.sort()
-
-	Languages_Choices_Array = []
-	Languages_Choices_List = SurveyPanel.objects.values_list('Languages', flat=True)    
-	for choice in Languages_Choices_List:
-		choice_string = str(choice)
-		choice_string_replace = choice_string.replace(', ', '| ')
-		split_choices = choice_string_replace.split(',')
-		Languages_Choices_Array.extend(s.replace('| ', ', ') for s in split_choices)   
-
-	Languages_Choices = list(set(Languages_Choices_Array))        
-	Languages_Choices.sort()
-
-	# create paths to CDO service area geojson files; SurveyPanel objects that start with {"paramName" have geoJson files assocaited with them
-	staticGeoJSONs = []
-	for survey in SurveyPanel.objects.filter(MapDissolve__startswith='{"paramName"'):
-		survey.Organization_Name = survey.Organization_Name.replace("'", "")
-		survey.Organization_Name = survey.Organization_Name.replace(" ", "")
-		staticGeoJSON = 'cdadmap/geojson/' + survey.Organization_Name + '_new.json'
-		staticGeoJSONs.append(staticGeoJSON);
-
-	context_dict = {'locations': locations, "Organization_Description_Choices": Organization_Description_Choices, "Service_Area_Choices": Service_Area_Choices, "organization_structured_Choices": organization_structured_Choices, "Activities_Services_Choices": Activities_Services_Choices, "Service_Population_Choices": Service_Population_Choices, "Languages_Choices": Languages_Choices, 'staticGeoJSONs': staticGeoJSONs }
+	context_dict = {'locations': locations, "Organization_Description_Choices": ORG_DESCRIPTION_CHOICES, "Service_Area_Choices": SERVICE_AREA_CHOICES, "organization_structured_Choices": STRUCTURE_CHOICES, "Activities_Services_Choices": ACTIVITY_SERVICES_CHOICES, "Service_Population_Choices": POPULATION_CHOICES, "Languages_Choices": LANGUAGE_CHOICES, 'surveys_with_maps_ids':surveys_with_maps_ids}
 	return render(request, 'cdadmap/index.html', context_dict)
    
 
@@ -127,6 +73,7 @@ def filterLocations(request):
 	Languages_Choices_query = Q()
 	cdadmebership_query = Q()
 	keyword_query = Q()
+	verified_query = Q(verified__exact = True)
 
 	#get filters
 	Organization_Description_Choices = request.GET.get("Organization_Description_Choices","All")
@@ -166,7 +113,7 @@ def filterLocations(request):
 
 	if(cdadmebership != ""):
 		if(cdadmebership == "Yes"):
-			cdadmebership_query = Q(Languages__contains = "Currently a member")
+			cdadmebership_query = Q(CDAD_MemberShip__contains = "Currently a member")
 		else:
 			surveyKwargsExclude['CDAD_MemberShip__exact'] = "Currently a member"
 
@@ -177,7 +124,7 @@ def filterLocations(request):
 			keyword_query = keyword_query | query       
 
 	# create query list from the queries that exist from above
-	q_list = [Organization_Description_query, Service_Area_Choices_query, organization_structured_Choices_query, Activities_Services_Choices_query, Service_Population_Choices_query, Languages_Choices_query, cdadmebership_query, keyword_query]
+	q_list = [Organization_Description_query, Service_Area_Choices_query, organization_structured_Choices_query, Activities_Services_Choices_query, Service_Population_Choices_query, Languages_Choices_query, cdadmebership_query, keyword_query, verified_query]
 	query = reduce(operator.and_, q_list)
 	
 	# get all survey panel objects that meet the search criteria
@@ -189,10 +136,14 @@ def filterLocations(request):
 	kwargs['Organization_Name_SurveyPanel_FK__in'] = surveys
 
 	# show only published media
-	kwargs['KeepPrivate__exact'] = 'false'
+	kwargs['KeepPrivate__exact'] = False
  
 	#get locations
 	locations = LocationPanel.objects.filter(**kwargs).order_by('Organization_Name')
+
+	# create Activity list
+	for location in locations:
+		location.Activity = location.Activity.strip('[]').replace("u'","").replace("'","").split(', ')
 
 	# load template requested 
 	template = request.GET.get("template","All")
@@ -214,6 +165,14 @@ def surveyPage1(request, id=None):
 
 	if id:
 		surveyObject = SurveyPanel.objects.get(id=id)
+		# check for non superusers and redirect to their dashboard if the user doesn't own the object
+		if request.user.groups.filter(name="superusers").exists():
+			empty = {}
+		else:
+			surveyObjectCheck = SurveyPanel.objects.get(user=request.user, removed=False)
+			if surveyObject != surveyObjectCheck:
+				#send them back to their dashboard
+				return HttpResponseRedirect('/dashboard/')
 	else:
 		surveyObject = SurveyPanel()
 
@@ -245,9 +204,60 @@ def surveyPage1(request, id=None):
 
 
 @login_required
+def adminSurveyPage1(request, id=None):
+
+	if id:
+		surveyObject = SurveyPanel.objects.get(id=id)
+		# check for non superusers and redirect to their dashboard if the user doesn't own the object
+		if request.user.groups.filter(name="superusers").exists():
+			empty = {}
+		else:
+			#send any non-superuser back to the dahsboard
+			return HttpResponseRedirect('/dashboard/')
+
+	else:
+		surveyObject = SurveyPanel()
+
+	# A HTTP POST?
+	if request.method == 'POST':
+		form = AdminPage1Form(request.POST, instance=surveyObject)
+
+		# Have we been provided with a valid form?
+		if form.is_valid():
+			# Save the new data to the database.
+			f = form.save(commit=False)
+			# mark as draft
+			f.verified = False
+			f.save()
+			lookupObject = SurveyPanel.objects.get(Organization_Name=f.Organization_Name)
+			return HttpResponseRedirect(reverse('surveyPage2', args=(lookupObject.pk,)))
+		else:
+			# The supplied form contained errors - just print them to the terminal.
+			print form.errors
+	else:
+		# If the request was not a POST, display the form to enter details.
+		form = AdminPage1Form(instance=surveyObject)
+
+	# Bad form (or form details), no form supplied...
+	# Render the form with error messages (if any).
+	return render(request, 'cdadsurvey/surveyPage1.html', {'form': form})
+
+
+
+@login_required
 def surveyPage2(request, id=None, passed=False):
 
 	surveyObject = SurveyPanel.objects.get(id=id)
+	# check for non superusers and redirect to their dashboard if the user doesn't own the object
+	if request.user.groups.filter(name="superusers").exists():
+		is_su = request.user.groups.filter(name='superusers').exists()
+		empty = {}
+	else:
+		surveyObjectCheck = SurveyPanel.objects.get(user=request.user)
+		if surveyObject != surveyObjectCheck:
+			#send them back to their dashboard
+			return HttpResponseRedirect('/dashboard/')
+
 
 	# A HTTP POST?
 	if request.method == 'POST' and passed == False:
@@ -268,13 +278,21 @@ def surveyPage2(request, id=None, passed=False):
 
 	# Bad form (or form details), no form supplied...
 	# Render the form with error messages (if any).
-	return render(request, 'cdadsurvey/surveyPage2.html', {'form': form, 'id':id})
+	return render(request, 'cdadsurvey/surveyPage2.html', {'form': form, 'id':id, 'is_su': is_su})
 
 
 @login_required
 def surveyPage3(request, id=None, passed=False):
 
 	surveyObject = SurveyPanel.objects.get(id=id)
+	# check for non superusers and redirect to their dashboard if the user doesn't own the object
+	if request.user.groups.filter(name="superusers").exists():
+		empty = {}
+	else:
+		surveyObjectCheck = SurveyPanel.objects.get(user=request.user)
+		if surveyObject != surveyObjectCheck:
+			#send them back to their dashboard
+			return HttpResponseRedirect('/dashboard/')
 
 	# A HTTP POST?
 	if request.method == 'POST' and passed == False:
@@ -302,6 +320,15 @@ def surveyPage3(request, id=None, passed=False):
 def surveyPage4(request, id=None, passed=False):
 
 	surveyObject = SurveyPanel.objects.get(id=id)
+	# check for non superusers and redirect to their dashboard if the user doesn't own the object
+	if request.user.groups.filter(name="superusers").exists():
+		empty = {}
+	else:
+		surveyObjectCheck = SurveyPanel.objects.get(user=request.user)
+		if surveyObject != surveyObjectCheck:
+			#send them back to their dashboard
+			return HttpResponseRedirect('/dashboard/')
+
 	contactObjects = ContactPanel.objects.filter(Organization_Name=surveyObject.Organization_Name)
 	ContactFormset = modelformset_factory(ContactPanel, form=Page4Form, extra=10, can_delete=True, validate_min=True, min_num=1)
 
@@ -343,6 +370,15 @@ def surveyPage5(request, id=None, passed=False):
 	base_url = "http://maps.googleapis.com/maps/api/geocode/json?"
 
 	surveyObject = SurveyPanel.objects.get(id=id)
+	# check for non superusers and redirect to their dashboard if the user doesn't own the object
+	if request.user.groups.filter(name="superusers").exists():
+		empty = {}
+	else:
+		surveyObjectCheck = SurveyPanel.objects.get(user=request.user)
+		if surveyObject != surveyObjectCheck:
+			#send them back to their dashboard
+			return HttpResponseRedirect('/dashboard/')
+
 	locationObjects = LocationPanel.objects.filter(Organization_Name=surveyObject.Organization_Name)
 	LocationFormset = modelformset_factory(LocationPanel, form=Page5Form, extra=10, can_delete=True, validate_min=True, min_num=1)
 
@@ -403,6 +439,14 @@ def surveyPage5(request, id=None, passed=False):
 def surveyPage6(request, id=None, passed=False):
 
 	surveyObject = SurveyPanel.objects.get(id=id)
+	# check for non superusers and redirect to their dashboard if the user doesn't own the object
+	if request.user.groups.filter(name="superusers").exists():
+		empty = {}
+	else:
+		surveyObjectCheck = SurveyPanel.objects.get(user=request.user)
+		if surveyObject != surveyObjectCheck:
+			#send them back to their dashboard
+			return HttpResponseRedirect('/dashboard/')
 
 	# A HTTP POST?
 	if request.method == 'POST' and passed == False:
@@ -431,6 +475,14 @@ def surveyPage6(request, id=None, passed=False):
 def surveyPage7(request, id=None, passed=False):
 
 	surveyObject = SurveyPanel.objects.get(id=id)
+	# check for non superusers and redirect to their dashboard if the user doesn't own the object
+	if request.user.groups.filter(name="superusers").exists():
+		empty = {}
+	else:
+		surveyObjectCheck = SurveyPanel.objects.get(user=request.user)
+		if surveyObject != surveyObjectCheck:
+			#send them back to their dashboard
+			return HttpResponseRedirect('/dashboard/')
 
 	return render(request, 'cdadsurvey/surveyPage7.html', {'surveyObject': surveyObject, 'id':id})
 
@@ -459,6 +511,14 @@ def surveyPage7save(request, id=None):
 def surveyPage8(request, id=None, passed=False):
 
 	surveyObject = SurveyPanel.objects.get(id=id)
+	# check for non superusers and redirect to their dashboard if the user doesn't own the object
+	if request.user.groups.filter(name="superusers").exists():
+		empty = {}
+	else:
+		surveyObjectCheck = SurveyPanel.objects.get(user=request.user)
+		if surveyObject != surveyObjectCheck:
+			#send them back to their dashboard
+			return HttpResponseRedirect('/dashboard/')
 
 	# A HTTP POST?
 	if request.method == 'POST' and passed == False:
@@ -486,6 +546,14 @@ def surveyPage8(request, id=None, passed=False):
 def surveyPage9(request, id=None, passed=False):
 
 	surveyObject = SurveyPanel.objects.get(id=id)
+	# check for non superusers and redirect to their dashboard if the user doesn't own the object
+	if request.user.groups.filter(name="superusers").exists():
+		empty = {}
+	else:
+		surveyObjectCheck = SurveyPanel.objects.get(user=request.user)
+		if surveyObject != surveyObjectCheck:
+			#send them back to their dashboard
+			return HttpResponseRedirect('/dashboard/')
 
 	# A HTTP POST?
 	if request.method == 'POST' and passed == False:
@@ -513,7 +581,16 @@ def surveyPage9(request, id=None, passed=False):
 def surveyPage10(request, id=None, passed=False):
 
 	surveyObject = SurveyPanel.objects.get(id=id)
-	# creating a Python list from string 
+	# check for non superusers and redirect to their dashboard if the user doesn't own the object
+	if request.user.groups.filter(name="superusers").exists():
+		empty = {}
+	else:
+		surveyObjectCheck = SurveyPanel.objects.get(user=request.user)
+		if surveyObject != surveyObjectCheck:
+			#send them back to their dashboard
+			return HttpResponseRedirect('/dashboard/')
+
+	# creating a CSV string from a Python list
 	if surveyObject.Languages_Other:
 		surveyObject.Languages_Other = surveyObject.Languages_Other.strip('[]').replace("u'","").replace("'","").split(', ')
 		surveyObject.Languages_Other = ", ".join(str(lang) for lang in surveyObject.Languages_Other)
@@ -547,6 +624,15 @@ def surveyPage10(request, id=None, passed=False):
 def surveyPage11(request, id=None, passed=False):
 
 	surveyObject = SurveyPanel.objects.get(id=id)
+	# check for non superusers and redirect to their dashboard if the user doesn't own the object
+	if request.user.groups.filter(name="superusers").exists():
+		empty = {}
+	else:
+		surveyObjectCheck = SurveyPanel.objects.get(user=request.user)
+		if surveyObject != surveyObjectCheck:
+			#send them back to their dashboard
+			return HttpResponseRedirect('/dashboard/')
+
 	meetingObjects = MeetingPanel.objects.filter(Organization_Name=surveyObject.Organization_Name)
 	MeetingFormset = modelformset_factory(MeetingPanel, form=Page11Form, extra=4, can_delete=True)
 
@@ -585,6 +671,14 @@ def surveyPage11(request, id=None, passed=False):
 def surveyPage12(request, id=None, passed=False):
 
 	surveyObject = SurveyPanel.objects.get(id=id)
+	# check for non superusers and redirect to their dashboard if the user doesn't own the object
+	if request.user.groups.filter(name="superusers").exists():
+		empty = {}
+	else:
+		surveyObjectCheck = SurveyPanel.objects.get(user=request.user)
+		if surveyObject != surveyObjectCheck:
+			#send them back to their dashboard
+			return HttpResponseRedirect('/dashboard/')
 
 	# A HTTP POST?
 	if request.method == 'POST' and passed == False:
@@ -612,6 +706,15 @@ def surveyPage12(request, id=None, passed=False):
 def surveyPage13(request, id=None, passed=False):
 
 	surveyObject = SurveyPanel.objects.get(id=id)
+	# check for non superusers and redirect to their dashboard if the user doesn't own the object
+	if request.user.groups.filter(name="superusers").exists():
+		empty = {}
+	else:
+		surveyObjectCheck = SurveyPanel.objects.get(user=request.user)
+		if surveyObject != surveyObjectCheck:
+			#send them back to their dashboard
+			return HttpResponseRedirect('/dashboard/')
+
 	PartnerFormset = modelformset_factory(Partners, form=AddParner, extra=5)
 
 	# A HTTP POST?
@@ -642,6 +745,14 @@ def surveyPage13(request, id=None, passed=False):
 def surveyPage14(request, id=None, passed=False):
 
 	surveyObject = SurveyPanel.objects.get(id=id)
+	# check for non superusers and redirect to their dashboard if the user doesn't own the object
+	if request.user.groups.filter(name="superusers").exists():
+		empty = {}
+	else:
+		surveyObjectCheck = SurveyPanel.objects.get(user=request.user)
+		if surveyObject != surveyObjectCheck:
+			#send them back to their dashboard
+			return HttpResponseRedirect('/dashboard/')
 
 	# A HTTP POST?
 	if request.method == 'POST' and passed == False:
@@ -668,6 +779,214 @@ def surveyPage14(request, id=None, passed=False):
 @login_required
 def surveyfinish(request, id=None):
 
-	return render(request, 'cdadsurvey/surveyfinish.html', {'id':id})
+	surveyObject = SurveyPanel.objects.get(id=id)
+	# check for non superusers and redirect to their dashboard if the user doesn't own the object
+	if request.user.groups.filter(name="superusers").exists():
+		empty = {}
+	else:
+		surveyObjectCheck = SurveyPanel.objects.get(user=request.user)
+		if surveyObject != surveyObjectCheck:
+			#send them back to their dashboard
+			return HttpResponseRedirect('/dashboard/')
+
+	# A HTTP POST?
+	if request.method == 'POST':
+		# send email to the user that their record has been submitted and CDAD will verify
+		subject = "Survey Submitted to d[COM]munity!"
+		html_message = "Dear "+ surveyObject.Survey_Taker_Name +",<br /><br />Thank you for completing the survey and adding your organization, " + surveyObject.Organization_Name + " to the d[COM]munity system! A representative from CDAD will review your survey submission shortly, and you will receieve an email at this address when your information is avialable on the d[COM]munity webesite.<br /><br />Again, thank you!<br />Community Development Advocates of Detroit<br /><a href=\"http://cdad-online.org/\">http://cdad-online.org/</a>"
+		message = "Dear "+ surveyObject.Survey_Taker_Name +", Thank you for completing the survey and adding your organization, " + surveyObject.Organization_Name + " to the d[COM]munity system! A representative from CDAD will review your survey submission shortly, and you will receieve an email at this address when your information is avialable on the d[COM]munity webesite. Again, thank you! Community Development Advocates of Detroit, http://cdad-online.org/"
+
+		send_mail(subject, message, 'dcommunity.cdad@gmail.com', [surveyObject.Survey_Taker_Email_Address], fail_silently=True, html_message=html_message)
+
+		# send another email to CDAD superusers
+		group = Group.objects.get(name='superusers')
+		superusers = group.user_set.all()
+		for	superuser in superusers:
+			subject = "New Survey from "+ surveyObject.Organization_Name +" Submitted to d[COM]munity!"
+			html_message = "Dear "+ superuser.first_name +" "+ superuser.last_name +",<br /><br />The group, " + surveyObject.Organization_Name + " just submitted their completed survey to CDAD for their review. Please log in to the d[COM]munity system when you have a moment and verify their work.<br /><br />Thank you!"
+			message = "Dear "+ superuser.first_name +" "+ superuser.last_name +", The group, " + surveyObject.Organization_Name + " just submitted their completed survey to CDAD for their review. Please log in to the d[COM]munity system when you have a moment and verify their work. Thank you!"
+
+			send_mail(subject, message, 'dcommunity.cdad@gmail.com', [superuser.email], fail_silently=True, html_message=html_message)
+
+		return HttpResponseRedirect('/dashboard/')
+	else:
+		# If the request was not a POST, display the form to enter details.
+		form = Page15Form()
+
+	return render(request, 'cdadsurvey/surveyfinish.html', {'id':id, 'form':form})
+
+@login_required
+def dashboard(request):
+
+	if request.user.groups.filter(name="superusers").exists():
+		# pull all surveys and place them in a sortable table
+		surveyObjects = SurveyPanel.objects.all().order_by('Organization_Name')
+
+		return render(request, 'cdadsurvey/admin_dashboard.html', {'surveyObjects':surveyObjects})
+	else:
+
+		#are they actively working on a survey
+		surveyObjects = SurveyPanel.objects.filter(user=request.user).exclude(removed=True)
+		surveyObjectsCount = len(surveyObjects)
+		if surveyObjectsCount > 0:
+			surveyObject = SurveyPanel.objects.get(user=request.user, removed=False)
+			id = surveyObject.id
+			page = -99
+			# is the survey verified? -- if so just give them the update button
+			if surveyObject.verified:
+				update = True
+			else:
+				update = False
+
+				# look up meeting, contact and location
+				meetingObjects = MeetingPanel.objects.filter(Organization_Name=surveyObject.Organization_Name)
+				meetingObjectsCount = len(meetingObjects)
+				locationObjects = LocationPanel.objects.filter(Organization_Name=surveyObject.Organization_Name)
+				locationObjectsCount = len(locationObjects)
+				contactObjects = ContactPanel.objects.filter(Organization_Name=surveyObject.Organization_Name)
+				contactObjectsCount = len(contactObjects)
+
+				#where in the survey are they? -- going back to front
+				if surveyObject.CDAD_MemberShip:
+					page = 15
+				elif surveyObject.partners.count() > 0:
+					page = 14
+				elif surveyObject.accomplish_one_title:
+					page = 13
+				elif meetingObjectsCount > 0:
+					page = 12
+				elif surveyObject.Service_Population:
+					page = 11
+				elif surveyObject.Activities_Services:
+					page = 10
+				elif surveyObject.organization_structured:
+					page = 9
+				elif surveyObject.MapDissolve:
+					page = 8
+				elif surveyObject.Service_Area_Description:
+					page = 7
+				elif locationObjectsCount > 0:
+					page = 6
+				elif contactObjectsCount > 0:
+					page = 5
+				elif surveyObject.Social_Email:
+					page = 4
+				elif surveyObject.Year_Founded:
+					page = 3
+				elif surveyObject.Organization_Name:
+					page = 2
+				else:
+					page = 1
 
 
+		else:
+			#no, then redirect to the survey page to start survey
+			return HttpResponseRedirect('/survey/')
+
+
+		return render(request, 'cdadsurvey/provider_dashboard.html', {'update':update, 'id':id, 'page':page, 'surveyObject':surveyObject})
+
+@login_required
+def verifysurvey(request, id=None):
+
+	if request.user.groups.filter(name="superusers").exists():
+		surveyObject = SurveyPanel.objects.get(id=id)
+
+		surveyObject.Organization_Description = surveyObject.Organization_Description.strip('[]').replace("u'","").replace("'","").split(', ')
+		surveyObject.Organization_Description = ", ".join(str(lang) for lang in surveyObject.Organization_Description)
+
+		# A HTTP POST?
+		if request.method == 'POST':
+			form = VerifyForm(request.POST, instance=surveyObject)
+
+			# Have we been provided with a valid form?
+			if form.is_valid():
+				# Save the new data to the database.
+				f = form.save(commit=True)
+
+				if f.verified:
+					#email user
+					subject = "d[COM]munity Survey Verified!"
+					html_message = "Dear "+ surveyObject.Survey_Taker_Name +",<br /><br />The survey you submitted for " + surveyObject.Organization_Name + " to the d[COM]munity system had been verified by CDAD and will now appear on the d[COM]munity website. Please visit <a href=\"http://cdad-online.org/\">http://cdad-online.org/</a> and click on d[COM]munity to see your information displayed in our mapping tool. Again, thank you for your time and energy in completing our survey!<br /><br />Thank you!<br />Community Development Advocates of Detroit<br /><a href=\"http://cdad-online.org/\">http://cdad-online.org/</a>"
+					message = "Dear "+ surveyObject.Survey_Taker_Name +", The survey you submitted for " + surveyObject.Organization_Name + " to the d[COM]munity system had been verified by CDAD and will now appear on the d[COM]munity website. Please visit http://cdad-online.org/ and click on d[COM]munity to see your information displayed in our mapping tool. Again, thank you for your time and energy in completing our survey! Thank you! Community Development Advocates of Detroit, http://cdad-online.org/"
+
+					send_mail(subject, message, 'dcommunity.cdad@gmail.com', [surveyObject.Survey_Taker_Email_Address], fail_silently=True, html_message=html_message)
+
+				return HttpResponseRedirect('/dashboard/')
+			else:
+				# The supplied form contained errors - just print them to the terminal.
+				print form.errors
+		else:
+			# If the request was not a POST, display the form to enter details.
+			form = VerifyForm(instance=surveyObject)
+
+		# Bad form (or form details), no form supplied...
+		# Render the form with error messages (if any).
+		return render(request, 'cdadsurvey/verifysurvey.html', {'form': form, 'surveyObject': surveyObject, 'id':id})
+
+
+
+	else:
+		return HttpResponseRedirect('/dashboard/')
+
+
+@login_required
+def removesurvey(request, id=None):
+
+	if request.user.groups.filter(name="superusers").exists():
+		surveyObject = SurveyPanel.objects.get(id=id)
+
+		surveyObject.Organization_Description = surveyObject.Organization_Description.strip('[]').replace("u'","").replace("'","").split(', ')
+		surveyObject.Organization_Description = ", ".join(str(lang) for lang in surveyObject.Organization_Description)
+
+		# A HTTP POST?
+		if request.method == 'POST':
+			form = RemoveForm(request.POST, instance=surveyObject)
+
+			# Have we been provided with a valid form?
+			if form.is_valid():
+				# Save the new data to the database.
+				form.save(commit=True)
+
+				return HttpResponseRedirect('/dashboard/')
+			else:
+				# The supplied form contained errors - just print them to the terminal.
+				print form.errors
+		else:
+			# If the request was not a POST, display the form to enter details.
+			form = RemoveForm(instance=surveyObject)
+
+		# Bad form (or form details), no form supplied...
+		# Render the form with error messages (if any).
+		return render(request, 'cdadsurvey/removesurvey.html', {'form': form, 'surveyObject': surveyObject, 'id':id})
+
+	else:
+		return HttpResponseRedirect('/dashboard/')
+
+
+@login_required
+def adminRegister(request):
+
+	# A HTTP POST?
+	if request.method == 'POST':
+		form = AdminUserOverrideCreationForm(request.POST)
+
+		# Have we been provided with a valid form?
+		if form.is_valid():
+			# Save the new data to the database.
+			user = form.save()
+			# ensure user is part of the superusers group
+			g = Group.objects.get(name='superusers') 
+			g.user_set.add(user)
+
+			return HttpResponseRedirect('/dashboard/')
+		else:
+			# The supplied form contained errors - just print them to the terminal.
+			print form.errors
+	else:
+		# If the request was not a POST, display the form to enter details.
+		form = AdminUserOverrideCreationForm()
+
+	# Bad form (or form details), no form supplied...
+	# Render the form with error messages (if any).
+	return render(request, 'registration/admin_register.html', {'form': form})

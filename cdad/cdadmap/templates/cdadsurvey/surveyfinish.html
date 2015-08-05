@@ -1,5 +1,6 @@
 {% extends 'cdadsurvey/base.html' %}
 {% load staticfiles %}
+{% load bootstrap_tags %}
 
 {% block css_block %}
 {% endblock %}
@@ -26,8 +27,12 @@
       <p>Find CDAD on the web: <a href="http://cdad-online.org/">http://cdad-online.org/</a></p>
       <p>Like CDAD on Facebook: <a href="http://www.facebook.com/CDADDetroit">http://www.facebook.com/CDADDetroit</a></p>
       <p>Follow CDAD on Twitter: <a href="http://twitter.com/CDADDetroit">http://twitter.com/CDADDetroit</a></p>
-      <a class="btn btn-default" href="/survey14/{{ id }}/" role="button">Back</a>
-      <button class="btn btn-primary" type="submit">Submit</button>
+      <form method="post" action=".">
+        {% csrf_token %}
+        {{ form|as_bootstrap }}
+        <a class="btn btn-default" href="/survey14/{{ id }}/" role="button">Back</a>
+        <input type="submit" class="btn btn-primary" value="Submit" />
+      </form>
     </div>
 	<div class="col-md-1">
 		<div class="percent">

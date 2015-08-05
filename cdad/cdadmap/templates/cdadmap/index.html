@@ -120,8 +120,8 @@
 						{% for choice in Organization_Description_Choices %}  						
 							<div class="checkbox">
 							  <label>
-							    <input type="checkbox" class="Organization_Description_Choices" value="{{ choice }}">
-							    {{ choice }}
+							    <input type="checkbox" class="Organization_Description_Choices" value="{{ choice.0 }}">
+							    {{ choice.1 }}
 							  </label>
 							</div>
 						{% endfor %}
@@ -141,8 +141,8 @@
 						{% for choice in Service_Area_Choices %}  						
 							<div class="checkbox">
 							  <label>
-							    <input type="checkbox" class="Service_Area_Choices" value="{{ choice }}">
-							    {{ choice }}
+							    <input type="checkbox" class="Service_Area_Choices" value="{{ choice.0 }}">
+							    {{ choice.1 }}
 							  </label>
 							</div>
 						{% endfor %}
@@ -162,8 +162,8 @@
 						{% for choice in organization_structured_Choices %}  						
 							<div class="checkbox">
 							  <label>
-							    <input type="checkbox" class="organization_structured_Choices" value="{{ choice }}">
-							    {{ choice }}
+							    <input type="checkbox" class="organization_structured_Choices" value="{{ choice.0 }}">
+							    {{ choice.1 }}
 							  </label>
 							</div>
 						{% endfor %}
@@ -183,8 +183,8 @@
 						{% for choice in Activities_Services_Choices %}  						
 							<div class="checkbox">
 							  <label>
-							    <input type="checkbox" class="Activities_Services_Choices" value="{{ choice }}">
-							    {{ choice }}
+							    <input type="checkbox" class="Activities_Services_Choices" value="{{ choice.0 }}">
+							    {{ choice.1 }}
 							  </label>
 							</div>
 						{% endfor %}
@@ -204,8 +204,8 @@
 						{% for choice in Service_Population_Choices %}  						
 							<div class="checkbox">
 							  <label>
-							    <input type="checkbox" class="Service_Population_Choices" value="{{ choice }}">
-							    {{ choice }}
+							    <input type="checkbox" class="Service_Population_Choices" value="{{ choice.0 }}">
+							    {{ choice.1 }}
 							  </label>
 							</div>
 						{% endfor %}
@@ -225,8 +225,8 @@
 						{% for choice in Languages_Choices %}  						
 							<div class="checkbox">
 							  <label>
-							    <input type="checkbox" class="Languages_Choices" value="{{ choice }}">
-							    {{ choice }}
+							    <input type="checkbox" class="Languages_Choices" value="{{ choice.0 }}">
+							    {{ choice.1 }}
 							  </label>
 							</div>
 						{% endfor %}
@@ -313,11 +313,10 @@
 	<!-- create locations geojson and include the topojson layers-->
 	<script type="text/javascript">
 		// create array of service areas based on the locations
-		var staticGeoJSON = []; 
-		{% for geoJSON in staticGeoJSONs %}
-			staticGeoJSON[{{ forloop.counter0 }}] = "{% static geoJSON %}";
+		var staticGeoJSON = []
+		{% for id in surveys_with_maps_ids %}
+			staticGeoJSON.push({{ id }});
 		{% endfor %}
-
 		var detlayer = "{% static 'cdadmap/topojsons/detroit_city_boundary.json' %}";			
 		var cdblayer = "{% static 'cdadmap/topojsons/detroit_city_council_district_boundaries.json' %}";	
 		var nblayer = "{% static 'cdadmap/topojsons/detroit_neighborhood_boundaries.json' %}";	

@@ -23,7 +23,7 @@
 				  <div class="col-sm-3">
 					  <div class="info-modal-titles">ORGANIZATION TYPE</div>
 					  <p class="info-modal-content">
-					  	{% for Organization_Description in location.getSurveyObject.Organization_Description_as_list %}
+					  	{% for Organization_Description in location.getSurveyObject.Organization_Description %}
 					  		{% if Organization_Description != 'undefined' %}
 						    	<span class="label label-filter label-orgtype">{{ Organization_Description }}</span>
 					  		{% endif %}					  	
@@ -31,7 +31,7 @@
 					  </p>				  	
 					  <div class="info-modal-titles">ACTIVITES & SERVICES AT THIS LOCATION</div>
 					  <p class="info-modal-content">
-					  	{% for activity in location.Activity_as_list %}
+					  	{% for activity in location.Activity %}
 					  		{% if activity != 'undefined' %}
 						    	<span class="label label-filter label-activity">{{ activity }}</span>
 					  		{% endif %}
@@ -39,7 +39,7 @@
 					  </p>				  	
 					  <div class="info-modal-titles">SERVICE AREA</div>
 					  <p class="info-modal-content">
-					  	{% for Service_Area_Description in location.getSurveyObject.Service_Area_Description_as_list %}
+					  	{% for Service_Area_Description in location.getSurveyObject.Service_Area_Description %}
 					  		{% if Service_Area_Description != 'undefined' %}
 						    	<span class="label label-filter label-servicearea">{{ Service_Area_Description }}</span>
 					  		{% endif %}					  	
@@ -47,7 +47,7 @@
 					  </p>				  	
 					  <div class="info-modal-titles">STRUCTURE</div>
 					  <p class="info-modal-content">
-					  	{% for organization_structured in location.getSurveyObject.organization_structured_as_list %}
+					  	{% for organization_structured in location.getSurveyObject.organization_structured %}
 					  		{% if organization_structured != 'undefined' %}
 						    	<span class="label label-filter label-orgstructure">{{ organization_structured }}</span>
 					  		{% endif %}					  	
@@ -59,7 +59,7 @@
 				  <div class="col-sm-3">
 					  <div class="info-modal-titles">SERVICES THIS ORGANIZATION PROVIDES</div>
 					  <p class="info-modal-content">
-					  	{% for Activities_Services in location.getSurveyObject.Activities_Services_as_list %}
+					  	{% for Activities_Services in location.getSurveyObject.Activities_Services %}
 					  		{% if Activities_Services != 'undefined' %}
 						    	<span class="label label-filter label-activityservice">{{ Activities_Services }}</span>
 					  		{% endif %}					  	
@@ -67,7 +67,7 @@
 					  </p>
 					  <div class="info-modal-titles">SERVICE POPULATION</div>
 					  <p class="info-modal-content">
-					  	{% for Service_Population in location.getSurveyObject.Service_Population_as_list %}
+					  	{% for Service_Population in location.getSurveyObject.Service_Population %}
 					  		{% if Service_Population != 'undefined' %}
 						    	<span class="label label-filter label-servicepop">{{ Service_Population }}</span>
 					  		{% endif %}					  	
@@ -81,18 +81,26 @@
 					  <p class="info-modal-content">{{ location.getSurveyObject.Organizational_Mission }}</p>
 					  <div class="info-modal-titles">KEY CONTACT PEOPLE</div>
 					  <p class="info-modal-content">
-					  	{% for contacts in location.getContactObject %}
-					  		{% if contacts.KeepPrivate == 'true' %}
-					  			{{ contacts.Name }}<br />
-					  			{{ contacts.Title }}<br />
-					  			{{ contacts.Tel }}<br />
-					  			{{ contacts.Email|urlize }}<br /><br />
-					  		{% endif %}
+				  		{% for contacts in location.getContactObject %}
+				  			{{ contacts.Name }}<br />
+				  			{{ contacts.Title }}<br />
+				  			{% if contacts.KeepPrivateTel == False %}
+				  				{{ contacts.Tel }}<br />
+							{% endif %}				  			
+				  			{% if contacts.KeepPrivateEmail == False %}
+				  				{{ contacts.Email|urlize }}<br />
+							{% endif %}
+				  			<br />			  		
 					  	{% endfor %}
 					  </p>
 					  <div class="info-modal-titles">LANGUAGES</div>
 					  <p class="info-modal-content">
-					  	{% for Languages in location.getSurveyObject.Languages_as_list %}
+					  	{% for Languages in location.getSurveyObject.Languages %}
+					  		{% if Languages != 'undefined' %}
+						    	<span class="label label-filter label-language">{{ Languages }}</span>
+					  		{% endif %}					  	
+					  	{% endfor %}
+					  	{% for Languages in location.getSurveyObject.Languages_Other %}
 					  		{% if Languages != 'undefined' %}
 						    	<span class="label label-filter label-language">{{ Languages }}</span>
 					  		{% endif %}					  	
@@ -101,18 +109,145 @@
 					  <div class="info-modal-titles">PUBLIC MEETINGS</div>
 					  <p class="info-modal-content">
 					  	{% for meetings in location.getMeetingObject %}
-					  		{% if meetings.hasMeeting == 'Yes' %}
+					  		{% if meetings.end_repeat %}
+					  			{% if meetings.checkRepeat %}
+						  			<strong>{{ meetings.MeetingName }}</strong><br />
+						  			{{ meetings.Address }} {% if meetings.Address2 %}{{ meetings.Address2 }}{% endif %} <br />
+						  			{{ meetings.City }}, {{ meetings.State }} {{ meetings.ZipCode }} <br />
+						  			{% if meetings.all_day %}
+						  				<strong>All Day Meeting</strong><br />
+							  			{% if meetings.repeat != "NEVER" %}
+							  				{% if meetings.repeat == "DAILY" %}
+							  					This meeting is held <strong>every day</strong> until {{ meetings.end_repeat|date:"F dS, Y"}}.
+							  				{% endif %}
+							  				{% if meetings.repeat == "WEEKDAY" %}
+							  					This meeting is held <strong>every weekday</strong> until {{ meetings.end_repeat|date:"l, F dS, Y"}}.
+							  				{% endif %}
+							  				{% if meetings.repeat == "WEEKLY" %}
+							  					This meeting is held <strong>weekly</strong> on <strong>{{ meetings.StartOn|date:"l"}}</strong> until {{ meetings.end_repeat|date:"l, F dS, Y"}}.
+							  				{% endif %}
+							  				{% if meetings.repeat == "MONTHLY" %}
+							  					This meeting is held <strong>monthly</strong> on the <strong>{{ meetings.getStartWeekDay }} {{ meetings.StartOn|date:"l"}}</strong> of the month until {{ meetings.end_repeat|date:"l, F dS, Y"}}.
+							  				{% endif %}
+							  				{% if meetings.repeat == "YEARLY" %}
+							  					This meeting is held <strong>annualy</strong> on the <strong>{{ meetings.getStartWeekDay }} {{ meetings.StartOn|date:"l"}}</strong> in <strong>{{ meetings.StartOn|date:"F"}}</strong> until {{ meetings.end_repeat|date:"l, F dS, Y"}}.
+							  				{% endif %}
+										{% else %}
+											{% if meetings.StartOn %}
+								  				{{ meetings.StartOn|date:"l, F dS, Y"}}
+								  			{% endif %}
+								  			{% if meetings.EndsOn %}
+								  				to {{ meetings.EndsOn|date:"l, F dS, Y"}}.
+								  			{% endif %}
+										{% endif %}	
+
+						  			{% else %}
+
+							  			{% if meetings.repeat != "NEVER" %}
+							  				{% if meetings.repeat == "DAILY" %}
+							  					This meeting is held <strong>every day</strong> from <strong>{{ meetings.StartOn|date:"P"}} to {{ meetings.EndsOn|date:"P"}}</strong> until {{ meetings.end_repeat|date:"l, F dS, Y"}}.
+							  				{% endif %}
+							  				{% if meetings.repeat == "WEEKDAY" %}
+							  					This meeting is held <strong>every weekday</strong> from <strong>{{ meetings.StartOn|date:"P"}} to {{ meetings.EndsOn|date:"P"}}</strong> until {{ meetings.end_repeat|date:"l, F dS, Y"}}.
+							  				{% endif %}
+							  				{% if meetings.repeat == "WEEKLY" %}
+							  					This meeting is held <strong>weekly</strong> on <strong>{{ meetings.StartOn|date:"l"}}</strong> from <strong>{{ meetings.StartOn|date:"P"}} to {{ meetings.EndsOn|date:"P"}}</strong> until {{ meetings.end_repeat|date:"l, F dS, Y"}}.
+							  				{% endif %}
+							  				{% if meetings.repeat == "MONTHLY" %}
+							  					This meeting is held <strong>monthly</strong> on the <strong>{{ meetings.getStartWeekDay }} {{ meetings.StartOn|date:"l"}}</strong> of the month from <strong>{{ meetings.StartOn|date:"P"}} to {{ meetings.EndsOn|date:"P"}}</strong> until {{ meetings.end_repeat|date:"l, F dS, Y"}}.
+							  				{% endif %}
+							  				{% if meetings.repeat == "YEARLY" %}
+							  					This meeting is held <strong>annualy</strong> on the <strong>{{ meetings.getStartWeekDay }} {{ meetings.StartOn|date:"l"}}</strong> in <strong>{{ meetings.StartOn|date:"F"}}</strong> from <strong>{{ meetings.StartOn|date:"P"}} to {{ meetings.EndsOn|date:"P"}}</strong> until {{ meetings.end_repeat|date:"l, F dS, Y"}}.
+							  				{% endif %}
+										{% else %}
+											{% if meetings.StartOn %}
+								  				{{ meetings.StartOn|date:"l, F dS, Y; P "}}
+								  			{% endif %}
+								  			{% if meetings.EndsOn %}
+								  				to {{ meetings.EndsOn|date:"l, F dS, Y; P "}}.
+								  			{% endif %}
+										{% endif %}	
+
+						  			{% endif %}
+			  			
+						  			<br />
+
+						  			<strong><em>Meeting Contact</em></strong><br />
+						  			{{ meetings.MeetingPerson }}<br />
+						  			{{ meetings.MeetingPersonPhone }}<br />
+						  			{{ meetings.MeetingPersonEmail|urlize }}<br /><br />
+					  			{% endif %}
+
+					  		{% else %}
+
 					  			<strong>{{ meetings.MeetingName }}</strong><br />
-					  			{{ meetings.Address }} {% if meetings.Address2 != 'No Data Yet' %}{{ meetings.Address2 }}{% endif %} <br />
+					  			{{ meetings.Address }} {% if meetings.Address2 %}{{ meetings.Address2 }}{% endif %} <br />
 					  			{{ meetings.City }}, {{ meetings.State }} {{ meetings.ZipCode }} <br />
-					  			{{ meetings.Time1 }} {{ meetings.Repeat1 }}<br />
+					  			{% if meetings.all_day %}
+					  				<strong>All Day Meeting</strong><br />
+						  			{% if meetings.repeat != "NEVER" %}
+						  				{% if meetings.repeat == "DAILY" %}
+						  					This meeting is held <strong>every day</strong>.
+						  				{% endif %}
+						  				{% if meetings.repeat == "WEEKDAY" %}
+						  					This meeting is held <strong>every weekday</strong>.
+						  				{% endif %}
+						  				{% if meetings.repeat == "WEEKLY" %}
+						  					This meeting is held <strong>weekly</strong> on <strong>{{ meetings.StartOn|date:"l"}}</strong>.
+						  				{% endif %}
+						  				{% if meetings.repeat == "MONTHLY" %}
+						  					This meeting is held <strong>monthly</strong> on the <strong>{{ meetings.getStartWeekDay }} {{ meetings.StartOn|date:"l"}}</strong> of the month.
+						  				{% endif %}
+						  				{% if meetings.repeat == "YEARLY" %}
+						  					This meeting is held <strong>annualy</strong> on the <strong>{{ meetings.getStartWeekDay }} {{ meetings.StartOn|date:"l"}}</strong> in <strong>{{ meetings.StartOn|date:"F"}}</strong>.
+						  				{% endif %}
+									{% else %}
+										{% if meetings.StartOn %}
+							  				{{ meetings.StartOn|date:"l, F dS, Y"}}
+							  			{% endif %}
+							  			{% if meetings.EndsOn %}
+							  				to {{ meetings.EndsOn|date:"l, F dS, Y"}}.
+							  			{% endif %}
+									{% endif %}									  				
+
+					  			{% else %}
+						  			{% if meetings.repeat != "NEVER" %}
+						  				{% if meetings.repeat == "DAILY" %}
+						  					This meeting is held <strong>every day</strong> from <strong>{{ meetings.StartOn|date:"P"}} to {{ meetings.EndsOn|date:"P"}}</strong>.
+						  				{% endif %}
+						  				{% if meetings.repeat == "WEEKDAY" %}
+						  					This meeting is held <strong>every weekday</strong> from <strong>{{ meetings.StartOn|date:"P"}} to {{ meetings.EndsOn|date:"P"}}</strong>.
+						  				{% endif %}
+						  				{% if meetings.repeat == "WEEKLY" %}
+						  					This meeting is held <strong>weekly</strong> on <strong>{{ meetings.StartOn|date:"l"}}</strong> from <strong>{{ meetings.StartOn|date:"P"}} to {{ meetings.EndsOn|date:"P"}}</strong>.
+						  				{% endif %}
+						  				{% if meetings.repeat == "MONTHLY" %}
+						  					This meeting is held <strong>monthly</strong> on the <strong>{{ meetings.getStartWeekDay }} {{ meetings.StartOn|date:"l"}}</strong> of the month from <strong>{{ meetings.StartOn|date:"P"}} to {{ meetings.EndsOn|date:"P"}}</strong>.
+						  				{% endif %}
+						  				{% if meetings.repeat == "YEARLY" %}
+						  					This meeting is held <strong>annualy</strong> on the <strong>{{ meetings.getStartWeekDay }} {{ meetings.StartOn|date:"l"}}</strong> in <strong>{{ meetings.StartOn|date:"F"}}</strong> from <strong>{{ meetings.StartOn|date:"P"}} to {{ meetings.EndsOn|date:"P"}}</strong>.
+						  				{% endif %}
+									{% else %}
+										{% if meetings.StartOn %}
+							  				{{ meetings.StartOn|date:"l, F dS, Y; P "}}
+							  			{% endif %}
+							  			{% if meetings.EndsOn %}
+							  				to {{ meetings.EndsOn|date:"l, F dS, Y; P "}}.
+							  			{% endif %}
+									{% endif %}				
+
+					  			{% endif %}
+  			
+					  			
+					  			<br />
+
 					  			<strong><em>Meeting Contact</em></strong><br />
 					  			{{ meetings.MeetingPerson }}<br />
 					  			{{ meetings.MeetingPersonPhone }}<br />
 					  			{{ meetings.MeetingPersonEmail|urlize }}<br /><br />
-					  		{% else %}
-					  			No Regular Public Meetings
-					  		{% endif %}
+					  		{% endif %}	
+					  	{% empty %}
+					  		No Regular Public Meetings
 					  	{% endfor %}
 					  </p>
 					  

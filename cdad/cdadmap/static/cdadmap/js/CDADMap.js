@@ -256,17 +256,24 @@ CDADMap.loadLayers = function (){
 
 	// for loop to open, parse and add each layer to the feature group set above
 	for (var i = staticGeoJSON.length - 1; i >= 0; i--) {
-		$.getJSON( staticGeoJSON[i], function( data ) {
-		    var dataset = data;
-		    // draw the dataset on the map
-			var saGeoJSON = L.geoJson(dataset, {
-		        style: CDADMap.getStyleColorFor_CDOBCLAYER,
-		        onEachFeature: CDADMap.onEachFeature_CDOBCLAYER
-		    });
+		$.ajax({
+			type: "GET",
+			url: "/getjsonformap/"+ staticGeoJSON[i] +"/",
+			success: function(data){
+				// load the draw tools
+				if (data) {
+					var geojson = JSON.parse(data);
 
-		    // add to the feature group
-			MY_MAP.CDOBCLAYER.addLayer(saGeoJSON);
-		    
+					var saGeoJSON = L.geoJson(geojson, {
+				        style: CDADMap.getStyleColorFor_CDOBCLAYER,
+				        onEachFeature: CDADMap.onEachFeature_CDOBCLAYER
+				    });
+
+				    // add to the feature group
+					MY_MAP.CDOBCLAYER.addLayer(saGeoJSON);
+
+				} 
+	        }
 		});
 	
 	};
@@ -359,14 +366,22 @@ CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 		var commaSpace = /,\s/ig;
 		var pipeSpace = /\|\s/ig;
 
+		var openBracket = /\[/gi;
+		var closeBracket = /\]/gi;
+		var u_list = /u&#39;/gi;
+		var quote_list = /&#39;/gi;
+
 		// activities available at this location
-		var activityString = feature.properties.Activity.replace(commaSpace, '| ');
+		var activityString = feature.properties.Activity;
 		var activityArray = activityString.split(',');
 		var activityArrayLength = activityArray.length;
 		for (var i = 0; i < activityArrayLength; i++) {
+			// strip away the Python list stuff
+			activityArray[i] = activityArray[i].replace(openBracket,'').replace(closeBracket,'').replace(u_list,'').replace(quote_list,'').trim()
+
 			// wrap each item in labels
 			if (activityArray[i] !== "undefined" && activityArray[i]) {
-				activityArray[i] = '<span class="label label-filter label-activity">' + activityArray[i].replace(pipeSpace, ', ') + '</span>';
+				activityArray[i] = '<span class="label label-filter label-activity">' + activityArray[i] + '</span>';
 			} else {
 				activityArray[i] = '';
 			}
@@ -375,13 +390,16 @@ CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 
 		
 		// activities avialable at this location 
-		var activities_ServicesString = feature.properties.Activities_Services.replace(commaSpace, '| ');
+		var activities_ServicesString = feature.properties.Activities_Services;
 		var activities_ServicesArray = activities_ServicesString.split(',');
 		var activities_ServicesArrayLength = activities_ServicesArray.length;
 		for (var i = 0; i < activities_ServicesArrayLength; i++) {
+			// strip away the Python list stuff
+			activities_ServicesArray[i] = activities_ServicesArray[i].replace(openBracket,'').replace(closeBracket,'').replace(u_list,'').replace(quote_list,'').trim()
+
 			// wrap each item in labels
 			if (activities_ServicesArray[i] !== "undefined" && activities_ServicesArray[i]) {
-				activities_ServicesArray[i] = '<span class="label label-filter label-activityservice">' + activities_ServicesArray[i].replace(pipeSpace, ', ') + '</span>';
+				activities_ServicesArray[i] = '<span class="label label-filter label-activityservice">' + activities_ServicesArray[i] + '</span>';
 			} else {
 				activities_ServicesArray[i] = '';
 			}
@@ -389,10 +407,13 @@ CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 		var activities_ServicesList = activities_ServicesArray.join(' ');
 
 		// organization type
-		var Organization_DescriptionString = feature.properties.Organization_Description.replace(commaSpace, '| ');
+		var Organization_DescriptionString = feature.properties.Organization_Description;
 		var Organization_DescriptionArray = Organization_DescriptionString.split(',');
 		var Organization_DescriptionArrayLength = Organization_DescriptionArray.length;
 		for (var i = 0; i < Organization_DescriptionArrayLength; i++) {
+			// strip away the Python list stuff
+			Organization_DescriptionArray[i] = Organization_DescriptionArray[i].replace(openBracket,'').replace(closeBracket,'').replace(u_list,'').replace(quote_list,'').trim()
+			
 			// wrap each item in labels
 			if (Organization_DescriptionArray[i] !== "undefined" && Organization_DescriptionArray[i]) {
 				Organization_DescriptionArray[i] = '<span class="label label-filter label-orgtype">' + Organization_DescriptionArray[i].replace(pipeSpace, ', ') + '</span>';
@@ -674,6 +695,11 @@ CDADMap.removeLayerFor = function(layerId){
 	if (layerId == 'CDOBC') {
 		MY_MAP.map.removeLayer( MY_MAP.CDOBCLAYER ); 		
 	}
+
+	if (MY_MAP.map.hasLayer(MY_MAP.DETLAYER)) {
+		MY_MAP.DETLAYER.bringToBack();
+	}
+
 
 	
 }

@@ -126,6 +126,8 @@ OrgDraw.imFinished = function () {
 	// ajax call to save the geojson
 	MY_MAP.DRAWNGEOJSON = MY_MAP.FEATURELAYER.toGeoJSON();
 	var geojson = MY_MAP.DRAWNGEOJSON;
+	// add OrgName feature property
+	geojson.properties.OrgName = OrgName
 	var url = '/survey7save/'+ id + '/';
 	var csrftoken = $.cookie('csrftoken');
 

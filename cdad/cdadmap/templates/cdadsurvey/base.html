@@ -41,13 +41,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#"><img src="{% static 'cdadmap/css/images/CDAD_dCOM_header.png' %}" /></a>
+          <a class="navbar-brand" href="{% url 'dashboard' %}"><img src="{% static 'cdadmap/css/images/CDAD_dCOM_header.png' %}" /></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <a class="navbar-brand navbar-brand-padtop navbar-right" href="#"><img class="" src="{% static 'cdadmap/css/images/cdadlogo4_header.png' %}" /></a>
+          <a class="navbar-brand navbar-brand-padtop navbar-right" href="http://cdad-online.org/"><img class="" src="{% static 'cdadmap/css/images/cdadlogo4_header.png' %}" /></a>
           <ul class="nav navbar-nav navbar-right">
           {% if user.is_authenticated %}
-            <li><a href="#">Hello, {{ user }}!</a></li>
+            <li><a href="{% url 'dashboard' %}">Hello, {{ user }}!</a></li>
             <li><a href="{% url 'auth_password_change' %}">Update Account</a></li>
             <li><a href="{% url 'auth_logout' %}">Logout</a></li>
           {% else %}

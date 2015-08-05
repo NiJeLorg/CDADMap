@@ -1,0 +1,40 @@
+{% extends 'cdadsurvey/base.html' %}
+{% load staticfiles %}
+{% load bootstrap_tags %}
+
+{% block css_block %}
+{% endblock %}
+
+{% block head_js_block %}
+{% endblock %}
+	
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Remove Survey</h3>
+      	<h4>{{ surveyObject.Organization_Name }} ({{ surveyObject.Organizaton_Acronym }})</h4>
+      	<p><strong>Survey Taker:</strong> {{ surveyObject.Survey_Taker_Name }}</p>
+      	<p><strong>Survey Taker Email:</strong> {{ surveyObject.Survey_Taker_Email_Address }}</p>
+      	<p><strong>Organization Description:</strong> {{ surveyObject.Organization_Description }}</p>
+      	<p><strong>Year Founded:</strong> {{ surveyObject.Year_Founded }}</p>
+      	<p><strong>Organization's Mission:</strong> {{ surveyObject.Organizational_Mission }}</p>
+		<form method="post" action=".">
+			{% csrf_token %}
+			{{ form|as_bootstrap }}
+			<input type="submit" class="btn btn-danger" value="Save" />
+		</form>
+    </div>
+  </div>
+</div> <!-- /container -->
+
+
+{% endblock %}
+
+
+
+	
+	
+
