@@ -48,7 +48,13 @@
 
 <!-- dynamic js for launching the carousel modal -->
 <script type="text/javascript">
+	// create array of service areas based on the locations
+	var staticGeoJSON = []
+	{% for id in surveys_with_maps_ids %}
+		staticGeoJSON.push({{ id }});
+	{% endfor %}
 
+	// modal carousel
 	{% for location in locations %}
 
 		var slideToIdlocationPopup = '#slideToPopup' + parseInt({{ forloop.counter0 }});

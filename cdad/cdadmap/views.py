@@ -44,10 +44,9 @@ def index(request):
 	# figure out which Surveys have geojsons
 	surveys_with_maps_ids = []
 	for location in locations:
-		survey = SurveyPanel.objects.get(Organization_Name=location.Organization_Name)
+		survey = SurveyPanel.objects.get(Organization_Name=location.Organization_Name_SurveyPanel_FK)
 		if survey.MapDissolve:
 			surveys_with_maps_ids.append(survey.id)
-
 
 	surveys_with_maps_ids = set(surveys_with_maps_ids)
 	surveys_with_maps_ids = list(surveys_with_maps_ids)
@@ -145,6 +144,16 @@ def filterLocations(request):
 	for location in locations:
 		location.Activity = location.Activity.strip('[]').replace("u'","").replace("'","").split(', ')
 
+	# figure out which Surveys have geojsons
+	surveys_with_maps_ids = []
+	for location in locations:
+		survey = SurveyPanel.objects.get(Organization_Name=location.Organization_Name_SurveyPanel_FK)
+		if survey.MapDissolve:
+			surveys_with_maps_ids.append(survey.id)
+
+	surveys_with_maps_ids = set(surveys_with_maps_ids)
+	surveys_with_maps_ids = list(surveys_with_maps_ids)
+
 	# load template requested 
 	template = request.GET.get("template","All")
 	if (template == "locations"):
@@ -155,7 +164,7 @@ def filterLocations(request):
 		renderTemplate = 'cdadmap/org-modal.html'
 
 			
-	context_dict = {'locations': locations}
+	context_dict = {'locations': locations, 'surveys_with_maps_ids':surveys_with_maps_ids}
 	return render(request, renderTemplate, context_dict)
 
 

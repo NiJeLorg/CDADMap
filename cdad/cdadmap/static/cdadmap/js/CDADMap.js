@@ -148,6 +148,7 @@ CDADMap.onEachFeature_NBLAYER = function(feature,layer){
 		
 		//highlight polygon
 		layer.setStyle(highlight);		
+		layer.bringToFront();	
 		
     });
 	
@@ -179,6 +180,7 @@ CDADMap.onEachFeature_ZCBLAYER = function(feature,layer){
 		
 		//highlight polygon
 		layer.setStyle(highlight);		
+		layer.bringToFront();	
 		
     });
 	
@@ -207,7 +209,7 @@ CDADMap.onEachFeature_CDOBCLAYER = function(feature,layer){
     layer.on('mouseover', function(ev) {
 		
 		//highlight polygon
-		layer.setStyle(highlight);		
+		layer.setStyle(highlight);
 		
     });
 	
@@ -215,6 +217,7 @@ CDADMap.onEachFeature_CDOBCLAYER = function(feature,layer){
     layer.on('mouseout', function(ev) {
 		//remove highlight for polygon
 		layer.setStyle(noHighlight);
+		layer.bringToBack();
 		
     });	
 	
@@ -271,6 +274,8 @@ CDADMap.loadLayers = function (){
 
 				    // add to the feature group
 					MY_MAP.CDOBCLAYER.addLayer(saGeoJSON);
+
+					console.log(staticGeoJSON);
 
 				} 
 	        }
@@ -548,29 +553,28 @@ CDADMap.loadFilteredLocations = function(data){
 
 }
 
-CDADMap.loadFilteredCDOBGLayer = function(filteredData){
+CDADMap.loadFilteredCDOBGLayer = function(){
 	
 	// for loop to open, parse and add each layer to the feature group set above
 	for (var i = staticGeoJSON.length - 1; i >= 0; i--) {
-		$.getJSON( staticGeoJSON[i], function( data ) {
-		    var dataset = data;
+		$.ajax({
+			type: "GET",
+			url: "/getjsonformap/"+ staticGeoJSON[i] +"/",
+			success: function(data){
+				// load the draw tools
+				if (data) {
+					var geojson = JSON.parse(data);
 
-		    //loop through each returned feature and check the org name, ifi ti matched add the polygon layer
-		    $.each(filteredData.features, function(i, d) {
-		    	
-		    	if (d.properties.Organization_Name === dataset.features[0].properties.OrgName) {
-					var saGeoJSON = L.geoJson(dataset, {
+					var saGeoJSON = L.geoJson(geojson, {
 				        style: CDADMap.getStyleColorFor_CDOBCLAYER,
 				        onEachFeature: CDADMap.onEachFeature_CDOBCLAYER
 				    });
 
 				    // add to the feature group
 					MY_MAP.CDOBCLAYER.addLayer(saGeoJSON);
-				}
 
-		    });
-
-		    
+				} 
+	        }
 		});
 	
 	};
