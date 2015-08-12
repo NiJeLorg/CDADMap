@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='locationpanel',
             name='Organization_Name',
-            field=models.TextField(default=1),
+            field=models.TextField(),
             preserve_default=False,
         ),
         migrations.AlterField(
@@ -26,7 +26,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='meetingpanel',
             name='Organization_Name',
-            field=models.TextField(default=1),
+            field=models.TextField(),
             preserve_default=False,
         ),
         migrations.AlterField(
@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='contactpanel',
             name='Organization_Name',
-            field=models.TextField(default=1),
+            field=models.TextField(),
             preserve_default=False,
         ),
         migrations.AlterField(
