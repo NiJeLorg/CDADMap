@@ -12,18 +12,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='contactpanel',
-            name='Organization_Name',
-            field=models.TextField(default=1),
-            preserve_default=False,
-        ),
-        migrations.AlterField(
-            model_name='contactpanel',
-            name='id',
-            field=models.ForeignKey(primary_key=True, serialize=False, to='cdadmap.SurveyPanel'),
-            preserve_default=True,
-        ),
-        migrations.AlterField(
             model_name='locationpanel',
             name='Organization_Name',
             field=models.TextField(default=1),
@@ -43,6 +31,18 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='meetingpanel',
+            name='id',
+            field=models.ForeignKey(primary_key=True, serialize=False, to='cdadmap.SurveyPanel'),
+            preserve_default=True,
+        ),
+        migrations.AlterField(
+            model_name='contactpanel',
+            name='Organization_Name',
+            field=models.TextField(default=1),
+            preserve_default=False,
+        ),
+        migrations.AlterField(
+            model_name='contactpanel',
             name='id',
             field=models.ForeignKey(primary_key=True, serialize=False, to='cdadmap.SurveyPanel'),
             preserve_default=True,
