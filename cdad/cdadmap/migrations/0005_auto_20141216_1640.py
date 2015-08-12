@@ -47,10 +47,4 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(primary_key=True, serialize=False, to='cdadmap.SurveyPanel'),
             preserve_default=True,
         ),
-        migrations.AlterField(
-            model_name='surveypanel',
-            name='Organization_Name',
-            field=models.TextField(),
-            preserve_default=True,
-        ),
     ]
