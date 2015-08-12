@@ -11,6 +11,12 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.AlterField(
+            model_name='surveypanel',
+            name='Organization_Name',
+            field=models.CharField(default=b'', unique=True, max_length=255),
+            preserve_default=True,
+        ),
         migrations.AddField(
             model_name='contactpanel',
             name='Organization_Name_FK',
@@ -27,12 +33,6 @@ class Migration(migrations.Migration):
             model_name='meetingpanel',
             name='Organization_Name_FK',
             field=models.ForeignKey(to='cdadmap.SurveyPanel', to_field=b'Organization_Name', null=True),
-            preserve_default=True,
-        ),
-        migrations.AlterField(
-            model_name='surveypanel',
-            name='Organization_Name',
-            field=models.CharField(default=b'', unique=True, max_length=255),
             preserve_default=True,
         ),
     ]
