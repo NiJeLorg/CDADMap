@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='contactpanel',
             name='Organization_Name',
-            field=models.CharField(default=b'', unique=True, max_length=255),
+            field=models.TextField(),
             preserve_default=True,
         ),    
     ]
