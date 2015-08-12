@@ -73,7 +73,7 @@ class SurveyPanel(models.Model):
     user = models.ForeignKey(User, default=DEFAULT_USER_ID)
     verified = models.BooleanField(default=False)
     removed = models.BooleanField(default=False)
-    Organization_Name = models.TextField(unique=True)
+    Organization_Name = models.CharField(max_length=2000, default='', unique=True)
     Organizaton_Acronym = models.TextField()
     Survey_Taker_Name = models.TextField()
     Survey_Taker_Email_Address = models.TextField()
