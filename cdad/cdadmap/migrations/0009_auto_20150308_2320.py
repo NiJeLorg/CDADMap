@@ -11,10 +11,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='locationpanel',
-            name='Organization_Name_ContactPanel_FK',
-        ),
         migrations.AddField(
             model_name='locationpanel',
             name='Organization_Name_ContactPanel',

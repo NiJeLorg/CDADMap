@@ -24,12 +24,6 @@ class Migration(migrations.Migration):
             model_name='meetingpanel',
             name='Organization_Name_FK',
         ),
-        migrations.AddField(
-            model_name='locationpanel',
-            name='Organization_Name_ContactPanel_FK',
-            field=models.ForeignKey(to='cdadmap.ContactPanel', to_field=b'Organization_Name', null=True),
-            preserve_default=True,
-        ),
         migrations.AlterField(
             model_name='contactpanel',
             name='Organization_Name',
