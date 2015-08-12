@@ -11,18 +11,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='contactpanel',
-            name='Organization_Name_FK',
-        ),
-        migrations.RemoveField(
-            model_name='locationpanel',
-            name='Organization_Name_FK',
-        ),
-        migrations.RemoveField(
-            model_name='meetingpanel',
-            name='Organization_Name_FK',
-        ),
         migrations.AlterField(
             model_name='contactpanel',
             name='Organization_Name',
