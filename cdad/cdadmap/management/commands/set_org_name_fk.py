@@ -20,10 +20,14 @@ class Command(BaseCommand):
             print location.Organization_Name
             surveyPanelRecord = SurveyPanel.objects.get(Organization_Name=location.Organization_Name)
             location.Organization_Name_SurveyPanel_FK = surveyPanelRecord
-            contactPanelRecord = ContactPanel.objects.get(Organization_Name=location.Organization_Name)
-            location.Organization_Name_ContactPanel_M2M.add(contactPanelRecord)
-            meetingPanelRecord = MeetingPanel.objects.get(Organization_Name=location.Organization_Name)
-            location.Organization_Name_MeetingPanel_M2M.add(meetingPanelRecord)
+            contactPanelRecords = ContactPanel.objects.filter(Organization_Name=location.Organization_Name)
+            for contactPanelRecord in contactPanelRecords:
+                location.Organization_Name_ContactPanel_M2M.add(contactPanelRecord)
+
+            meetingPanelRecords = MeetingPanel.objects.filter(Organization_Name=location.Organization_Name)
+            for meetingPanelRecord in meetingPanelRecords:
+                location.Organization_Name_MeetingPanel_M2M.add(meetingPanelRecord)
+            
             location.save()
                                 
 
