@@ -128,7 +128,6 @@ OrgDraw.imFinished = function () {
 	MY_MAP.DRAWNGEOJSON = MY_MAP.FEATURELAYER.toGeoJSON();
 	var geojson = MY_MAP.DRAWNGEOJSON;
 	// add OrgName feature property
-	geojson.properties.OrgName = OrgName;
 	for (var i = geojson.features.length - 1; i >= 0; i--) {
 		geojson.features[i].properties.OrgName;
 	};
