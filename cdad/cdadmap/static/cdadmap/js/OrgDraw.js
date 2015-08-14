@@ -109,6 +109,7 @@ OrgDraw.loadDrawTools = function (thismap){
 
 
 OrgDraw.startOver = function () {
+	console.log(OrgName);
 	// remove buttons
 	$('#imFinished').addClass('hidden');
 	$('#startOver').addClass('hidden');
@@ -127,6 +128,7 @@ OrgDraw.imFinished = function () {
 	MY_MAP.DRAWNGEOJSON = MY_MAP.FEATURELAYER.toGeoJSON();
 	var geojson = MY_MAP.DRAWNGEOJSON;
 	// add OrgName feature property
+	console.log(OrgName);
 	geojson.properties.OrgName = OrgName;
 	var url = '/survey7save/'+ id + '/';
 	var csrftoken = $.cookie('csrftoken');
