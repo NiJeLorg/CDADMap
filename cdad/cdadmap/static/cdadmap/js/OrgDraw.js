@@ -126,7 +126,9 @@ OrgDraw.startOver = function () {
 OrgDraw.imFinished = function () {
 	// ajax call to save the geojson
 	MY_MAP.DRAWNGEOJSON = MY_MAP.FEATURELAYER.toGeoJSON();
+	console.log(MY_MAP.DRAWNGEOJSON);
 	var geojson = MY_MAP.DRAWNGEOJSON;
+	console.log(geojson);
 	// add OrgName feature property
 	console.log(OrgName);
 	geojson.properties.OrgName = OrgName;
