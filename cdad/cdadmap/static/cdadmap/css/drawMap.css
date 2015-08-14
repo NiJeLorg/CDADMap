@@ -20,18 +20,18 @@ html, body, .paddingTop140Bottom70, #map {
 
 #imFinished {
 	position: absolute;
-	top: 322px;
+	top: 362px;
 	left: 10px;
 }
 
 #startOver {
 	position: absolute;
-	top: 362px;
+	top: 392px;
 	left: 10px;
 }
 
 .skipButton {
 	position: absolute;
-	top: 392px;
+	top: 322px;
 	left: 10px;
 }
