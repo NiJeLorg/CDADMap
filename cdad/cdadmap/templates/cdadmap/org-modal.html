@@ -22,7 +22,14 @@
 						  <p class="info-modal-content">{{ location.getSurveyObject.Social_Phone }}</p>
 					  {% endif %}
 					  <p class="info-modal-content"><a href="{{ location.getSurveyObject.Social_website }}">{{ location.getSurveyObject.Social_website }}</a></p>
-					  <p class="info-modal-content"><a href="{{ location.getSurveyObject.Social_facebook }}"><span class='facebook-logo'></span></a><a href="{{ location.getSurveyObject.Social_Twitter }}"><span class='twitter-logo'></span></a></p>
+					  <p class="info-modal-content">
+					  	{% if location.getSurveyObject.Social_Twitter %}
+						  	<a href="{{ location.getSurveyObject.Social_Twitter }}"><span class='twitter-logo'></span></a>
+					  	{% endif %}
+					  	{% if location.getSurveyObject.Social_facebook %}
+						  	<a href="{{ location.getSurveyObject.Social_facebook }}"><span class='facebook-logo'></span></a>
+					  	{% endif %}
+					  </p>
 				  </div>
 				  <div class="col-sm-3">
 					  <div class="info-modal-titles">ORGANIZATION TYPE</div>
@@ -368,7 +375,12 @@
 						maps[{{ forloop.counter0 }}].map.invalidateSize();
 						// update modal title
 						if ($( "#modalItem{{ forloop.counter0 }}").hasClass('next') || $( "#modalItem{{ forloop.counter0 }}").hasClass('prev')) {
-							$( "#titleOrgName" ).html('{{ location.Organization_Name }} ({{ location.getSurveyObject.Organizaton_Acronym}})');			
+							{% if location.getSurveyObject.Organizaton_Acronym %}
+								var Organizaton_Acronym = "({{ location.getSurveyObject.Organizaton_Acronym}})";
+							{% else %}
+								var Organizaton_Acronym = "";								
+							{% endif %}
+							$( "#titleOrgName" ).html('{{ location.Organization_Name }} ' + Organizaton_Acronym);			
 						}
 						
 					}, 10);				

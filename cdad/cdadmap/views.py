@@ -734,6 +734,14 @@ def surveyPage13(request, id=None, passed=False):
 			form.save(commit=True)
 			formset.save(commit=True)
 
+			# add newly added partners to the list of partners for this survey
+			for f in formset:
+				#look up partner
+				if 'partner_name' in f.cleaned_data.keys():
+					newPartner = Partners.objects.get(partner_name=f.cleaned_data['partner_name'])
+					surveyObject.partners.add(newPartner)
+
+
 			return HttpResponseRedirect(reverse('surveyPage14', args=(id,)))
 		else:
 			# The supplied form contained errors - just print them to the terminal.

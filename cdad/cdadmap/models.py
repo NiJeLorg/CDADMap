@@ -7,7 +7,7 @@ import datetime
 
 #names of partners
 class Partners(models.Model):
-    partner_name = models.CharField(max_length=255, default='')
+    partner_name = models.CharField(max_length=255, default='', unique=True)
 
     def __str__(self):
         return self.partner_name        
