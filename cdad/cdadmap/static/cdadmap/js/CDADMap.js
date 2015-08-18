@@ -497,7 +497,7 @@ CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 		$( ".about" ).removeClass("active");
 
 		// set up modal for having this org selected
-		$( "#titleOrgName" ).html(feature.properties.Organization_Name + " (" + feature.properties.Organizaton_Acronym + ")");
+		$( "#titleOrgName" ).html(feature.properties.Organization_Name + acronym);
 
 		CDADMapPopout.checkPopoutOpen();
 
