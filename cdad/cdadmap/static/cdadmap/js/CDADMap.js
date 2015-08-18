@@ -447,9 +447,16 @@ CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 			var twwebsite = '';
 		}
 
+		// if an org has an acronym, add it
+		if (typeof feature.properties.Organizaton_Acronym !== 'undefined' && feature.properties.Organizaton_Acronym) {
+			var acronym = " (" + feature.properties.Organizaton_Acronym + ") ";
+		} else {
+			var acronym = "";
+		}
+
 		
 		// update sidebar content based on click
-		$( "#popout-info-content" ).html("<div class='info-title-bar text-capitalize'>" + feature.properties.Organization_Name + " (" + feature.properties.Organizaton_Acronym + ")</div><div class='info-content-titles'>ORGANIZATIONAL CONTACT</div><p class='info-content'>" + feature.properties.Address + " " + feature.properties.Address2 + "<br>" + feature.properties.City + ", " + feature.properties.State + " " + feature.properties.ZipCode + "</p><p class='info-content'><a href='mailto:" + feature.properties.Email + "'>" + feature.properties.Email + "</a></p><p class='info-content'>" + feature.properties.Phone + "</p>" + website + "<p class='info-content'>" + twwebsite + fbwebsite + "</p><div class='info-content-titles'>ORGANIZATION TYPE</div><p class='info-content'>" + Organization_DescriptionList + "</p><div class='info-content-titles'>ACTIVITES & SERVICES AT THIS LOCATION</div><p class='info-content'>" + activityList + "</p><div class='info-content-titles'>SERVICES THIS ORGANIZATION PROVIDES</div><p class='info-content'>" + activities_ServicesList + "</p><button type='button' class='btn btn-default btn-block' data-toggle='modal' data-target='#orgModal' data-local='#orgCarousel' id='slideTo" + feature.properties.counterId + "'><span class='pull-left'>VIEW FULL PROFILE</span><span class='glyphicon glyphicon-fullscreen pull-right' aria-hidden='true'></span></button>");
+		$( "#popout-info-content" ).html("<div class='info-title-bar text-capitalize'>" + feature.properties.Organization_Name + acronym + "</div><div class='info-content-titles'>ORGANIZATIONAL CONTACT</div><p class='info-content'>" + feature.properties.Address + " " + feature.properties.Address2 + "<br>" + feature.properties.City + ", " + feature.properties.State + " " + feature.properties.ZipCode + "</p><p class='info-content'><a href='mailto:" + feature.properties.Email + "'>" + feature.properties.Email + "</a></p><p class='info-content'>" + feature.properties.Phone + "</p>" + website + "<p class='info-content'>" + twwebsite + fbwebsite + "</p><div class='info-content-titles'>ORGANIZATION TYPE</div><p class='info-content'>" + Organization_DescriptionList + "</p><div class='info-content-titles'>ACTIVITES & SERVICES AT THIS LOCATION</div><p class='info-content'>" + activityList + "</p><div class='info-content-titles'>SERVICES THIS ORGANIZATION PROVIDES</div><p class='info-content'>" + activities_ServicesList + "</p><button type='button' class='btn btn-default btn-block' data-toggle='modal' data-target='#orgModal' data-local='#orgCarousel' id='slideTo" + feature.properties.counterId + "'><span class='pull-left'>VIEW FULL PROFILE</span><span class='glyphicon glyphicon-fullscreen pull-right' aria-hidden='true'></span></button>");
 				
 		var slideToIdlocation = '#slideTo' + parseInt(feature.properties.counterId);
 		$(slideToIdlocation).click(function() {
