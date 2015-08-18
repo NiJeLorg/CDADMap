@@ -448,7 +448,7 @@ CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 		}
 
 		// if an org has an acronym, add it
-		if (typeof feature.properties.Organizaton_Acronym !== 'undefined' && feature.properties.Organizaton_Acronym) {
+		if (feature.properties.Organizaton_Acronym) {
 			var acronym = " (" + feature.properties.Organizaton_Acronym + ") ";
 		} else {
 			var acronym = "";
