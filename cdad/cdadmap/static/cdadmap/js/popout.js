@@ -398,7 +398,7 @@ CDADMapPopout.loadData = function (Organization_Description_Choices, Service_Are
         type: 'GET',
         url:  'filter/?Organization_Description_Choices=' + Organization_Description_Choices_String + '&Service_Area_Choices=' + Service_Area_Choices_String + '&organization_structured_Choices=' + organization_structured_Choices_String + '&Activities_Services_Choices=' + Activities_Services_Choices_String + '&Service_Population_Choices=' + Service_Population_Choices_String + '&Languages_Choices=' + Languages_Choices_String + '&cdadmebership=' + cdadmebership_String + '&keyword=' + keyword + '&template=locations',
         success: function(data){
-        	//console.log(data);
+        	console.log(data);
         	// remove locations from map
         	CDADMap.clearLocationsLayers();
         	// parse new incoming geojson
