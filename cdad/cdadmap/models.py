@@ -15,7 +15,7 @@ class Partners(models.Model):
 
 # Survey model retired
 class Survey(models.Model):
-    id = models.IntegerField(null=False, primary_key=True)
+    id = models.AutoField(primary_key=True)
     Organization_Name = models.TextField()
     Organizaton_Acronym = models.TextField()
     Survey_Taker_Name = models.TextField()
@@ -69,7 +69,7 @@ DEFAULT_USER_ID = 1
 
 # SurveyPanel defined first to allow foreign key relationship to come late        
 class SurveyPanel(models.Model):
-    id = models.IntegerField(null=False, primary_key=True)
+    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, default=DEFAULT_USER_ID)
     verified = models.BooleanField(default=False)
     removed = models.BooleanField(default=False)
@@ -128,7 +128,7 @@ class SurveyPanel(models.Model):
 
 
 class Contact(models.Model):
-    id = models.IntegerField(null=False, primary_key=True)
+    id = models.AutoField(primary_key=True)
     Organization_Name = models.TextField()
     Name = models.TextField()
     Title = models.TextField()
@@ -146,7 +146,7 @@ class Contact(models.Model):
         
 
 class ContactPanel(models.Model):
-    id = models.IntegerField(null=False, primary_key=True)
+    id = models.AutoField(primary_key=True)
     Organization_Name = models.TextField()
     Name = models.TextField()
     Title = models.TextField()
@@ -164,7 +164,7 @@ class ContactPanel(models.Model):
 
 
 class Meeting(models.Model):
-    id = models.IntegerField(null=False, primary_key=True)
+    id = models.AutoField(primary_key=True)
     Organization_Name = models.TextField()
     hasMeeting = models.TextField()
     MeetingName = models.TextField()
@@ -203,7 +203,7 @@ REPEAT_CHOICES = (
 
 
 class MeetingPanel(models.Model):
-    id = models.IntegerField(null=False, primary_key=True)
+    id = models.AutoField(primary_key=True)
     Organization_Name = models.TextField()
     hasMeeting = models.BooleanField(default=False)
     MeetingName = models.TextField()
@@ -248,7 +248,7 @@ class MeetingPanel(models.Model):
 
 
 class Location(models.Model):
-    id = models.IntegerField(null=False, primary_key=True)
+    id = models.AutoField(primary_key=True)
     Organization_Name = models.TextField()
     Address = models.TextField()
     Address2 = models.TextField()
@@ -268,7 +268,7 @@ class Location(models.Model):
 
 
 class LocationPanel(models.Model):
-    idlocation = models.IntegerField(null=False, primary_key=True)
+    idlocation = models.AutoField(primary_key=True)
     Organization_Name = models.TextField()
     Address = models.TextField()
     Address2 = models.TextField()
