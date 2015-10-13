@@ -238,7 +238,7 @@ class MeetingPanel(models.Model):
         elif week_number == 3:
             week_number = '3rd'
         else:
-            week_number = week_number + 'th'
+            week_number = str(week_number) + 'th'
         return week_number
 
     def checkRepeat(self):

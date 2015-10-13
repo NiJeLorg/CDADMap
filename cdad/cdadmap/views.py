@@ -255,8 +255,8 @@ def surveyPage2(request, id=None, passed=False):
 
 	surveyObject = SurveyPanel.objects.get(id=id)
 	# check for non superusers and redirect to their dashboard if the user doesn't own the object
-	if request.user.groups.filter(name="superusers").exists():
-		is_su = request.user.groups.filter(name='superusers').exists()
+	is_su = request.user.groups.filter(name='superusers').exists()
+	if is_su:
 		empty = {}
 	else:
 		surveyObjectCheck = SurveyPanel.objects.get(user=request.user)
