@@ -50,6 +50,7 @@ function CDADMap() {
 	this.NBLAYER = null;
 	this.ZCBLAYER = null;
 	this.CDOBCLAYER = null;
+	this.CDOBCLAYER_geojsons = null;
 	
 	// marker cluster options
 	clusterLocations = L.markerClusterGroup({ 
@@ -113,11 +114,8 @@ CDADMap.onEachFeature_CDBLAYER = function(feature,layer){
 	
     //add on hover -- same on hover and mousemove for each layer
     layer.on('mouseover', function(ev) {
-		
 		//highlight polygon
-		layer.setStyle(highlight);	
-		layer.bringToFront();	
-		
+		layer.setStyle(highlight);			
     });
 	
 	
@@ -145,18 +143,13 @@ CDADMap.onEachFeature_NBLAYER = function(feature,layer){
 	
     //add on hover -- same on hover and mousemove for each layer
     layer.on('mouseover', function(ev) {
-		
 		//highlight polygon
-		layer.setStyle(highlight);		
-		layer.bringToFront();	
-		
+		layer.setStyle(highlight);				
     });
-	
 	
     layer.on('mouseout', function(ev) {
 		//remove highlight for polygon
 		layer.setStyle(noHighlight);
-		
     });	
 		
 }
@@ -176,19 +169,15 @@ CDADMap.onEachFeature_ZCBLAYER = function(feature,layer){
 	// set so labels are not hidden
 
     //add on hover -- same on hover and mousemove for each layer
-    layer.on('mouseover', function(ev) {
-		
+    layer.on('mouseover', function(ev) {		
 		//highlight polygon
-		layer.setStyle(highlight);		
-		layer.bringToFront();	
-		
+		layer.setStyle(highlight);				
     });
 	
 	
     layer.on('mouseout', function(ev) {
 		//remove highlight for polygon
-		layer.setStyle(noHighlight);
-		
+		layer.setStyle(noHighlight);		
     });	
 	
 }
@@ -206,20 +195,41 @@ CDADMap.onEachFeature_CDOBCLAYER = function(feature,layer){
 	layer.bindLabel(feature.properties.OrgName, { direction:'auto' });
 	
     //add on hover -- same on hover and mousemove for each layer
-    layer.on('mouseover', function(ev) {
-		
+    layer.on('mouseover', function(ev) {		
 		//highlight polygon
 		layer.setStyle(highlight);
-		
     });
-	
 	
     layer.on('mouseout', function(ev) {
 		//remove highlight for polygon
 		layer.setStyle(noHighlight);
 		layer.bringToBack();
-		
+		CDADMap.sendLayersToBack();	
     });	
+
+	// ajax to bind data on click to the feature
+	$.ajax({
+		type: "GET",
+		url: "/getlocationdataforcdobclayer/?Organization_Name="+ feature.properties.OrgName,
+		success: function(data){
+			// bind in the items on click
+			if (data) {
+				var result = $.grep(locations.features, function(e){ return e.properties.Organization_Name == data.Organization_Name; });
+				data.counterId = result[0].properties.counterId;
+				if (data.Address2) {
+					data.Address2 = '<br />' + data.Address2;
+				} else {
+					data.Address2 = '';
+				}
+
+				layer.on("click",function(ev){
+					CDADMap.sidebar(data);	
+				});
+			} 
+        }
+	});
+
+
 	
 }
 
@@ -328,7 +338,7 @@ CDADMap.getStyleColorFor_CDOBCLAYER = function (feature){
         weight: 2,
         opacity: 0.75,
         color: '#e8c51d',
-        fillOpacity: 0.25,
+        fillOpacity: 0.5,
         fill: '#e8c51d'
     }
 }
@@ -358,169 +368,192 @@ CDADMap.CouncilDistrictNames = function (d){
 
 CDADMap.onEachFeatureFor_LOCATIONS = function(feature, layer){
 
+	if (feature.properties.Address2) {
+		feature.properties.Address2 = '<br />' + feature.properties.Address2;
+	} else {
+		feature.properties.Address2 = '';
+	}
+
 	layer.bindLabel('<strong>' + feature.properties.Organization_Name + '</strong><br />' + feature.properties.Address + ' ' + feature.properties.Address2 + '<br />' + feature.properties.City + ', ' + feature.properties.State + ' ' + feature.properties.ZipCode, { direction:'auto', offset:[20,-30] });
 		
 	// add on click popups for locations -- open ino sidebar and populate with data
 	layer.on("click",function(ev){
-		// close all open popups
-		MY_MAP.map.closePopup();
-		
-		// set up data for popout
-		var commaSpace = /,\s/ig;
-		var pipeSpace = /\|\s/ig;
-
-		var openBracket = /\[/gi;
-		var closeBracket = /\]/gi;
-		var u_list = /u&#39;/gi;
-		var quote_list = /&#39;/gi;
-
-		// activities available at this location
-		var activityString = feature.properties.Activity;
-		var activityArray = activityString.split(',');
-		var activityArrayLength = activityArray.length;
-		for (var i = 0; i < activityArrayLength; i++) {
-			// strip away the Python list stuff
-			activityArray[i] = activityArray[i].replace(openBracket,'').replace(closeBracket,'').replace(u_list,'').replace(quote_list,'').trim()
-
-			// wrap each item in labels
-			if (activityArray[i] !== "undefined" && activityArray[i]) {
-				activityArray[i] = '<span class="label label-filter label-activity">' + activityArray[i] + '</span>';
-			} else {
-				activityArray[i] = '';
-			}
-		}
-		var activityList = activityArray.join(' ');
-
-		
-		// activities avialable at this location 
-		var activities_ServicesString = feature.properties.Activities_Services;
-		var activities_ServicesArray = activities_ServicesString.split(',');
-		var activities_ServicesArrayLength = activities_ServicesArray.length;
-		for (var i = 0; i < activities_ServicesArrayLength; i++) {
-			// strip away the Python list stuff
-			activities_ServicesArray[i] = activities_ServicesArray[i].replace(openBracket,'').replace(closeBracket,'').replace(u_list,'').replace(quote_list,'').trim()
-
-			// wrap each item in labels
-			if (activities_ServicesArray[i] !== "undefined" && activities_ServicesArray[i]) {
-				activities_ServicesArray[i] = '<span class="label label-filter label-activityservice">' + activities_ServicesArray[i] + '</span>';
-			} else {
-				activities_ServicesArray[i] = '';
-			}
-		}
-		var activities_ServicesList = activities_ServicesArray.join(' ');
-
-		// organization type
-		var Organization_DescriptionString = feature.properties.Organization_Description;
-		var Organization_DescriptionArray = Organization_DescriptionString.split(',');
-		var Organization_DescriptionArrayLength = Organization_DescriptionArray.length;
-		for (var i = 0; i < Organization_DescriptionArrayLength; i++) {
-			// strip away the Python list stuff
-			Organization_DescriptionArray[i] = Organization_DescriptionArray[i].replace(openBracket,'').replace(closeBracket,'').replace(u_list,'').replace(quote_list,'').trim()
-			
-			// wrap each item in labels
-			if (Organization_DescriptionArray[i] !== "undefined" && Organization_DescriptionArray[i]) {
-				Organization_DescriptionArray[i] = '<span class="label label-filter label-orgtype">' + Organization_DescriptionArray[i].replace(pipeSpace, ', ') + '</span>';
-			} else {
-				Organization_DescriptionArray[i] = '';
-			}
-		}
-		var Organization_DescriptionList = Organization_DescriptionArray.join(' ');
-
-		if (typeof feature.properties.Social_website !== 'undefined' && feature.properties.Social_website) {
-			var website = "<p class='info-content'><a href='" + feature.properties.Social_website + "'>" + feature.properties.Social_website + "</a></p>";
-		} else {
-			var website = '';
-		}
-
-
-		// facebook link
-		if (typeof feature.properties.Social_facebook !== 'undefined' && feature.properties.Social_facebook) {
-			var fbwebsite = "<a href='" + feature.properties.Social_facebook + "'><span class='facebook-logo'></span></a>";
-		} else {
-			var fbwebsite = '';
-		}
-
-		// twitter link
-		if (typeof feature.properties.Social_Twitter !== 'undefined' && feature.properties.Social_Twitter) {
-			var twwebsite = "<a href='" + feature.properties.Social_Twitter + "'><span class='twitter-logo'></span></a>";
-		} else {
-			var twwebsite = '';
-		}
-
-		// if an org has an acronym, add it
-		if (feature.properties.Organizaton_Acronym) {
-			var acronym = " (" + feature.properties.Organizaton_Acronym + ") ";
-		} else {
-			var acronym = "";
-		}
-
-		
-		// update sidebar content based on click
-		$( "#popout-info-content" ).html("<div class='info-title-bar text-capitalize'>" + feature.properties.Organization_Name + acronym + "</div><div class='info-content-titles'>ORGANIZATIONAL CONTACT</div><p class='info-content'>" + feature.properties.Address + " " + feature.properties.Address2 + "<br>" + feature.properties.City + ", " + feature.properties.State + " " + feature.properties.ZipCode + "</p><p class='info-content'><a href='mailto:" + feature.properties.Email + "'>" + feature.properties.Email + "</a></p><p class='info-content'>" + feature.properties.Phone + "</p>" + website + "<p class='info-content'>" + twwebsite + fbwebsite + "</p><div class='info-content-titles'>ORGANIZATION TYPE</div><p class='info-content'>" + Organization_DescriptionList + "</p><div class='info-content-titles'>ACTIVITES & SERVICES AT THIS LOCATION</div><p class='info-content'>" + activityList + "</p><div class='info-content-titles'>SERVICES THIS ORGANIZATION PROVIDES</div><p class='info-content'>" + activities_ServicesList + "</p><button type='button' class='btn btn-default btn-block' data-toggle='modal' data-target='#orgModal' data-local='#orgCarousel' id='slideTo" + feature.properties.counterId + "'><span class='pull-left'>VIEW FULL PROFILE</span><span class='glyphicon glyphicon-fullscreen pull-right' aria-hidden='true'></span></button>");
-				
-		var slideToIdlocation = '#slideTo' + parseInt(feature.properties.counterId);
-		$(slideToIdlocation).click(function() {
-			// show carousel in modal
-			$( "#orgCarousel" ).show();
-
-			// rotate carousel
-			$( "#orgCarousel" ).carousel(parseInt(feature.properties.counterId));
-			
-			setTimeout(function() {
-				
-				maps[feature.properties.counterId].map.invalidateSize();
-
-			}, 200);
-			
-		});
-				
-		// populate banner				
-		$( "#banner-text" ).html("INFO");
-
-		// ensure the correct content is showing
-		$( "#popout-info-content" ).show();
-		$( "#popout-settings-content" ).hide();
-		$( "#popout-filters-content" ).hide();
-		$( "#popout-about-content" ).hide();
-		
-		if ($( ".popout-banner" ).hasClass( "popout-banner-open" )) {
-			// don't toggle classes
-		} else {
-			$( ".popout-banner" ).toggleClass("popout-banner-open");		
-			$( ".popout-content" ).toggleClass("popout-content-open");								
-		}		
-		
-		// set actives for next click
-		$( ".info" ).addClass("active");
-		$( ".settings" ).removeClass("active");
-		$( ".filters" ).removeClass("active");
-		$( ".about" ).removeClass("active");
-
-		// set up modal for having this org selected
-		$( "#titleOrgName" ).html(feature.properties.Organization_Name + acronym);
-
-		CDADMapPopout.checkPopoutOpen();
-
-		
-		// create scrollbars
-		$( "#popout-info-content" ).perfectScrollbar({
-			suppressScrollX: true,
-			includePadding: true
-		});			
-						
-		$( "#popout-info-content" ).perfectScrollbar('update');
-
-		// show yellow bar if scrollbar isn't on
-		if ($( "#popout-info-content .ps-scrollbar-y-rail .ps-scrollbar-y" ).css( "height" ) == "0px") {
-			$( ".right-bar-color" ).show();
-		} else {
-			$( ".right-bar-color" ).hide();			
-		}
-
-		
+		CDADMap.sidebar(feature.properties);	
 	});
 	
 }
+
+
+CDADMap.sidebar = function(data){
+
+	// close all open popups
+	MY_MAP.map.closePopup();
+	
+	// set up data for popout
+	var commaSpace = /,\s/ig;
+	var pipeSpace = /\|\s/ig;
+
+	var openBracket = /\[/gi;
+	var closeBracket = /\]/gi;
+	var u_list = /u&#39;/gi;
+	var quote_list = /&#39;/gi;
+
+	// activities available at this location
+	var activityString = data.Activity;
+	if (typeof activityString === 'object') {
+		var activityArray = activityString;
+	} else {
+		var activityArray = activityString.split(',');
+	}
+	var activityArrayLength = activityArray.length;
+	for (var i = 0; i < activityArrayLength; i++) {
+		// strip away the Python list stuff
+		activityArray[i] = activityArray[i].replace(openBracket,'').replace(closeBracket,'').replace(u_list,'').replace(quote_list,'').trim()
+
+		// wrap each item in labels
+		if (activityArray[i] !== "undefined" && activityArray[i]) {
+			activityArray[i] = '<span class="label label-filter label-activity">' + activityArray[i] + '</span>';
+		} else {
+			activityArray[i] = '';
+		}
+	}
+	var activityList = activityArray.join(' ');
+
+	
+	// activities avialable at this location 
+	var activities_ServicesString = data.Activities_Services;
+	var activities_ServicesArray = activities_ServicesString.split(',');
+	var activities_ServicesArrayLength = activities_ServicesArray.length;
+	for (var i = 0; i < activities_ServicesArrayLength; i++) {
+		// strip away the Python list stuff
+		activities_ServicesArray[i] = activities_ServicesArray[i].replace(openBracket,'').replace(closeBracket,'').replace(u_list,'').replace(quote_list,'').trim()
+
+		// wrap each item in labels
+		if (activities_ServicesArray[i] !== "undefined" && activities_ServicesArray[i]) {
+			activities_ServicesArray[i] = '<span class="label label-filter label-activityservice">' + activities_ServicesArray[i] + '</span>';
+		} else {
+			activities_ServicesArray[i] = '';
+		}
+	}
+	var activities_ServicesList = activities_ServicesArray.join(' ');
+
+	// organization type
+	var Organization_DescriptionString = data.Organization_Description;
+	var Organization_DescriptionArray = Organization_DescriptionString.split(',');
+	var Organization_DescriptionArrayLength = Organization_DescriptionArray.length;
+	for (var i = 0; i < Organization_DescriptionArrayLength; i++) {
+		// strip away the Python list stuff
+		Organization_DescriptionArray[i] = Organization_DescriptionArray[i].replace(openBracket,'').replace(closeBracket,'').replace(u_list,'').replace(quote_list,'').trim()
+		
+		// wrap each item in labels
+		if (Organization_DescriptionArray[i] !== "undefined" && Organization_DescriptionArray[i]) {
+			Organization_DescriptionArray[i] = '<span class="label label-filter label-orgtype">' + Organization_DescriptionArray[i].replace(pipeSpace, ', ') + '</span>';
+		} else {
+			Organization_DescriptionArray[i] = '';
+		}
+	}
+	var Organization_DescriptionList = Organization_DescriptionArray.join(' ');
+
+	if (typeof data.Social_website !== 'undefined' && data.Social_website) {
+		var website = "<p class='info-content'><a href='" + data.Social_website + "' target=\"_blank\">" + data.Social_website + "</a></p>";
+	} else {
+		var website = '';
+	}
+
+
+	// facebook link
+	if (typeof data.Social_facebook !== 'undefined' && data.Social_facebook) {
+		var fbwebsite = "<a href='" + data.Social_facebook + "' target=\"_blank\"><span class='facebook-logo'></span></a>";
+	} else {
+		var fbwebsite = '';
+	}
+
+	// twitter link
+	if (typeof data.Social_Twitter !== 'undefined' && data.Social_Twitter) {
+		var twwebsite = "<a href='" + data.Social_Twitter + "' target=\"_blank\"><span class='twitter-logo'></span></a>";
+	} else {
+		var twwebsite = '';
+	}
+
+	// if an org has an acronym, add it
+	if (data.Organizaton_Acronym) {
+		var acronym = " (" + data.Organizaton_Acronym + ") ";
+	} else {
+		var acronym = "";
+	}
+
+	// if a logo is present, print it here
+	if (data.Organization_Logo_Image) {
+		var logo = "<img src='" + data.Organization_Logo_Image + "' class='img-responsive margin10topbottom'/> "
+	} else {
+		var logo = '';
+	}
+	
+	// update sidebar content based on click
+	$( "#popout-info-content" ).html("<div class='info-title-bar text-capitalize'>" + data.Organization_Name + acronym + "</div>"+ logo +"<div class='info-content-titles'>ORGANIZATIONAL CONTACT</div><p class='info-content'>" + data.Address + " " + data.Address2 + "<br />" + data.City + ", " + data.State + " " + data.ZipCode + "</p><p class='info-content'><a href='mailto:" + data.Email + "'>" + data.Email + "</a></p><p class='info-content'>" + data.Phone + "</p>" + website + "<p class='info-content'>" + twwebsite + fbwebsite + "</p><div class='info-content-titles'>ORGANIZATION TYPE</div><p class='info-content'>" + Organization_DescriptionList + "</p><div class='info-content-titles'>ACTIVITES & SERVICES AT THIS LOCATION</div><p class='info-content'>" + activityList + "</p><div class='info-content-titles'>SERVICES THIS ORGANIZATION PROVIDES</div><p class='info-content'>" + activities_ServicesList + "</p><button type='button' class='btn btn-default btn-block' data-toggle='modal' data-target='#orgModal' data-local='#orgCarousel' id='slideTo" + data.counterId + "'><span class='pull-left'>VIEW FULL PROFILE</span><span class='glyphicon glyphicon-fullscreen pull-right' aria-hidden='true'></span></button>");
+			
+	var slideToIdlocation = '#slideTo' + parseInt(data.counterId);
+	$(slideToIdlocation).click(function() {
+		// show carousel in modal
+		$( "#orgCarousel" ).show();
+
+		// rotate carousel
+		$( "#orgCarousel" ).carousel(parseInt(data.counterId));
+		
+		setTimeout(function() {
+			
+			maps[data.counterId].map.invalidateSize();
+
+		}, 200);
+		
+	});
+			
+	// populate banner				
+	$( "#banner-text" ).html("INFO");
+
+	// ensure the correct content is showing
+	$( "#popout-info-content" ).show();
+	$( "#popout-settings-content" ).hide();
+	$( "#popout-filters-content" ).hide();
+	$( "#popout-about-content" ).hide();
+	
+	if ($( ".popout-banner" ).hasClass( "popout-banner-open" )) {
+		// don't toggle classes
+	} else {
+		$( ".popout-banner" ).toggleClass("popout-banner-open");		
+		$( ".popout-content" ).toggleClass("popout-content-open");								
+	}		
+	
+	// set actives for next click
+	$( ".info" ).addClass("active");
+	$( ".settings" ).removeClass("active");
+	$( ".filters" ).removeClass("active");
+	$( ".about" ).removeClass("active");
+
+	// set up modal for having this org selected
+	$( "#titleOrgName" ).html(data.Organization_Name + acronym);
+
+	CDADMapPopout.checkPopoutOpen();
+
+	
+	// create scrollbars
+	$( "#popout-info-content" ).perfectScrollbar({
+		suppressScrollX: true,
+		includePadding: true
+	});			
+					
+	$( "#popout-info-content" ).perfectScrollbar('update');
+
+	// show yellow bar if scrollbar isn't on
+	if ($( "#popout-info-content .ps-scrollbar-y-rail .ps-scrollbar-y" ).css( "height" ) == "0px") {
+		$( ".right-bar-color" ).show();
+	} else {
+		$( ".right-bar-color" ).hide();			
+	}
+
+
+}
+
 
 CDADMap.prototype.loadLocations = function(){
 					
@@ -597,9 +630,6 @@ CDADMap.loadLayerFor = function(layerId){
 
     if(layerId == "CouncilDistrictBoundaries"){
 		MY_MAP.CDBLAYER.addTo(MY_MAP.map).bringToFront();
-		if (MY_MAP.map.hasLayer(MY_MAP.DETLAYER)) {
-			MY_MAP.DETLAYER.bringToBack();
-		}
 		if (MY_MAP.map.hasLayer(MY_MAP.NBLAYER)) {
 			MY_MAP.NBLAYER.bringToBack();
 		}
@@ -607,15 +637,15 @@ CDADMap.loadLayerFor = function(layerId){
 			MY_MAP.ZCBLAYER.bringToBack();
 		}
 		if (MY_MAP.map.hasLayer(MY_MAP.CDOBCLAYER)) {
-			MY_MAP.CDOBCLAYER.bringToBack();
+			MY_MAP.CDOBCLAYER.bringToFront();
+		}
+		if (MY_MAP.map.hasLayer(MY_MAP.DETLAYER)) {
+			MY_MAP.DETLAYER.bringToBack();
 		}
 	}	
 
     if(layerId == "NeighborhoodBoundaries"){
 		MY_MAP.NBLAYER.addTo(MY_MAP.map).bringToFront();
-		if (MY_MAP.map.hasLayer(MY_MAP.DETLAYER)) {
-			MY_MAP.DETLAYER.bringToBack();
-		}
 		if (MY_MAP.map.hasLayer(MY_MAP.CDBLAYER)) {
 			MY_MAP.CDBLAYER.bringToBack();
 		}
@@ -623,15 +653,15 @@ CDADMap.loadLayerFor = function(layerId){
 			MY_MAP.ZCBLAYER.bringToBack();
 		}
 		if (MY_MAP.map.hasLayer(MY_MAP.CDOBCLAYER)) {
-			MY_MAP.CDOBCLAYER.bringToBack();
+			MY_MAP.CDOBCLAYER.bringToFront();
+		}
+		if (MY_MAP.map.hasLayer(MY_MAP.DETLAYER)) {
+			MY_MAP.DETLAYER.bringToBack();
 		}
 	}	
 
     if(layerId == "ZipCodeBoundaries"){
 		MY_MAP.ZCBLAYER.addTo(MY_MAP.map).bringToFront();
-		if (MY_MAP.map.hasLayer(MY_MAP.DETLAYER)) {
-			MY_MAP.DETLAYER.bringToBack();
-		}
 		if (MY_MAP.map.hasLayer(MY_MAP.NBLAYER)) {
 			MY_MAP.NBLAYER.bringToBack();
 		}
@@ -639,15 +669,15 @@ CDADMap.loadLayerFor = function(layerId){
 			MY_MAP.CDBLAYER.bringToBack();
 		}
 		if (MY_MAP.map.hasLayer(MY_MAP.CDOBCLAYER)) {
-			MY_MAP.CDOBCLAYER.bringToBack();
+			MY_MAP.CDOBCLAYER.bringToFront();
+		}
+		if (MY_MAP.map.hasLayer(MY_MAP.DETLAYER)) {
+			MY_MAP.DETLAYER.bringToBack();
 		}
 	}	
 
     if(layerId == "CDOBC"){
 		MY_MAP.CDOBCLAYER.addTo(MY_MAP.map).bringToFront();
-		if (MY_MAP.map.hasLayer(MY_MAP.DETLAYER)) {
-			MY_MAP.DETLAYER.bringToBack();
-		}
 		if (MY_MAP.map.hasLayer(MY_MAP.NBLAYER)) {
 			MY_MAP.NBLAYER.bringToBack();
 		}
@@ -656,12 +686,30 @@ CDADMap.loadLayerFor = function(layerId){
 		}
 		if (MY_MAP.map.hasLayer(MY_MAP.CDBLAYER)) {
 			MY_MAP.CDBLAYER.bringToBack();
+		}
+		if (MY_MAP.map.hasLayer(MY_MAP.DETLAYER)) {
+			MY_MAP.DETLAYER.bringToBack();
 		}
 	}
 
 	MY_MAP.LOCATIONS.bringToFront();
 
 
+}
+
+CDADMap.sendLayersToBack = function(){
+	if (MY_MAP.map.hasLayer(MY_MAP.NBLAYER)) {
+		MY_MAP.NBLAYER.bringToBack();
+	}
+	if (MY_MAP.map.hasLayer(MY_MAP.ZCBLAYER)) {
+		MY_MAP.ZCBLAYER.bringToBack();
+	}
+	if (MY_MAP.map.hasLayer(MY_MAP.CDBLAYER)) {
+		MY_MAP.CDBLAYER.bringToBack();
+	}	
+	if (MY_MAP.map.hasLayer(MY_MAP.DETLAYER)) {
+		MY_MAP.DETLAYER.bringToBack();
+	}
 }
 
 

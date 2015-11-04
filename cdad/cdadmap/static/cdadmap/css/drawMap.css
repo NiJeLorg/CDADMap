@@ -33,5 +33,17 @@ html, body, .paddingTop140Bottom70, #map {
 .skipButton {
 	position: absolute;
 	top: 322px;
+	left: 72px;
+}
+
+.backButton {
+	position: absolute;
+	top: 322px;
 	left: 10px;
+}
+
+.helpButton {
+	position: absolute;
+	top: 322px;
+	left: 130px;
 }

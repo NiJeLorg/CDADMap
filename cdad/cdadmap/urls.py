@@ -6,6 +6,7 @@ from django.conf.urls.static import static
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
     url(r'^filter/$', views.filterLocations, name='filterLocations'),
+    url(r'^getlocationdataforcdobclayer/$', views.getLocationDataForCDOBCLAYER, name='getLocationDataForCDOBCLAYER'),
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     url(r'^survey/$', views.surveyPage1, name='surveyView'),
     url(r'^survey/(?P<id>\d+)/$', views.surveyPage1, name='surveyView'),
@@ -30,4 +31,5 @@ urlpatterns = patterns('',
     url(r'^verifysurvey/(?P<id>\d+)/$', views.verifysurvey, name='verifysurvey'),
     url(r'^removesurvey/(?P<id>\d+)/$', views.removesurvey, name='removesurvey'),
     url(r'^adminregister/$', views.adminRegister, name='adminRegister'),
+    url(r'^administeraccounts/$', views.administerAccounts, name='administerAccounts'),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

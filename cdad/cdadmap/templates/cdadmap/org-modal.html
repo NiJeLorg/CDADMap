@@ -14,20 +14,25 @@
 				  	<div class='modalmap' id='map{{ forloop.counter0 }}'></div>
 				  </div>
 				  <div class="col-sm-3">
+				  	  {% if location.getSurveyObject.Organization_Logo_Image %}
+					  	  <img src="/media/{{ location.getSurveyObject.Organization_Logo_Image }}" class="img-responsive margin10topbottom"/>
+				  	  {% endif %}
 					  <div class="info-modal-titles">ORGANIZATIONAL CONTACT</div>
-					  <p class="info-modal-content">{{ location.Address }} {{ location.Address2 }}<br>{{ location.City }}, {{ location.State }} {{ location.ZipCode }}</p>
+					  {% if location.Address %}
+					  	<p class="info-modal-content">{{ location.Address }} {% if location.Address2 %}<br />{{ location.Address2 }}{% endif %}<br />{{ location.City }}, {{ location.State }} {{ location.ZipCode }}</p>
+					  {% endif %}
 					  <p class="info-modal-content"><a href="mailto:{{ location.getSurveyObject.Social_Email }}">{{ location.getSurveyObject.Social_Email }}</a></p>
 					  {% if location.getSurveyObject.Social_Phone_KeepPrivate %}
 					  {% else %}
 						  <p class="info-modal-content">{{ location.getSurveyObject.Social_Phone }}</p>
 					  {% endif %}
-					  <p class="info-modal-content"><a href="{{ location.getSurveyObject.Social_website }}">{{ location.getSurveyObject.Social_website }}</a></p>
+					  <p class="info-modal-content"><a href="{{ location.getSurveyObject.Social_website }}" target="_blank">{{ location.getSurveyObject.Social_website }}</a></p>
 					  <p class="info-modal-content">
 					  	{% if location.getSurveyObject.Social_Twitter %}
-						  	<a href="{{ location.getSurveyObject.Social_Twitter }}"><span class='twitter-logo'></span></a>
+						  	<a href="{{ location.getSurveyObject.Social_Twitter }}" target="_blank"><span class='twitter-logo'></span></a>
 					  	{% endif %}
 					  	{% if location.getSurveyObject.Social_facebook %}
-						  	<a href="{{ location.getSurveyObject.Social_facebook }}"><span class='facebook-logo'></span></a>
+						  	<a href="{{ location.getSurveyObject.Social_facebook }}" target="_blank"><span class='facebook-logo'></span></a>
 					  	{% endif %}
 					  </p>
 				  </div>

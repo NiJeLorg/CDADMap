@@ -138,10 +138,18 @@
 				    </div>
 				    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
 				      <div class="panel-body content-filters">
-						{% for choice in Service_Area_Choices %}  						
+						{% for choice in Service_Area_Choices %} 	
 							<div class="checkbox">
 							  <label>
 							    <input type="checkbox" class="Service_Area_Choices" value="{{ choice.0 }}">
+							    {{ choice.1 }}
+							  </label>
+							</div>
+						{% endfor %}
+						{% for choice in Council_District_Choices %} 	
+							<div class="checkbox">
+							  <label>
+							    <input type="checkbox" class="Council_District_Choices" value="{{ choice.0 }}">
 							    {{ choice.1 }}
 							  </label>
 							</div>
@@ -230,6 +238,12 @@
 							  </label>
 							</div>
 						{% endfor %}
+							<div class="checkbox">
+							  <label>
+							    <input type="checkbox" class="Languages_Other" value="Other">
+							    Other
+							  </label>
+							</div>
 				      </div>
 				    </div>
 				  </div>
@@ -263,7 +277,6 @@
 	        </div>
 	        <div id="popout-about-content" class="popout-content">
 	        	<p class="about-content"><strong>d[COM]munity</strong> is CDAD's interactive map and directory for all of Detroit’s community-based organizations working to make our neighborhoods strong and vibrant.  You can find out who is working in your area, search for existing groups, and make sure your organization is listed. This resource will help Detroit organizations, institutions, and residents connect and learn about the activities and services of block clubs, neighborhood associations, community development organizations, and neighborhood improvement organizations throughout the city.</p>
-	        	{{ locationsCount }}
 	        </div>
 		</div>
 	</div>

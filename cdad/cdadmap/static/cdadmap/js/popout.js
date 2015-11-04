@@ -325,7 +325,9 @@ CDADMapPopout.onFilterChange = function (){
 	var Activities_Services_Choices = [];
 	var Service_Population_Choices = [];
 	var Languages_Choices = [];
+	var Languages_Other = '';
 	var cdadmebership = [];
+	var Council_District_Choices = [];
 
 	// select all checked and iterate through each checked value and bin into categories
 	$( "input:checked" ).each(function() {				
@@ -347,8 +349,14 @@ CDADMapPopout.onFilterChange = function (){
 		if ($( this ).attr('class') === "Languages_Choices") {
 			Languages_Choices.push($( this ).attr('value'));
 		}
+		if ($( this ).attr('class') === "Languages_Other") {
+			Languages_Other = 'Other';
+		}
 		if ($( this ).attr('class') === "cdadmebership") {
 			cdadmebership.push($( this ).attr('value'));
+		}
+		if ($( this ).attr('class') === "Council_District_Choices") {
+			Council_District_Choices.push($( this ).attr('value'));
 		}
 
 	});
@@ -361,26 +369,27 @@ CDADMapPopout.onFilterChange = function (){
 	Service_Population_Choices_String = Service_Population_Choices.join("|");
 	Languages_Choices_String = Languages_Choices.join("|");
 	cdadmebership_String = cdadmebership.join("|");
+	Council_District_Choices_String = Council_District_Choices.join("|");
 
     //reload map data
-    CDADMapPopout.loadData(Organization_Description_Choices, Service_Area_Choices, organization_structured_Choices, Activities_Services_Choices, Service_Population_Choices, Languages_Choices, cdadmebership, Organization_Description_Choices_String, Service_Area_Choices_String, organization_structured_Choices_String, Activities_Services_Choices_String, Service_Population_Choices_String, Languages_Choices_String, cdadmebership_String, keyword);
+    CDADMapPopout.loadData(Organization_Description_Choices, Service_Area_Choices, organization_structured_Choices, Activities_Services_Choices, Service_Population_Choices, Languages_Choices, Languages_Other, cdadmebership, Organization_Description_Choices_String, Service_Area_Choices_String, organization_structured_Choices_String, Activities_Services_Choices_String, Service_Population_Choices_String, Languages_Choices_String, cdadmebership_String, keyword, Council_District_Choices, Council_District_Choices_String);
 
 }
 
 	// ajax call to server to reload data when filters are chosen
-CDADMapPopout.loadData = function (Organization_Description_Choices, Service_Area_Choices, organization_structured_Choices, Activities_Services_Choices, Service_Population_Choices, Languages_Choices, cdadmebership, Organization_Description_Choices_String, Service_Area_Choices_String, organization_structured_Choices_String, Activities_Services_Choices_String, Service_Population_Choices_String, Languages_Choices_String, cdadmebership_String, keyword){
+CDADMapPopout.loadData = function (Organization_Description_Choices, Service_Area_Choices, organization_structured_Choices, Activities_Services_Choices, Service_Population_Choices, Languages_Choices, Languages_Other, cdadmebership, Organization_Description_Choices_String, Service_Area_Choices_String, organization_structured_Choices_String, Activities_Services_Choices_String, Service_Population_Choices_String, Languages_Choices_String, cdadmebership_String, keyword, Council_District_Choices, Council_District_Choices_String){
 
 	// first ajax call to reload the popup data when filters are chosen
     $.ajax({
         type: 'GET',
-        url:  'filter/?Organization_Description_Choices=' + Organization_Description_Choices_String + '&Service_Area_Choices=' + Service_Area_Choices_String + '&organization_structured_Choices=' + organization_structured_Choices_String + '&Activities_Services_Choices=' + Activities_Services_Choices_String + '&Service_Population_Choices=' + Service_Population_Choices_String + '&Languages_Choices=' + Languages_Choices_String + '&cdadmebership=' + cdadmebership_String + '&keyword=' + keyword + '&template=popup',
+        url:  'filter/?Organization_Description_Choices=' + Organization_Description_Choices_String + '&Service_Area_Choices=' + Service_Area_Choices_String + '&organization_structured_Choices=' + organization_structured_Choices_String + '&Activities_Services_Choices=' + Activities_Services_Choices_String + '&Service_Population_Choices=' + Service_Population_Choices_String + '&Languages_Choices=' + Languages_Choices_String + '&Languages_Other=' + Languages_Other + '&cdadmebership=' + cdadmebership_String + '&keyword=' + keyword + '&template=popup' + '&Council_District_Choices=' + Council_District_Choices_String,
         success: function(data){
         	// remove data in popup content
         	$("#popup-wrapper").html('');
         	// add new data to popup content
 			$("#popup-wrapper").html(data);
 
-			CDADMapPopout.setFiltersInPopup(Organization_Description_Choices, Service_Area_Choices, organization_structured_Choices, Activities_Services_Choices, Service_Population_Choices, Languages_Choices, cdadmebership, keyword);
+			CDADMapPopout.setFiltersInPopup(Organization_Description_Choices, Service_Area_Choices, organization_structured_Choices, Activities_Services_Choices, Service_Population_Choices, Languages_Choices, Languages_Other, cdadmebership, keyword, Council_District_Choices);
 
 			// open list below the map
 			if ($( ".popup-wrapper" ).hasClass( "popup-wrapper-open" )) {
@@ -396,7 +405,7 @@ CDADMapPopout.loadData = function (Organization_Description_Choices, Service_Are
 	// second call to reload the map layers
     $.ajax({
         type: 'GET',
-        url:  'filter/?Organization_Description_Choices=' + Organization_Description_Choices_String + '&Service_Area_Choices=' + Service_Area_Choices_String + '&organization_structured_Choices=' + organization_structured_Choices_String + '&Activities_Services_Choices=' + Activities_Services_Choices_String + '&Service_Population_Choices=' + Service_Population_Choices_String + '&Languages_Choices=' + Languages_Choices_String + '&cdadmebership=' + cdadmebership_String + '&keyword=' + keyword + '&template=locations',
+        url:  'filter/?Organization_Description_Choices=' + Organization_Description_Choices_String + '&Service_Area_Choices=' + Service_Area_Choices_String + '&organization_structured_Choices=' + organization_structured_Choices_String + '&Activities_Services_Choices=' + Activities_Services_Choices_String + '&Service_Population_Choices=' + Service_Population_Choices_String + '&Languages_Choices=' + Languages_Choices_String + '&Languages_Other=' + Languages_Other + '&cdadmebership=' + cdadmebership_String + '&keyword=' + keyword + '&template=locations' + '&Council_District_Choices=' + Council_District_Choices_String,
         success: function(data){
         	console.log(data);
         	// remove locations from map
@@ -420,7 +429,7 @@ CDADMapPopout.loadData = function (Organization_Description_Choices, Service_Are
 	// third ajax call to reload the modals
     $.ajax({
         type: 'GET',
-        url:  'filter/?Organization_Description_Choices=' + Organization_Description_Choices_String + '&Service_Area_Choices=' + Service_Area_Choices_String + '&organization_structured_Choices=' + organization_structured_Choices_String + '&Activities_Services_Choices=' + Activities_Services_Choices_String + '&Service_Population_Choices=' + Service_Population_Choices_String + '&Languages_Choices=' + Languages_Choices_String + '&cdadmebership=' + cdadmebership_String + '&keyword=' + keyword + '&template=modals',
+        url:  'filter/?Organization_Description_Choices=' + Organization_Description_Choices_String + '&Service_Area_Choices=' + Service_Area_Choices_String + '&organization_structured_Choices=' + organization_structured_Choices_String + '&Activities_Services_Choices=' + Activities_Services_Choices_String + '&Service_Population_Choices=' + Service_Population_Choices_String + '&Languages_Choices=' + Languages_Choices_String + '&Languages_Other=' + Languages_Other + '&cdadmebership=' + cdadmebership_String + '&keyword=' + keyword + '&template=modals' + '&Council_District_Choices=' + Council_District_Choices_String,
         success: function(data){
         	// remove data in popup content
         	$("#modal-wrapper").html('');
@@ -437,8 +446,8 @@ CDADMapPopout.loadData = function (Organization_Description_Choices, Service_Are
 	
 }
 
-CDADMapPopout.setFiltersInPopup = function(Organization_Description_Choices, Service_Area_Choices, organization_structured_Choices, Activities_Services_Choices, Service_Population_Choices, Languages_Choices, cdadmebership, keyword){
-	if ((Organization_Description_Choices.length > 0) || (Service_Area_Choices.length > 0) || (organization_structured_Choices.length > 0) || (Activities_Services_Choices.length > 0) || (Service_Population_Choices.length > 0) || (Languages_Choices.length > 0) || (cdadmebership.length > 0)) {
+CDADMapPopout.setFiltersInPopup = function(Organization_Description_Choices, Service_Area_Choices, organization_structured_Choices, Activities_Services_Choices, Service_Population_Choices, Languages_Choices, Languages_Other, cdadmebership, keyword, Council_District_Choices){
+	if ((Organization_Description_Choices.length > 0) || (Service_Area_Choices.length > 0) || (organization_structured_Choices.length > 0) || (Activities_Services_Choices.length > 0) || (Service_Population_Choices.length > 0) || (Languages_Choices.length > 0) || (Languages_Other == "Other") || (cdadmebership.length > 0) || (Council_District_Choices.length > 0)) {
 		$("#popup-filters").append('<span class="popup-filters">Filters applied: </span>');
 	}
 
@@ -448,6 +457,9 @@ CDADMapPopout.setFiltersInPopup = function(Organization_Description_Choices, Ser
 		$("#popup-filters").append('<span class="label label-filter label-orgtype">' + value + '</span>');
 	});
 	$.each(Service_Area_Choices, function( index, value ) {
+		$("#popup-filters").append('<span class="label label-filter label-servicearea">' + value + '</span>');
+	});
+	$.each(Council_District_Choices, function( index, value ) {
 		$("#popup-filters").append('<span class="label label-filter label-servicearea">' + value + '</span>');
 	});
 	$.each(organization_structured_Choices, function( index, value ) {
@@ -462,6 +474,9 @@ CDADMapPopout.setFiltersInPopup = function(Organization_Description_Choices, Ser
 	$.each(Languages_Choices, function( index, value ) {
 		$("#popup-filters").append('<span class="label label-filter label-language">' + value + '</span>');
 	});
+	if (Languages_Other == "Other") {
+		$("#popup-filters").append('<span class="label label-filter label-language">Other</span>');		
+	}
 	$.each(cdadmebership, function( index, value ) {
 		if (value == 'Yes') {
 			$("#popup-filters").append('<span class="label label-filter label-cdadmebership">CDAD Members</span>');

@@ -11,6 +11,11 @@ $( document ).ready(function() {
       $('#introduction').modal('hide');
     });
 
+    $('#help').click(function() {
+      $('#introduction').modal('show');
+    });
+
+
     $('#imFinished').click(function() {
       OrgDraw.imFinished();
     });

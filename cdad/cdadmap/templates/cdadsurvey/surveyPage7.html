@@ -19,7 +19,9 @@
 <div id="map" class="map"></div>
 <button id="imFinished" class="btn btn-primary hidden" type="submit">Save and Continue</button>
 <button id="startOver" class="btn btn-warning hidden" type="submit">Start Over</button>
-<a class="btn btn-default skipButton" type="submit" href="/survey8/{{ id }}/">Skip</a>
+<a class="btn btn-default skipButton" href="/survey8/{{ id }}/">Skip</a>
+<a class="btn btn-default backButton" href="/survey6/{{ id }}/">Back</a>
+<button id="help" class="btn btn-danger helpButton">Help</button>
 
 
 <div class="container">
@@ -41,7 +43,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body modalContent">
-        <h3 class="text-center text-uppercase">Please Use the Map Tool to Draw Your Service Areas</h3>
+        <h3 class="text-center text-uppercase">Please Use the Map Tool to Draw Your Organization's Service Area</h3>
         <p class="text-justify">
           Trace all of the areas where your organization offers any services. Click on the <span class="leaflet-draw-toolbar leaflet-bar leaflet-draw-toolbar-top"><a class="leaflet-draw-draw-polygon" href="#" title="Draw a polygon"></a></span> icon under the zoom tools in the upper-left corner to begin drawing your organizations service area(s), and follow the on screen instructions. 
         </p>

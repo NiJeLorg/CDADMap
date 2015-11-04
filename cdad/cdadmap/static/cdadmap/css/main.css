@@ -98,6 +98,11 @@ body.loading .loading-modal {
 	border-bottom: 1px dashed #595959;
 }
 
+.margin10topbottom {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
 /*
 * Modal styles
 */

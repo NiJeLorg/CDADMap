@@ -10,6 +10,7 @@
 					"idlocation": "{{ location.idlocation }}",
 			        "Organization_Name": "{{ location.Organization_Name }}",
 			        "Organizaton_Acronym": "{{ location.getSurveyObject.Organizaton_Acronym }}",
+			        "Organization_Logo_Image": "{{ location.getSurveyObject.Organization_Logo_Image }}",
 			        "Address": "{{ location.Address }}",
 			        "Address2": "{{ location.Address2 }}",
 			        "City": "{{ location.City }}",
@@ -28,7 +29,7 @@
 			    },
 			    "geometry": {
 			        "type": "Point",
-			        "coordinates": [ {{ location.Lon }}, {{ location.Lat }} ]
+			        "coordinates": [ {% if not location.KeepPrivate %}{{ location.Lon }}, {{ location.Lat }}{% else %}0,0{% endif %} ]
 			    }
 			}{% if forloop.last %}{% else %},{% endif %}{% endfor %}
 	    ]

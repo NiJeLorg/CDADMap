@@ -383,7 +383,7 @@ class Page11Form(forms.ModelForm):
 
     class Meta:
         model = MeetingPanel
-        fields = ('hasMeeting','MeetingName','Address','Address2','City','State','ZipCode','StartOn','EndsOn','all_day','repeat','end_repeat','MeetingPerson','MeetingPersonPhone','MeetingPersonEmail','MeetAlways')
+        fields = ('hasMeeting','MeetingName','Address','Address2','City','State','ZipCode','StartOn','EndsOn','all_day','repeat','end_repeat','MeetingPerson','MeetingPersonPhone','MeetingPersonEmail')
         labels = {
             'hasMeeting': 'Does your organization hold regular public meetings/events (e.g. monthly block meeting)?',
             'MeetingName': 'Meeting Name',
@@ -398,7 +398,6 @@ class Page11Form(forms.ModelForm):
             'MeetingPerson': 'Who should someone contact for more information about this meeting?',
             'MeetingPersonPhone': 'Meeting contact phone number',
             'MeetingPersonEmail': 'Meeting contact email',
-            'MeetAlways': 'Are meetings always at this location?',
         }
         widgets = {
             'MeetingName': forms.widgets.TextInput(),

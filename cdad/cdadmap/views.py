@@ -28,8 +28,6 @@ def index(request):
 	# get all locations and pass to template to create geojson file
 	#build query
 	kwargs = {}
-	# show only public locations 
-	kwargs['KeepPrivate__exact'] = False
 
 	#get locations only from verified surveys
 	kwargs['Organization_Name_SurveyPanel_FK__verified__exact'] = True
@@ -51,8 +49,43 @@ def index(request):
 	surveys_with_maps_ids = set(surveys_with_maps_ids)
 	surveys_with_maps_ids = list(surveys_with_maps_ids)
 		
-	context_dict = {'locations': locations, "Organization_Description_Choices": ORG_DESCRIPTION_CHOICES, "Service_Area_Choices": SERVICE_AREA_CHOICES, "organization_structured_Choices": STRUCTURE_CHOICES, "Activities_Services_Choices": ACTIVITY_SERVICES_CHOICES, "Service_Population_Choices": POPULATION_CHOICES, "Languages_Choices": LANGUAGE_CHOICES, 'surveys_with_maps_ids':surveys_with_maps_ids}
+	context_dict = {'locations': locations, "Organization_Description_Choices": ORG_DESCRIPTION_CHOICES, "Service_Area_Choices": SERVICE_AREA_CHOICES, "organization_structured_Choices": STRUCTURE_CHOICES, "Activities_Services_Choices": ACTIVITY_SERVICES_CHOICES, "Service_Population_Choices": POPULATION_CHOICES, "Languages_Choices": LANGUAGE_CHOICES, 'surveys_with_maps_ids':surveys_with_maps_ids, 'Council_District_Choices':COUNCIL_DISTRICT_CHOICES}
 	return render(request, 'cdadmap/index.html', context_dict)
+
+
+def getLocationDataForCDOBCLAYER(request):
+
+	response = {}
+
+	Organization_Name = request.GET.get("Organization_Name","")
+	
+	#get locations 
+	location = LocationPanel.objects.get(Organization_Name__exact=Organization_Name)
+	survey = SurveyPanel.objects.get(Organization_Name__exact=Organization_Name)
+	
+	response['idlocation'] = location.idlocation
+	response['Organization_Name'] = location.Organization_Name
+	response['Organizaton_Acronym'] = survey.Organizaton_Acronym
+	response['Organization_Logo_Image'] = '/media/' + str(survey.Organization_Logo_Image)
+	response['Address'] = location.Address
+	response['Address2'] = location.Address2
+	response['City'] = location.City
+	response['ZipCode'] = location.ZipCode
+	response['State'] = location.State
+	response['MailingAddress'] = location.MailingAddress
+	response['Activity'] = location.Activity
+	response['Organization_Description'] = survey.Organization_Description
+	response['Activities_Services'] = survey.Activities_Services
+	response['Email'] = survey.Social_Email
+	if survey.Social_Phone_KeepPrivate:
+		response['Phone'] = ''
+	else:
+		response['Phone'] = survey.Social_Phone
+	response['Social_website'] = survey.Social_website
+	response['Social_facebook'] = survey.Social_facebook
+	response['Social_Twitter'] = survey.Social_Twitter
+
+	return JsonResponse(response)
    
 
 def filterLocations(request):
@@ -70,7 +103,9 @@ def filterLocations(request):
 	Activities_Services_Choices_query = Q()
 	Service_Population_Choices_query = Q()
 	Languages_Choices_query = Q()
+	Languages_Other_query = Q()
 	cdadmebership_query = Q()
+	Council_District_Choices_query = Q()
 	keyword_query = Q()
 	verified_query = Q(verified__exact = True)
 
@@ -81,7 +116,9 @@ def filterLocations(request):
 	Activities_Services_Choices = request.GET.get("Activities_Services_Choices","All")
 	Service_Population_Choices = request.GET.get("Service_Population_Choices","All")
 	Languages_Choices = request.GET.get("Languages_Choices","All")
+	Languages_Other = request.GET.get("Languages_Other","All")
 	cdadmebership = request.GET.get("cdadmebership","All")
+	Council_District_Choices = request.GET.get("Council_District_Choices","All")
 	keyword = request.GET.get("keyword","All")
 
 	#query for fields
@@ -110,11 +147,18 @@ def filterLocations(request):
 		Languages_ChoicesArray = Languages_Choices.split('|')
 		Languages_Choices_query = reduce(operator.or_, (Q(Languages__contains = item) for item in Languages_ChoicesArray))
 
+	if(Languages_Other == "Other"):
+		Languages_Other_query = Q(Languages_Other__isnull = False)
+
 	if(cdadmebership != ""):
 		if(cdadmebership == "Yes"):
 			cdadmebership_query = Q(CDAD_MemberShip__contains = "Currently a member")
 		else:
 			surveyKwargsExclude['CDAD_MemberShip__exact'] = "Currently a member"
+
+	if(Council_District_Choices != ""):
+		Council_District_ChoicesArray = Council_District_Choices.split('|')
+		Council_District_Choices_query = reduce(operator.or_, (Q(CouncilDistricts__contains = item) for item in Council_District_ChoicesArray))
 
 	if(keyword != ""):
 		fields = [f for f in SurveyPanel._meta.fields if isinstance(f, TextField)]
@@ -122,8 +166,12 @@ def filterLocations(request):
 		for query in queries:
 			keyword_query = keyword_query | query       
 
+	# reduce Service Areas and Council Districts with or
+	sa_co_list = [Service_Area_Choices_query, Council_District_Choices_query]
+	sa_co_or = reduce(operator.or_, sa_co_list)
+
 	# create query list from the queries that exist from above
-	q_list = [Organization_Description_query, Service_Area_Choices_query, organization_structured_Choices_query, Activities_Services_Choices_query, Service_Population_Choices_query, Languages_Choices_query, cdadmebership_query, keyword_query, verified_query]
+	q_list = [Organization_Description_query, organization_structured_Choices_query, Activities_Services_Choices_query, Service_Population_Choices_query, Languages_Choices_query, Languages_Other_query, cdadmebership_query, keyword_query, verified_query, sa_co_or]
 	query = reduce(operator.and_, q_list)
 	
 	# get all survey panel objects that meet the search criteria
@@ -133,9 +181,6 @@ def filterLocations(request):
 	kwargs = {}
 	# add returned surveys to location search
 	kwargs['Organization_Name_SurveyPanel_FK__in'] = surveys
-
-	# show only published media
-	kwargs['KeepPrivate__exact'] = False
  
 	#get locations
 	locations = LocationPanel.objects.filter(**kwargs).order_by('Organization_Name')
@@ -832,11 +877,18 @@ def surveyfinish(request, id=None):
 @login_required
 def dashboard(request):
 
-	if request.user.groups.filter(name="superusers").exists():
+	if request.user.groups.filter(name="superadmin").exists():
+		# pull all surveys and place them in a sortable table
+		surveyObjects = SurveyPanel.objects.all().order_by('Organization_Name')
+
+		return render(request, 'cdadsurvey/super_admin_dashboard.html', {'surveyObjects':surveyObjects})
+
+	elif request.user.groups.filter(name="superusers").exists():
 		# pull all surveys and place them in a sortable table
 		surveyObjects = SurveyPanel.objects.all().order_by('Organization_Name')
 
 		return render(request, 'cdadsurvey/admin_dashboard.html', {'surveyObjects':surveyObjects})
+
 	else:
 
 		#are they actively working on a survey
@@ -1006,3 +1058,14 @@ def adminRegister(request):
 	# Bad form (or form details), no form supplied...
 	# Render the form with error messages (if any).
 	return render(request, 'registration/admin_register.html', {'form': form})
+
+
+@login_required
+def administerAccounts(request, id=None):
+
+	#if request.user.groups.filter(name="superadmin").exists():
+
+
+	#else:
+	return HttpResponseRedirect('/dashboard/')
+

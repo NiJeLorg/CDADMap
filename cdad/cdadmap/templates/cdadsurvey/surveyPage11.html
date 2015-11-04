@@ -96,7 +96,15 @@
 
 {% endblock %}
 
+{% block js_block %}
+<script type="text/javascript">
+	$('.icon-arrow-right').addClass("glyphicon glyphicon-arrow-right");
+	$('.icon-arrow-right').removeClass("icon-arrow-right");
+	$('.icon-arrow-left').addClass("glyphicon glyphicon-arrow-left");
+	$('.icon-arrow-left').removeClass("icon-arrow-left");
 
+</script>
+{% endblock %}
 
 	
 	

@@ -129,7 +129,7 @@ OrgDraw.imFinished = function () {
 	var geojson = MY_MAP.DRAWNGEOJSON;
 	// add OrgName feature property
 	for (var i = geojson.features.length - 1; i >= 0; i--) {
-		geojson.features[i].properties.OrgName;
+		geojson.features[i].properties.OrgName = OrgName;
 	};
 	var url = '/survey7save/'+ id + '/';
 	var csrftoken = $.cookie('csrftoken');
