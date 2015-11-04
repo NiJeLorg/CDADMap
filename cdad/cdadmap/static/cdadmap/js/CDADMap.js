@@ -484,10 +484,10 @@ CDADMap.sidebar = function(data){
 
 	// if a logo is present, print it here
 	console.log(data.Organization_Logo_Image);
-	if (data.Organization_Logo_Image) {
-		var logo = "<img src='" + data.Organization_Logo_Image + "' class='img-responsive margin10topbottom'/> "
-	} else {
+	if (!data.Organization_Logo_Image || data.Organization_Logo_Image == '/media/') {
 		var logo = '';
+	} else {
+		var logo = "<img src='" + data.Organization_Logo_Image + "' class='img-responsive margin10topbottom'/> "
 	}
 	
 	// update sidebar content based on click
