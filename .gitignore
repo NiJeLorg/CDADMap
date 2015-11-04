@@ -47,5 +47,5 @@ Thumbs.db
 ##########
 env/
 cdad/cdad/settings.py
-
+cdad/cdadmap/media/
 
