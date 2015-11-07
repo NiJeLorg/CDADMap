@@ -29,7 +29,7 @@ function CDADModalMap(mapid, lat, lon, zoom, surveyid, type, numid) {
 
 	if (type == 'locationAndSA') {
 		// add location
-		CDADModalMap.add_LOCATION(this);
+		CDADModalMap.add_LOCATION(this, numid);
 
 		// add SA
 		CDADModalMap.add_SA(this, surveyid, numid);
@@ -40,7 +40,7 @@ function CDADModalMap(mapid, lat, lon, zoom, surveyid, type, numid) {
 
 	} else if (type == 'location') {
 		// add location
-		CDADModalMap.add_LOCATION(this);
+		CDADModalMap.add_LOCATION(this, numid);
 
 		// set center and zoom
 		this.map.setView([lat,lon], zoom);
@@ -54,19 +54,25 @@ function CDADModalMap(mapid, lat, lon, zoom, surveyid, type, numid) {
 
 		this.DETLAYER = omnivore.topojson(detlayer, null, this.DETLAYER_style);
 
-		// set center and zoom
-		this.map.setView([lat,lon], zoom);
-
-		bounds[numid] = this.map.getBounds();
+		bounds[numid] = this.DETLAYER.getBounds();
+		this.map.fitBounds(bounds[numid]);
 
 	}
 		
 }
 
-CDADModalMap.add_LOCATION = function(sel) {
+CDADModalMap.add_LOCATION = function(sel, numid) {
 	// define layer styles and oneachfeature popup styling
+	console.log(locations);
 	sel.LOCATION = L.geoJson(locations, {
 		pointToLayer: CDADModalMap.getStyleFor_LOCATION,
+		filter: function(feature, layer) {
+			if (feature.properties.counterId == numid) {
+				return true;
+			} else {
+				return false;
+			}
+	    }
 	});
 	
 	sel.map.addLayer(sel.LOCATION);
