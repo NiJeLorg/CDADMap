@@ -59,6 +59,8 @@ function CDADModalMap(mapid, lat, lon, zoom, surveyid, type, numid) {
 
 		bounds[numid] = this.map.getBounds();
 
+		console.log(bounds[numid]);
+
 	}
 		
 }
