@@ -57,7 +57,9 @@ function CDADModalMap(mapid, lat, lon, zoom, surveyid, type, numid) {
 		// set center and zoom
 		this.map.setView([lat,lon], zoom);
 
-		bounds[numid] = this.map.getBounds();
+		var southWest = L.latLng(42.257746, -83.295593),
+		    northEast = L.latLng(42.489061, -82.853394),
+		    bounds[numid] = L.latLngBounds(southWest, northEast);
 
 		console.log(bounds[numid]);
 
