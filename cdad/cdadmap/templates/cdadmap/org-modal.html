@@ -11,9 +11,6 @@
 			<div class="container-fluid">
 				<div class="row modalContent">
 				  <div class="col-sm-3">
-				  	<div class='modalmap' id='map{{ forloop.counter0 }}'></div>
-				  </div>
-				  <div class="col-sm-3">
 				  	  {% if location.getSurveyObject.Organization_Logo_Image %}
 					  	  <img src="/media/{{ location.getSurveyObject.Organization_Logo_Image }}" class="img-responsive margin10topbottom"/>
 				  	  {% endif %}
@@ -44,6 +41,9 @@
 						  	<a href="{{ location.getSurveyObject.nextdoor }}" target="_blank"><span class='nextdoor-logo'></span></a>
 					  	{% endif %}
 					  </p>
+				  </div>
+				  <div class="col-sm-3">
+				  	<div class='modalmap' id='map{{ forloop.counter0 }}'></div>
 				  </div>
 				  <div class="col-sm-3">
 					  <div class="info-modal-titles">ORGANIZATION TYPE</div>
@@ -360,7 +360,7 @@
 <script type="text/javascript">
 	// globally define maps
 	var maps = [];
-	var bounds;			
+	var bounds = [];			
 	
 	// modal maps: loop through each location and create a map for each on the modal
 	$().ready(new function(){
@@ -387,6 +387,9 @@
 
 		// define mini-maps array
 		{% for location in locations %}
+			var numid = {{ forloop.counter0 }};
+			var mapid = 'map' + {{ forloop.counter0 }};
+
 			{% if location.getSurveyObject.MapDissolve and location.Lat != "0" %}
 				var type = 'locationAndSA';
 			{% elif location.getSurveyObject.MapDissolve %}
@@ -398,14 +401,11 @@
 			{% endif %}	
 
 			{% if location.getSurveyObject.MapDissolve %}
-				var mapid = 'map' + {{ forloop.counter0 }};
-			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, 42.38, -83.1, 9, {{ location.getSurveyObject.id  }}, type);				
+			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, 42.38, -83.1, 9, {{ location.getSurveyObject.id  }}, type, numid);				
 			{% elif location.Lat != "0" %}
-				var mapid = 'map' + {{ forloop.counter0 }};
-			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, {{ location.Lat }}, {{ location.Lon }}, 16, {{ location.getSurveyObject.id  }}, type);
+			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, {{ location.Lat }}, {{ location.Lon }}, 16, {{ location.getSurveyObject.id  }}, type, numid);
 		    {% else %}
-				var mapid = 'map' + {{ forloop.counter0 }};
-			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, 42.38, -83.1, 9, -99, type);
+			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, 42.38, -83.1, 9, -99, type, numid);
 		   	{% endif %}				
 		{% endfor %}
 		
@@ -416,8 +416,7 @@
 					setTimeout(function() {
 						maps[{{ forloop.counter0 }}].map.invalidateSize();
 						// fit bounds
-						console.log(bounds);
-						maps[{{ forloop.counter0 }}].map.fitBounds(bounds);
+						maps[{{ forloop.counter0 }}].map.fitBounds(bounds[{{ forloop.counter0 }}]);
 						// update modal title
 						if ($( "#modalItem{{ forloop.counter0 }}").hasClass('next') || $( "#modalItem{{ forloop.counter0 }}").hasClass('prev')) {
 							{% if location.getSurveyObject.Organizaton_Acronym %}
@@ -437,9 +436,7 @@
 					// use invalidate size to make maps show appropriately
 					setTimeout(function() {
 						maps[{{ forloop.counter0 }}].map.invalidateSize();
-						// fit bounds
-						console.log(bounds);
-						maps[{{ forloop.counter0 }}].map.fitBounds(bounds);
+						maps[{{ forloop.counter0 }}].map.fitBounds(bounds[{{ forloop.counter0 }}]);
 						// update modal title
 						if ($( "#modalItem{{ forloop.counter0 }}").hasClass('next') || $( "#modalItem{{ forloop.counter0 }}").hasClass('prev')) {
 							{% if location.getSurveyObject.Organizaton_Acronym %}

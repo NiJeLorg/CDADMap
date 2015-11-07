@@ -3,7 +3,7 @@
 */
 
 // initialize map
-function CDADModalMap(mapid, lat, lon, zoom, surveyid, type) {
+function CDADModalMap(mapid, lat, lon, zoom, surveyid, type, numid) {
 	
 	//console.log(mapid);
 	
@@ -32,11 +32,11 @@ function CDADModalMap(mapid, lat, lon, zoom, surveyid, type) {
 		CDADModalMap.add_LOCATION(this);
 
 		// add SA
-		CDADModalMap.add_SA(this, surveyid);
+		CDADModalMap.add_SA(this, surveyid, numid);
 		
 	} else if (type == 'SA') {
 		// add SA
-		CDADModalMap.add_SA(this, surveyid);
+		CDADModalMap.add_SA(this, surveyid, numid);
 
 	} else if (type == 'location') {
 		// add location
@@ -45,7 +45,7 @@ function CDADModalMap(mapid, lat, lon, zoom, surveyid, type) {
 		// set center and zoom
 		this.map.setView([lat,lon], zoom);
 
-		bounds = this.map.getBounds();
+		bounds[numid] = this.map.getBounds();
 
 	} else {
 		this.DETLAYER_style = L.geoJson(null, {
@@ -57,7 +57,7 @@ function CDADModalMap(mapid, lat, lon, zoom, surveyid, type) {
 		// set center and zoom
 		this.map.setView([lat,lon], zoom);
 
-		bounds = this.map.getBounds();
+		bounds[numid] = this.map.getBounds();
 
 	}
 		
@@ -72,7 +72,7 @@ CDADModalMap.add_LOCATION = function(sel) {
 	sel.map.addLayer(sel.LOCATION);
 }
 
-CDADModalMap.add_SA = function(sel, surveyid) {
+CDADModalMap.add_SA = function(sel, surveyid, numid) {
 	$.ajax({
 		type: "GET",
 		url: "/getjsonformap/"+ surveyid +"/",
@@ -87,8 +87,8 @@ CDADModalMap.add_SA = function(sel, surveyid) {
 			    sel.map.addLayer(sel.CDOBCLAYER);
 
 			    // fit map to bounds of layer
-				bounds = sel.CDOBCLAYER.getBounds();
-				sel.map.fitBounds(bounds);
+				bounds[numid] = sel.CDOBCLAYER.getBounds();
+				sel.map.fitBounds(bounds[numid]);
 
 			} 
         }
