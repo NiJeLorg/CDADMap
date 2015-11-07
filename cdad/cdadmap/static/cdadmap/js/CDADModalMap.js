@@ -54,8 +54,10 @@ function CDADModalMap(mapid, lat, lon, zoom, surveyid, type, numid) {
 
 		this.DETLAYER = omnivore.topojson(detlayer, null, this.DETLAYER_style);
 
-		bounds[numid] = this.DETLAYER.getBounds();
-		this.map.fitBounds(bounds[numid]);
+		// set center and zoom
+		this.map.setView([lat,lon], zoom);
+
+		bounds[numid] = this.map.getBounds();
 
 	}
 		
@@ -63,7 +65,6 @@ function CDADModalMap(mapid, lat, lon, zoom, surveyid, type, numid) {
 
 CDADModalMap.add_LOCATION = function(sel, numid) {
 	// define layer styles and oneachfeature popup styling
-	console.log(locations);
 	sel.LOCATION = L.geoJson(locations, {
 		pointToLayer: CDADModalMap.getStyleFor_LOCATION,
 		filter: function(feature, layer) {
