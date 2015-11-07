@@ -23,7 +23,9 @@
 					  {% else %}
 						  <p class="info-modal-content"><span class='glyphicon glyphicon-phone'></span> {{ location.getSurveyObject.Social_Phone }}</p>
 					  {% endif %}
-					  <p class="info-modal-content"><span class='glyphicon glyphicon-link'></span> <a href="{{ location.getSurveyObject.Social_website }}" target="_blank">{{ location.getSurveyObject.Social_website }}</a></p>
+					  {% if location.getSurveyObject.Social_website %}
+						  <p class="info-modal-content"><span class='glyphicon glyphicon-link'></span> <a href="{{ location.getSurveyObject.Social_website }}" target="_blank">{{ location.getSurveyObject.Social_website }}</a></p>
+					  {% endif %}
 					  <p class="info-modal-content">
 					  	{% if location.getSurveyObject.Social_Twitter %}
 						  	<a href="{{ location.getSurveyObject.Social_Twitter }}" target="_blank"><span class='twitter-logo'></span></a>
