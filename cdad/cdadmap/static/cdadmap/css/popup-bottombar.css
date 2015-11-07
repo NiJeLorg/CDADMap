@@ -2,13 +2,27 @@
  * Popup popout that includes settings, info, filters, and about 
  */
 
+.map {
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+    bottom:8%;
+    width:100%;
+    overflow: hidden;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
 .popup-wrapper {
     z-index: 1001;
     position: fixed;
     left: 0px;
     right: 0px;
     bottom: 0px;
-    height: 0px;
+    height: 8%;
     overflow: auto;
     background: #fff; /*#d9d9d9;*/
     border-top: #3D3D3D 1px solid;
@@ -18,8 +32,12 @@
     transition: all 0.5s ease;
 }
 
+.map-popup-wrapper-open {
+    bottom:35%;
+}
+
 .popup-wrapper-open {
-	height: 32%;
+	height: 35%;
 }
 
 .popup-heading-text {

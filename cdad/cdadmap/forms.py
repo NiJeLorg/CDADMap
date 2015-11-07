@@ -67,6 +67,7 @@ GEOGRAPHIC_BOUNDARY_CHOICES = (
 )
 
 COUNCIL_DISTRICT_CHOICES = (
+    ('Citywide', 'Citywide'),
     ('Council District 1', 'Council District 1'),
     ('Council District 2', 'Council District 2'),
     ('Council District 3', 'Council District 3'),
@@ -171,11 +172,12 @@ class Page1Form(forms.ModelForm):
 
     class Meta:
         model = SurveyPanel
-        fields = ('Organization_Name', 'Organizaton_Acronym', 'Survey_Taker_Name', 'Survey_Taker_Email_Address', 'Survey_Taker_Email_AddToList', 'Organization_Description')
+        fields = ('Organization_Name', 'Organizaton_Acronym', 'Survey_Taker_Name', 'Survey_Taker_Email_Address', 'Survey_Taker_Email_AddToList', 'Organization_Description', 'Organization_Description_Other')
         labels = {
             'Organization_Name': 'Organization Name (Required)',
             'Survey_Taker_Name': 'Survey Taker Name (Required)',
             'Survey_Taker_Email_Address': 'Survey Taker Email Address (Required)',
+            'Organization_Description_Other': 'If you selected other, please specify', 
         }
         help_texts = {
             'Organization_Name': 'Please enter the full name of your organization. e.g. \'Community Development Advocates of Detroit\'',
@@ -186,6 +188,7 @@ class Page1Form(forms.ModelForm):
             'Organization_Name': forms.widgets.TextInput(),
             'Survey_Taker_Name': forms.widgets.TextInput(),
             'Survey_Taker_Email_Address': forms.widgets.EmailInput(),
+            'Organization_Description_Other': forms.widgets.TextInput(),
         }
 
 class CustomUserChoiceField(forms.ModelChoiceField):
@@ -201,12 +204,13 @@ class AdminPage1Form(forms.ModelForm):
 
     class Meta:
         model = SurveyPanel
-        fields = ('user', 'Organization_Name', 'Organizaton_Acronym', 'Survey_Taker_Name', 'Survey_Taker_Email_Address', 'Survey_Taker_Email_AddToList', 'Organization_Description')
+        fields = ('user', 'Organization_Name', 'Organizaton_Acronym', 'Survey_Taker_Name', 'Survey_Taker_Email_Address', 'Survey_Taker_Email_AddToList', 'Organization_Description', 'Organization_Description_Other')
         labels = {
             'user': 'Administrators, please select the user in the system that you would like to attach this survey to.',
             'Organization_Name': 'Organization Name (Required)',
             'Survey_Taker_Name': 'Survey Taker Name (Required)',
             'Survey_Taker_Email_Address': 'Survey Taker Email Address (Required)',
+            'Organization_Description_Other': 'If you selected other, please specify', 
         }
         help_texts = {
             'Organization_Name': 'Please enter the full name of your organization. e.g. \'Community Development Advocates of Detroit\'',
@@ -217,6 +221,7 @@ class AdminPage1Form(forms.ModelForm):
             'Organization_Name': forms.widgets.TextInput(),
             'Survey_Taker_Name': forms.widgets.TextInput(),
             'Survey_Taker_Email_Address': forms.widgets.EmailInput(),
+            'Organization_Description_Other': forms.widgets.TextInput(),
         }
 
 
@@ -248,7 +253,7 @@ class Page3Form(forms.ModelForm):
 
     class Meta:
         model = SurveyPanel
-        fields = ('Social_Email', 'AddSocial_Email', 'Social_Phone', 'Social_Phone_KeepPrivate', 'Social_website', 'Social_facebook', 'Social_Twitter', 'Social_other_media')
+        fields = ('Social_Email', 'AddSocial_Email', 'Social_Phone', 'Social_Phone_KeepPrivate', 'Social_website', 'Social_facebook', 'Social_Twitter', 'youtube', 'instagram', 'nextdoor', 'Social_other_media')
         labels = {
             'Social_Email': 'Email Address (Required)',
             'Social_Phone': 'Main Organizational Phone Number (Required)',
@@ -256,12 +261,18 @@ class Page3Form(forms.ModelForm):
             'Social_website': 'Website Address',
             'Social_facebook': 'Facebook Page',
             'Social_Twitter': 'Twitter Page',
+            'youtube': 'YouTube Channel',
+            'instagram': 'Instagram Page',
+            'nextdoor': 'Next Door Page',
         }
         help_texts = {
             'Social_Email': 'What is the general email address for contacting your organization?',
             'Social_website': 'How can we find your organization on the web? Please include the full URL including the leading http:// or https://',
             'Social_facebook': 'Please enter your organization\'s Facebook page address. Please include the full URL including the leading http:// or https://',
             'Social_Twitter': 'Please enter your organization\'s Twitter page. Please include the full URL including the leading http:// or https://',
+            'youtube': 'Please enter your organization\'s YouTube channel. Please include the full URL including the leading http:// or https://',
+            'instagram': 'Please enter your organization\'s Instagram page. Please include the full URL including the leading http:// or https://',
+            'nextdoor': 'Please enter your organization\'s Next Door page. Please include the full URL including the leading http:// or https://',
         }
         widgets = {
             'Social_Email': forms.widgets.EmailInput(),
@@ -298,7 +309,7 @@ class Page5Form(forms.ModelForm):
 
     class Meta:
         model = LocationPanel
-        fields = ('Address','Address2','City','State','ZipCode','MailingAddress','KeepPrivate','Activity')
+        fields = ('Address','Address2','City','State','ZipCode','MailingAddress','KeepPrivate','Activity', 'Activity_Other')
         labels = {
             'Address': 'Address',
             'City': 'City',
@@ -306,12 +317,14 @@ class Page5Form(forms.ModelForm):
             'ZipCode': 'Zip Code',
             'MailingAddress': 'This is a mailing address only (e.g. P.O. Box)',
             'KeepPrivate': 'Keep this address private',
+            'Activity_Other': 'If you selected other, please specify'
         }
         widgets = {
             'Address': forms.widgets.TextInput(),
             'City': forms.widgets.TextInput(),
             'State': forms.widgets.TextInput(),
             'ZipCode': forms.widgets.TextInput(),
+            'Activity_Other': forms.widgets.TextInput(),
         }
 
 
@@ -364,15 +377,17 @@ class Page10Form(forms.ModelForm):
 
     class Meta:
         model = SurveyPanel
-        fields = ('Service_Population','Languages','Languages_Other')
+        fields = ('Service_Population','Service_Population_Other','Languages','Languages_Other')
         labels = {
             'Languages_Other': 'Please add any additional languages your organizaiton provides services in not included above.',
+            'Service_Population_Other': 'If you selected other, please specify'
         }
         help_texts = {
             'Languages_Other': 'Please seperate these languages with a comma.'
         }
         widgets = {
             'Languages_Other': forms.widgets.TextInput(),
+            'Service_Population_Other': forms.widgets.TextInput(),
         }
 
 

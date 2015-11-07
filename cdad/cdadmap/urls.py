@@ -30,6 +30,11 @@ urlpatterns = patterns('',
     url(r'^surveyfinish/(?P<id>\d+)/$', views.surveyfinish, name='surveyfinish'),
     url(r'^verifysurvey/(?P<id>\d+)/$', views.verifysurvey, name='verifysurvey'),
     url(r'^removesurvey/(?P<id>\d+)/$', views.removesurvey, name='removesurvey'),
+    url(r'^removesurveyyep/(?P<id>\d+)/$', views.removesurveyyep, name='removesurveyyep'),
     url(r'^adminregister/$', views.adminRegister, name='adminRegister'),
     url(r'^administeraccounts/$', views.administerAccounts, name='administerAccounts'),
+    url(r'^removeuser/(?P<id>\d+)/$', views.removeUsers, name='removeUsers'),
+    url(r'^removeuseryep/(?P<id>\d+)/$', views.removeUsersYep, name='removeUsersYep'),
+    url(r'^downloaddata/$', views.downloaddata, name='downloaddata'),
+
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

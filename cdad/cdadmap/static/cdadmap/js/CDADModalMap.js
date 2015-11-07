@@ -3,19 +3,15 @@
 */
 
 // initialize map
-function CDADModalMap(mapid, lat, lon, zoom) {
+function CDADModalMap(mapid, lat, lon, zoom, surveyid, type) {
 	
 	//console.log(mapid);
 	
     //where detroit is 42.377410, -83.093719
     this.map = new L.Map(mapid, {
-		dragging: false,
 		minZoom: 8,
 		maxZoom: 16,
-		zoomControl: false,
 		attributionControl: false,
-    	center: [lat,lon],
-   	 	zoom: zoom,
 	});
 	
 	// add CartoDB tiles
@@ -29,14 +25,28 @@ function CDADModalMap(mapid, lat, lon, zoom) {
 
 	// create and empty container for detroit city boundary
 	this.DETLAYER = null;
-	
-	if (zoom == 16) {
-		// define layer styles and oneachfeature popup styling
-		this.LOCATION = L.geoJson(locations, {
-			pointToLayer: CDADModalMap.getStyleFor_LOCATION,
-		});
+	this.CDOBCLAYER = null;
+
+	if (type == 'locationAndSA') {
+		// add location
+		CDADModalMap.add_LOCATION(this);
+
+		// add SA
+		CDADModalMap.add_SA(this, surveyid);
 		
-		this.map.addLayer(this.LOCATION);
+	} else if (type == 'SA') {
+		// add SA
+		CDADModalMap.add_SA(this, surveyid);
+
+	} else if (type == 'location') {
+		// add location
+		CDADModalMap.add_LOCATION(this);
+
+		// set center and zoom
+		this.map.setView([lat,lon], zoom);
+
+		bounds = this.map.getBounds();
+
 	} else {
 		this.DETLAYER_style = L.geoJson(null, {
 		    style: CDADModalMap.getStyleColorFor_DETLAYER,
@@ -44,8 +54,45 @@ function CDADModalMap(mapid, lat, lon, zoom) {
 
 		this.DETLAYER = omnivore.topojson(detlayer, null, this.DETLAYER_style);
 
+		// set center and zoom
+		this.map.setView([lat,lon], zoom);
+
+		bounds = this.map.getBounds();
+
 	}
 		
+}
+
+CDADModalMap.add_LOCATION = function(sel) {
+	// define layer styles and oneachfeature popup styling
+	sel.LOCATION = L.geoJson(locations, {
+		pointToLayer: CDADModalMap.getStyleFor_LOCATION,
+	});
+	
+	sel.map.addLayer(sel.LOCATION);
+}
+
+CDADModalMap.add_SA = function(sel, surveyid) {
+	$.ajax({
+		type: "GET",
+		url: "/getjsonformap/"+ surveyid +"/",
+		success: function(data){
+			// load the draw tools
+			if (data) {
+				var geojson = JSON.parse(data);
+
+				sel.CDOBCLAYER = L.geoJson(geojson, {
+			        style: CDADModalMap.getStyleColorFor_CDOBCLAYER,
+			    });
+			    sel.map.addLayer(sel.CDOBCLAYER);
+
+			    // fit map to bounds of layer
+				bounds = sel.CDOBCLAYER.getBounds();
+				sel.map.fitBounds(bounds);
+
+			} 
+        }
+	});
 }
 
 
@@ -58,6 +105,16 @@ CDADModalMap.getStyleFor_LOCATION = function(feature, latlng){
 
 	return L.marker(latlng, {icon: locationIcon});
 	
+}
+
+CDADModalMap.getStyleColorFor_CDOBCLAYER = function (feature){
+    return {
+        weight: 2,
+        opacity: 0.75,
+        color: '#e8c51d',
+        fillOpacity: 0.5,
+        fill: '#e8c51d'
+    }
 }
 
 CDADModalMap.getStyleColorFor_DETLAYER = function (feature){

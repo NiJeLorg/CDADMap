@@ -35,6 +35,26 @@
 {% endblock %}
 
 
+{% block js_block %}
+<script type="text/javascript">
+	$( document ).ready(function() {
+
+		$('#id_CouncilDistricts_1').change(function() {
+			if ($(this).is(':checked')) {
+				$('#id_CouncilDistricts_2').prop( "checked", true );
+				$('#id_CouncilDistricts_3').prop( "checked", true );
+				$('#id_CouncilDistricts_4').prop( "checked", true );
+				$('#id_CouncilDistricts_5').prop( "checked", true );
+				$('#id_CouncilDistricts_6').prop( "checked", true );
+				$('#id_CouncilDistricts_7').prop( "checked", true );
+				$('#id_CouncilDistricts_8').prop( "checked", true );
+			} 
+		});
+
+	});
+</script>
+{% endblock %}
+
 
 	
 	

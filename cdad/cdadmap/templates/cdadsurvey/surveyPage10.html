@@ -33,7 +33,27 @@
 {% endblock %}
 
 
+{% block js_block %}
+<script type="text/javascript">
+	$( document ).ready(function() {
+		if (!$('#id_Service_Population_15').is(':checked')) {
+			$('#div_id_Service_Population_Other').addClass('hidden');
+		}
 
+		$('#id_Service_Population_15').change(function() {
+			if ($(this).is(':checked')) {
+				$('#div_id_Service_Population_Other').removeClass('hidden');
+			} else {
+				$('#div_id_Service_Population_Other').addClass('hidden');
+				// remove text from field
+				$('#id_Service_Population_Other').val('');
+			}
+			
+		});
+
+	});
+</script>
+{% endblock %}
 
 
 	

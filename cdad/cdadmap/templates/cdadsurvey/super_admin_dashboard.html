@@ -41,7 +41,7 @@
 		            {% if survey.verified %}
 		              <p class="text-success"><strong>VERIFIED</strong> <small><a href="/verifysurvey/{{ survey.id }}/">Remove verification?</a></small></p>
 		            {% elif survey.removed %}
-		              <p class="text-danger"><strong>REMOVED</strong> <small><a href="/removesurvey/{{ survey.id }}/">Recover?</a></small></p>
+		              <p class="text-danger"><strong>REMOVED</strong> <small><a href="/removesurvey/{{ survey.id }}/">Recover?</a> <a href="/removesurveyyep/{{ survey.id }}/">Remove Permanantly? (Careful, this removes this survey immediately!)</a></small></p>
 		            {% elif survey.CDAD_MemberShip %}
 		              <a class="btn btn-warning" href="/verifysurvey/{{ survey.id }}/" role="button">Awaiting Verification</a>
 		            {% else %}

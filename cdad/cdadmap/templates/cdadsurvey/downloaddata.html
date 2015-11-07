@@ -1,0 +1,31 @@
+{% extends 'cdadsurvey/base.html' %}
+{% load staticfiles %}
+{% load bootstrap_tags %}
+
+{% block css_block %}
+{% endblock %}
+
+{% block head_js_block %}
+{% endblock %}
+	
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Download Data</h3>
+      	<p><a class="btn btn-default btn-lg" href="/media/downloads/survey_data.csv" role="button">Survey Data (CSV)</a></p>
+        <p><a class="btn btn-default btn-lg" href="/media/downloads/geojsons.zip" role="button">Geojson Files (ZIP)</a></p>
+    </div>
+  </div>
+</div> <!-- /container -->
+
+
+{% endblock %}
+
+
+
+	
+	
+

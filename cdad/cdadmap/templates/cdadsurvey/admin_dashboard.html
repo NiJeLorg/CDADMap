@@ -1,5 +1,6 @@
 {% extends 'cdadsurvey/base.html' %}
 {% load staticfiles %}
+{% load cdad_filters %}
 
 {% block css_block %}
 <link rel="stylesheet" type="text/css" href="{% static 'cdadmap/css/bootstrap-sortable.css' %}">
@@ -18,6 +19,12 @@
       <a class="btn btn-default btn-lg" href="/adminsurvey/" role="button">Create a New Survey</a>
       <a class="btn btn-default btn-lg" href="{% url 'registration_register' %}" role="button">Register a New User</a>
       <a class="btn btn-default btn-lg" href="{% url 'adminRegister' %}" role="button">Register an Administrator</a>
+      <a class="btn btn-default btn-lg" href="{% url 'downloaddata' %}" role="button">Export Survey Data</a>
+      {% if user|has_group:"superadmin" %}
+      <a class="btn btn-default btn-lg" href="{% url 'administerAccounts' %}" role="button">Administer Accounts</a>
+      {% else %}
+      wtf
+      {% endif %}
     </div>
   </div>
   <br />
@@ -32,6 +39,8 @@
 		      <th>Acronym</th>
 		      <th>User Account</th>
 		      <th>Survey Taker Name & Email</th>
+		      <th>Created</th>
+		      <th>Modified</th>
 		    </thead>
 		    <tbody>
 		      {% for survey in surveyObjects %}
@@ -40,7 +49,7 @@
 		            {% if survey.verified %}
 		              <p class="text-success"><strong>VERIFIED</strong> <small><a href="/verifysurvey/{{ survey.id }}/">Remove verification?</a></small></p>
 		            {% elif survey.removed %}
-		              <p class="text-danger"><strong>REMOVED</strong> <small><a href="/removesurvey/{{ survey.id }}/">Recover?</a></small></p>
+		              <p class="text-danger"><strong>REMOVED</strong> <small><a href="/removesurvey/{{ survey.id }}/">Recover?</a> <a href="/removesurveyyep/{{ survey.id }}/">Remove Permanantly? (Careful, this removes this survey immediately!)</a></small></p>
 		            {% elif survey.CDAD_MemberShip %}
 		              <a class="btn btn-warning" href="/verifysurvey/{{ survey.id }}/" role="button">Awaiting Verification</a>
 		            {% else %}
@@ -61,6 +70,8 @@
 		          <td>
 		            {{ survey.Survey_Taker_Name }} ({{ survey.Survey_Taker_Email_Address }})
 		          </td>
+		          <td>{{ survey.created }}</td>
+		          <td>{{ survey.modified }}</td>
 		        </tr>
 		      {% endfor %}
 		    </tbody>

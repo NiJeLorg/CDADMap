@@ -65,7 +65,7 @@
 
 			// add attributes to dropdown menu
 			// add text to the dropdown
-			dropdown.innerHTML = '<button id="dropdown-address-bar" class="btn btn-default dropdown-toggle leaflet-control-geocoder-dropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ADDRESS <span class="caret"></span></button><ul id="topBarSelection" class="dropdown-menu" role="menu" aria-labelledby="dropdown-address-bar"><li id="liAddress" class="menu-item chosen" role="presentation"><a role="menuitem" tabindex="-1" href="#">ADDRESS</a></li><li id="liKeyword" class="menu-item" role="presentation"><a role="menuitem" tabindex="-1" href="#">KEYWORD</a></li></ul>';
+			dropdown.innerHTML = '<button id="dropdown-address-bar" class="btn btn-default dropdown-toggle leaflet-control-geocoder-dropdown" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">KEYWORD <span class="caret"></span></button><ul id="topBarSelection" class="dropdown-menu" role="menu" aria-labelledby="dropdown-address-bar"><li id="liKeyword" class="menu-item chosen" role="presentation"><a role="menuitem" tabindex="-1" href="#">KEYWORD</a></li><li id="liAddress" class="menu-item" role="presentation"><a role="menuitem" tabindex="-1" href="#">ADDRESS</a></li></ul>';
 
 			this._map = map;
 			this._container = container;

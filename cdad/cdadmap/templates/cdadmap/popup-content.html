@@ -4,8 +4,8 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-sm-12">
-					<span class="popup-heading-text">Resources (<img src="{% static 'cdadmap/css/images/cdad-marker.png' %}" /> On Map)</span>
-					<button type="button" class="close right" id="popup-close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<span class="popup-heading-text">{{ locations.count }} Resource{{ locations.count|pluralize }} (<img src="{% static 'cdadmap/css/images/cdad-marker.png' %}" /> On Map)</span>
+					<a id="popup-expand" class="btn btn-default btn-xs pull-right" href="#" role="button">Contract this window</a>
 				</div>
 			</div>
 			<div class="row">
@@ -22,11 +22,12 @@
 								<div class="popup-title">
 									{{ location.Organization_Name }}
 								</div>
-								<p class="popup-address">{{ location.Address }} {{ location.Address2 }}<br />{{ location.City }}, {{ location.State }} {{ location.ZipCode }}</p>
-								{% if location.Lat != '0' %}
-									<img class="location-dot" src="{% static 'cdadmap/css/images/cdad-marker.png' %}" />
+								{% if location.Address %}
+									<p class="popup-address">{{ location.Address }}{% if location.Address2 %}<br />{{ location.Address2 }}{% endif %}<br />{{ location.City }}, {{ location.State }} {{ location.ZipCode }}</p>
+									{% if location.Lat != '0' %}
+										<img class="location-dot" src="{% static 'cdadmap/css/images/cdad-marker.png' %}" />
+									{% endif %}
 								{% endif %}
-
 							</div>
 						</div>
 				{% if forloop.counter|divisibleby:4 %}
@@ -83,10 +84,13 @@
 
 	{% endfor %}
 
-	// listener to close the popup
-	$( "#popup-close" ).click(function() {
+	// expand/contract lower tray
+	$('#popup-expand').click(function() {
 		$( ".popup-wrapper" ).toggleClass("popup-wrapper-open");
-	});	
+		$( ".map" ).toggleClass("map-popup-wrapper-open");
+		var text = $('#popup-expand').text();
+		$('#popup-expand').text(text == "Expand this window" ? "Contract this window" : "Expand this window");
+	});
 
 
 </script>

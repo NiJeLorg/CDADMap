@@ -1,0 +1,45 @@
+{% extends 'cdadsurvey/base.html' %}
+{% load staticfiles %}
+{% load bootstrap_tags %}
+
+{% block css_block %}
+{% endblock %}
+
+{% block head_js_block %}
+{% endblock %}
+	
+
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Remove User</h3>
+      	<h4>{{ userObject.username }} ({{ userObject.email }})</h4>
+        {% if userObject.surveys %}
+          <h4>Affiliated Survey(s)</h4>
+          <p>This user has the following survey(s) affiliated with their account. These must be attached to another user account in the system before you can delete this user account. To do that, click on the affiliated survey link, pick another user from list at the very top of the first survey page, click save and come back to this list. Remember that administrator account may have more than one survey attached to their accounts, while regular accounts can only have one survey per account.</p>
+          <ul>
+            {% for survey in userObject.surveys %}
+              <li><a href="/adminsurvey/{{ survey.id }}/">{{ survey.Organization_Name }}</a></li>
+            {% endfor %}
+          </ul>
+
+        {% else %}
+          <p>Are you sure you want to remove this user?</p>
+          <a class="btn btn-default" href="/administeraccounts/" role="button">No</a>
+          <a class="btn btn-danger" href="/removeuseryep/{{ userObject.id }}/" role="button">Yes</a>
+
+        {% endif %}
+    </div>
+  </div>
+</div> <!-- /container -->
+
+
+{% endblock %}
+
+
+
+	
+	
+

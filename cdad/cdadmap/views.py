@@ -1,5 +1,5 @@
 
-import sys,os,urllib,urllib2,json,re
+import sys,os,urllib,urllib2,json,re,zipfile,csv
 from django.shortcuts import render
 import operator
 from django.db.models import TextField
@@ -11,6 +11,11 @@ from django.forms.models import modelformset_factory
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.forms import UserCreationForm
 from django.core.mail import send_mail
+
+# path to media root for adding a zip archive
+from django.core.files import File
+from django.conf import settings
+MEDIA_ROOT = settings.MEDIA_ROOT
 
 # import all cdadmap models and forms
 from cdadmap.forms import *
@@ -35,9 +40,13 @@ def index(request):
 	#get locations 
 	locations = LocationPanel.objects.filter(**kwargs).order_by('Organization_Name')
 
-	# create Activity list
+
+
+	# create Activity list and strip out address if address is private
 	for location in locations:
 		location.Activity = location.Activity.strip('[]').replace("u'","").replace("'","").split(', ')
+		if location.KeepPrivate:
+			location.Address = ''
 
 	# figure out which Surveys have geojsons
 	surveys_with_maps_ids = []
@@ -62,7 +71,10 @@ def getLocationDataForCDOBCLAYER(request):
 	#get locations 
 	location = LocationPanel.objects.get(Organization_Name__exact=Organization_Name)
 	survey = SurveyPanel.objects.get(Organization_Name__exact=Organization_Name)
-	
+
+	if location.KeepPrivate:
+		location.Address = ''	
+
 	response['idlocation'] = location.idlocation
 	response['Organization_Name'] = location.Organization_Name
 	response['Organizaton_Acronym'] = survey.Organizaton_Acronym
@@ -74,7 +86,9 @@ def getLocationDataForCDOBCLAYER(request):
 	response['State'] = location.State
 	response['MailingAddress'] = location.MailingAddress
 	response['Activity'] = location.Activity
+	response['Activity_Other'] = location.Activity_Other
 	response['Organization_Description'] = survey.Organization_Description
+	response['Organization_Description_Other'] = survey.Organization_Description_Other
 	response['Activities_Services'] = survey.Activities_Services
 	response['Email'] = survey.Social_Email
 	if survey.Social_Phone_KeepPrivate:
@@ -84,6 +98,9 @@ def getLocationDataForCDOBCLAYER(request):
 	response['Social_website'] = survey.Social_website
 	response['Social_facebook'] = survey.Social_facebook
 	response['Social_Twitter'] = survey.Social_Twitter
+	response['youtube'] = survey.youtube
+	response['instagram'] = survey.instagram
+	response['nextdoor'] = survey.nextdoor
 
 	return JsonResponse(response)
    
@@ -188,6 +205,8 @@ def filterLocations(request):
 	# create Activity list
 	for location in locations:
 		location.Activity = location.Activity.strip('[]').replace("u'","").replace("'","").split(', ')
+		if location.KeepPrivate:
+			location.Address = ''
 
 	# figure out which Surveys have geojsons
 	surveys_with_maps_ids = []
@@ -852,10 +871,10 @@ def surveyfinish(request, id=None):
 	if request.method == 'POST':
 		# send email to the user that their record has been submitted and CDAD will verify
 		subject = "Survey Submitted to d[COM]munity!"
-		html_message = "Dear "+ surveyObject.Survey_Taker_Name +",<br /><br />Thank you for completing the survey and adding your organization, " + surveyObject.Organization_Name + " to the d[COM]munity system! A representative from CDAD will review your survey submission shortly, and you will receieve an email at this address when your information is avialable on the d[COM]munity webesite.<br /><br />Again, thank you!<br />Community Development Advocates of Detroit<br /><a href=\"http://cdad-online.org/\">http://cdad-online.org/</a>"
-		message = "Dear "+ surveyObject.Survey_Taker_Name +", Thank you for completing the survey and adding your organization, " + surveyObject.Organization_Name + " to the d[COM]munity system! A representative from CDAD will review your survey submission shortly, and you will receieve an email at this address when your information is avialable on the d[COM]munity webesite. Again, thank you! Community Development Advocates of Detroit, http://cdad-online.org/"
+		html_message = "Dear "+ surveyObject.Survey_Taker_Name +",<br /><br />Thank you for completing the survey and adding your organization, " + surveyObject.Organization_Name + " to the d[COM]munity system! A representative from CDAD will review your survey submission shortly, and you will receieve an email at this address when your information is avialable on the d[COM]munity webesite.<br /><br />Again, thank you for being a part of d[COM]munity and please contact us with any questions!<br /><br /><a href=\"http://cdad-online.org/\">Community Development Advocates of Detroit</a><br />440 Burroughs St. Suite 340<br />Detroit, MI 48202<br />313-832-4620<br />dcommunity@cdad-online.org"
+		message = "Dear "+ surveyObject.Survey_Taker_Name +", Thank you for completing the survey and adding your organization, " + surveyObject.Organization_Name + " to the d[COM]munity system! A representative from CDAD will review your survey submission shortly, and you will receieve an email at this address when your information is avialable on the d[COM]munity webesite. Again, thank you for being a part of d[COM]munity and please contact us with any questions! Community Development Advocates of Detroit, http://cdad-online.org/, 440 Burroughs St. Suite 340, Detroit, MI 48202; 313-832-4620; dcommunity@cdad-online.org"
 
-		#send_mail(subject, message, 'dcommunity.cdad@gmail.com', [surveyObject.Survey_Taker_Email_Address], fail_silently=True, html_message=html_message)
+		send_mail(subject, message, 'dcommunity@cdad-online.org', [surveyObject.Survey_Taker_Email_Address], fail_silently=True, html_message=html_message)
 
 		# send another email to CDAD superusers
 		group = Group.objects.get(name='superusers')
@@ -865,7 +884,7 @@ def surveyfinish(request, id=None):
 			html_message = "Dear "+ superuser.first_name +" "+ superuser.last_name +",<br /><br />The group, " + surveyObject.Organization_Name + " just submitted their completed survey to CDAD for their review. Please log in to the d[COM]munity system when you have a moment and verify their work.<br /><br />Thank you!"
 			message = "Dear "+ superuser.first_name +" "+ superuser.last_name +", The group, " + surveyObject.Organization_Name + " just submitted their completed survey to CDAD for their review. Please log in to the d[COM]munity system when you have a moment and verify their work. Thank you!"
 
-			#send_mail(subject, message, 'dcommunity.cdad@gmail.com', [superuser.email], fail_silently=True, html_message=html_message)
+			send_mail(subject, message, 'dcommunity@cdad-online.org', [superuser.email], fail_silently=True, html_message=html_message)
 
 		return HttpResponseRedirect('/dashboard/')
 	else:
@@ -877,13 +896,7 @@ def surveyfinish(request, id=None):
 @login_required
 def dashboard(request):
 
-	if request.user.groups.filter(name="superadmin").exists():
-		# pull all surveys and place them in a sortable table
-		surveyObjects = SurveyPanel.objects.all().order_by('Organization_Name')
-
-		return render(request, 'cdadsurvey/super_admin_dashboard.html', {'surveyObjects':surveyObjects})
-
-	elif request.user.groups.filter(name="superusers").exists():
+	if request.user.groups.filter(name="superadmin").exists() or request.user.groups.filter(name="superusers").exists():
 		# pull all surveys and place them in a sortable table
 		surveyObjects = SurveyPanel.objects.all().order_by('Organization_Name')
 
@@ -973,10 +986,10 @@ def verifysurvey(request, id=None):
 				if f.verified:
 					#email user
 					subject = "d[COM]munity Survey Verified!"
-					html_message = "Dear "+ surveyObject.Survey_Taker_Name +",<br /><br />The survey you submitted for " + surveyObject.Organization_Name + " to the d[COM]munity system had been verified by CDAD and will now appear on the d[COM]munity website. Please visit <a href=\"http://cdad-online.org/\">http://cdad-online.org/</a> and click on d[COM]munity to see your information displayed in our mapping tool. Again, thank you for your time and energy in completing our survey!<br /><br />Thank you!<br />Community Development Advocates of Detroit<br /><a href=\"http://cdad-online.org/\">http://cdad-online.org/</a>"
-					message = "Dear "+ surveyObject.Survey_Taker_Name +", The survey you submitted for " + surveyObject.Organization_Name + " to the d[COM]munity system had been verified by CDAD and will now appear on the d[COM]munity website. Please visit http://cdad-online.org/ and click on d[COM]munity to see your information displayed in our mapping tool. Again, thank you for your time and energy in completing our survey! Thank you! Community Development Advocates of Detroit, http://cdad-online.org/"
+					html_message = "Dear "+ surveyObject.Survey_Taker_Name +",<br /><br />The survey you submitted for " + surveyObject.Organization_Name + " to the d[COM]munity system has been verified by CDAD and will now appear on the <a href=\"http://cdad-online.org/dcommunity/\">d[COM]munity website</a>. Please visit <a href=\"http://cdad-online.org/dcommunity/\">http://cdad-online.org/dcommunity/</a> to see your information displayed in our mapping tool. Again, we appreciate your time and energy in completing our survey.<br /><br />Thank you for being a part of d[COM]munity and please contact us with any questions!<br /><br /><a href=\"http://cdad-online.org/\">Community Development Advocates of Detroit</a><br />440 Burroughs St. Suite 340<br />Detroit, MI 48202<br />313-832-4620<br />dcommunity@cdad-online.org"
+					message = "Dear "+ surveyObject.Survey_Taker_Name +", The survey you submitted for " + surveyObject.Organization_Name + " to the d[COM]munity system has been verified by CDAD and will now appear on the d[COM]munity website. Please visit http://cdad-online.org/dcommunity/ to see your information displayed in our mapping tool. Again, we appreciate your time and energy in completing our survey. Thank you for being a part of d[COM]munity and please contact us with any questions! Community Development Advocates of Detroit; http://cdad-online.org/; 440 Burroughs St. Suite 340, Detroit, MI 48202; 313-832-4620; dcommunity@cdad-online.org"
 
-					#send_mail(subject, message, 'dcommunity.cdad@gmail.com', [surveyObject.Survey_Taker_Email_Address], fail_silently=True, html_message=html_message)
+					send_mail(subject, message, 'dcommunity@cdad-online.org', [surveyObject.Survey_Taker_Email_Address], fail_silently=True, html_message=html_message)
 
 				return HttpResponseRedirect('/dashboard/')
 			else:
@@ -1033,6 +1046,34 @@ def removesurvey(request, id=None):
 
 
 @login_required
+def removesurveyyep(request, id=None):
+
+	if request.user.groups.filter(name="superusers").exists():
+		surveyObject = SurveyPanel.objects.get(id=id)
+		locations = LocationPanel.objects.filter(Organization_Name=surveyObject.Organization_Name)
+		meetings = MeetingPanel.objects.filter(Organization_Name=surveyObject.Organization_Name)
+		contacts = ContactPanel.objects.filter(Organization_Name=surveyObject.Organization_Name)
+
+		surveyObject.delete()
+
+		for location in locations:
+			location.delete()
+
+		for meeting in meetings:
+			meeting.delete()
+
+		for contact in contacts:
+			contact.delete()
+
+		return HttpResponseRedirect('/dashboard/')
+
+	else:
+		return HttpResponseRedirect('/dashboard/')
+
+
+
+
+@login_required
 def adminRegister(request):
 
 	# A HTTP POST?
@@ -1063,9 +1104,143 @@ def adminRegister(request):
 @login_required
 def administerAccounts(request, id=None):
 
-	#if request.user.groups.filter(name="superadmin").exists():
+	if request.user.groups.filter(name="superadmin").exists():
+		# pull all users
+		users = User.objects.all().exclude(username=request.user)
+
+		for user in users:
+			# look up related surveys
+			surveys = SurveyPanel.objects.filter(user=user)
+			user.surveys = surveys
+
+		return render(request, 'cdadsurvey/super_admin_user_admin.html', {'users': users})
+	else:
+
+		return HttpResponseRedirect('/dashboard/')
 
 
-	#else:
-	return HttpResponseRedirect('/dashboard/')
+@login_required
+def removeUsers(request, id=None):
 
+	if request.user.groups.filter(name="superadmin").exists():
+		userObject = User.objects.get(id=id)
+
+		surveys = SurveyPanel.objects.filter(user=userObject)
+		userObject.surveys = surveys
+
+		return render(request, 'cdadsurvey/removeuser.html', {'userObject': userObject})
+
+	else:
+		return HttpResponseRedirect('/dashboard/')
+
+
+def removeUsersYep(request, id=None):
+
+	if request.user.groups.filter(name="superadmin").exists():
+		userObject = User.objects.get(id=id)
+		surveys = SurveyPanel.objects.filter(user=userObject)
+		if surveys:
+			# don't delete account if survey's exist for this user
+			return HttpResponseRedirect('/administeraccounts/')
+		elif userObject.groups.filter(name="superadmin").exists():
+			#don't delete if superadmin account
+			return HttpResponseRedirect('/administeraccounts/')
+		else:
+			userObject.delete()
+			return HttpResponseRedirect('/administeraccounts/')
+
+	else:
+		return HttpResponseRedirect('/dashboard/')
+
+
+def downloaddata(request):
+
+	#folder for zip file
+	folder = "/downloads/"
+	filename = "geojsons.zip"
+
+	if not os.path.exists(MEDIA_ROOT + folder):
+		os.makedirs(MEDIA_ROOT + folder)
+
+	#create zip file of geojsons
+	with zipfile.ZipFile(MEDIA_ROOT + folder + filename, "w", allowZip64=True) as myzip:
+
+		surveys = SurveyPanel.objects.all()
+		for survey in surveys:		
+			if survey.MapDissolve:
+				# temporarily stick a file at the media root
+				filename = str(survey.Organization_Name).replace(" ", "_")
+				with open(MEDIA_ROOT + "/" + filename + ".geojson", "wb") as myfile:
+					myfile.write(survey.MapDissolve)
+
+				myzip.write(MEDIA_ROOT + '/' + filename + ".geojson", "geojsons/" + filename + ".geojson")
+
+
+				os.remove(MEDIA_ROOT + "/" + filename + ".geojson")
+
+	#create csv file
+	with open(MEDIA_ROOT + folder + 'survey_data.csv', 'wb') as f:
+		writer = csv.writer(f, quoting=csv.QUOTE_ALL)
+		#header row
+		headerRow = ['id','user','verified','removed', 'Organization_Name', 'Organizaton_Acronym', 'Survey_Taker_Name', 'Survey_Taker_Email_Address', 'Survey_Taker_Email_AddToList', 'Organization_Description', 'Year_Founded', 'Organization_Logo_Image', 'Organizational_Mission', 'Social_Email', 'AddSocial_Email', 'Social_Phone', 'Social_Phone_KeepPrivate', 'Social_facebook', 'Social_website', 'Social_Twitter', 'Social_other_media', 'Service_Area_Description', 'Service_Area_Geographic_Boundaries', 'CouncilDistricts', 'organization_structured', 'governance_board', 'No_of_board_members', 'staff_members', 'Activities_Services', 'Service_Population', 'Languages', 'Languages_Other', 'accomplish_one_title', 'accomplish_one_description', 'accomplish_two_title', 'accomplish_two_description', 'accomplish_three_title', 'accomplish_three_description', 'accomplish_four_title', 'accomplish_four_description', 'accomplish_five_title', 'accomplish_five_description', 'CDAD_MemberShip', 'CDAD_Services', 'CDAD_Services_Other', 'CDAD_Comments', 'CDAD_FeedBack', 'partners', 'created', 'modified']
+		writer.writerow(headerRow)
+		surveys = SurveyPanel.objects.all()
+		for survey in surveys:
+			#empty list for a row
+			row = ['','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','']
+			row[0] = survey.id
+			row[1] = survey.user
+			row[2] = survey.verified
+			row[3] = survey.removed
+			row[4] = survey.Organization_Name
+			row[5] = survey.Organizaton_Acronym
+			row[6] = survey.Survey_Taker_Name
+			row[7] = survey.Survey_Taker_Email_Address
+			row[8] = survey.Survey_Taker_Email_AddToList
+			row[9] = survey.Organization_Description
+			row[10] = survey.Year_Founded
+			row[11] = survey.Organization_Logo_Image
+			row[12] = survey.Organizational_Mission
+			row[13] = survey.Social_Email
+			row[14] = survey.AddSocial_Email
+			row[15] = survey.Social_Phone
+			row[16] = survey.Social_Phone_KeepPrivate
+			row[17] = survey.Social_facebook
+			row[18] = survey.Social_website
+			row[19] = survey.Social_Twitter
+			row[20] = survey.Social_other_media
+			row[21] = survey.Service_Area_Description
+			row[22] = survey.Service_Area_Geographic_Boundaries
+			row[23] = survey.CouncilDistricts
+			row[24] = survey.organization_structured
+			row[25] = survey.governance_board
+			row[26] = survey.No_of_board_members
+			row[27] = survey.staff_members
+			row[28] = survey.Activities_Services
+			row[29] = survey.Service_Population
+			row[30] = survey.Languages
+			row[31] = survey.Languages_Other
+			row[32] = survey.accomplish_one_title
+			row[33] = survey.accomplish_one_description
+			row[34] = survey.accomplish_two_title
+			row[35] = survey.accomplish_two_description
+			row[36] = survey.accomplish_three_title
+			row[37] = survey.accomplish_three_description
+			row[38] = survey.accomplish_four_title
+			row[39] = survey.accomplish_four_description
+			row[40] = survey.accomplish_five_title
+			row[41] = survey.accomplish_five_description
+			row[42] = survey.CDAD_MemberShip
+			row[43] = survey.CDAD_Services
+			row[44] = survey.CDAD_Services_Other
+			row[45] = survey.CDAD_Comments
+			row[46] = survey.CDAD_FeedBack
+			row[47] = survey.partners
+			row[48] = survey.created
+			row[49] = survey.modified
+
+			writer.writerow(row)
+
+
+
+	return render(request, 'cdadsurvey/downloaddata.html', {})

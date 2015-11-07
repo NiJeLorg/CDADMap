@@ -19,14 +19,14 @@
 				  	  {% endif %}
 					  <div class="info-modal-titles">ORGANIZATIONAL CONTACT</div>
 					  {% if location.Address %}
-					  	<p class="info-modal-content">{{ location.Address }} {% if location.Address2 %}<br />{{ location.Address2 }}{% endif %}<br />{{ location.City }}, {{ location.State }} {{ location.ZipCode }}</p>
+					  	<p class="info-modal-content"><span class='glyphicon glyphicon-map-marker'></span> <a href="https://www.google.com/maps/place/{{ location.Address }}+{{ location.City }}+{{ location.State }}+{{ location.ZipCode }}" target="_blank"> {{ location.Address }} {% if location.Address2 %}<br />{{ location.Address2 }}{% endif %}<br />{{ location.City }}, {{ location.State }} {{ location.ZipCode }}</p></a>
 					  {% endif %}
-					  <p class="info-modal-content"><a href="mailto:{{ location.getSurveyObject.Social_Email }}">{{ location.getSurveyObject.Social_Email }}</a></p>
+					  <p class="info-modal-content"><span class='glyphicon glyphicon-envelope'></span> <a href="mailto:{{ location.getSurveyObject.Social_Email }}">{{ location.getSurveyObject.Social_Email }}</a></p>
 					  {% if location.getSurveyObject.Social_Phone_KeepPrivate %}
 					  {% else %}
-						  <p class="info-modal-content">{{ location.getSurveyObject.Social_Phone }}</p>
+						  <p class="info-modal-content"><span class='glyphicon glyphicon-phone'></span> {{ location.getSurveyObject.Social_Phone }}</p>
 					  {% endif %}
-					  <p class="info-modal-content"><a href="{{ location.getSurveyObject.Social_website }}" target="_blank">{{ location.getSurveyObject.Social_website }}</a></p>
+					  <p class="info-modal-content"><span class='glyphicon glyphicon-link'></span> <a href="{{ location.getSurveyObject.Social_website }}" target="_blank">{{ location.getSurveyObject.Social_website }}</a></p>
 					  <p class="info-modal-content">
 					  	{% if location.getSurveyObject.Social_Twitter %}
 						  	<a href="{{ location.getSurveyObject.Social_Twitter }}" target="_blank"><span class='twitter-logo'></span></a>
@@ -34,30 +34,50 @@
 					  	{% if location.getSurveyObject.Social_facebook %}
 						  	<a href="{{ location.getSurveyObject.Social_facebook }}" target="_blank"><span class='facebook-logo'></span></a>
 					  	{% endif %}
+					  	{% if location.getSurveyObject.youtube %}
+						  	<a href="{{ location.getSurveyObject.youtube }}" target="_blank"><span class='youtube-logo'></span></a>
+					  	{% endif %}
+					  	{% if location.getSurveyObject.instagram %}
+						  	<a href="{{ location.getSurveyObject.instagram }}" target="_blank"><span class='instagram-logo'></span></a>
+					  	{% endif %}
+					  	{% if location.getSurveyObject.nextdoor %}
+						  	<a href="{{ location.getSurveyObject.nextdoor }}" target="_blank"><span class='nextdoor-logo'></span></a>
+					  	{% endif %}
 					  </p>
 				  </div>
 				  <div class="col-sm-3">
 					  <div class="info-modal-titles">ORGANIZATION TYPE</div>
 					  <p class="info-modal-content">
 					  	{% for Organization_Description in location.getSurveyObject.Organization_Description %}
-					  		{% if Organization_Description != 'undefined' %}
+					  		{% if Organization_Description != 'undefined' and Organization_Description != 'Other' %}
 						    	<span class="label label-filter label-orgtype">{{ Organization_Description }}</span>
 					  		{% endif %}					  	
 					  	{% endfor %}
+					  	{% if location.getSurveyObject.Organization_Description_Other %}
+					  		<span class="label label-filter label-orgtype">{{ location.getSurveyObject.Organization_Description_Other|truncatechars:50 }}</span>
+					  	{% endif %}
 					  </p>				  	
 					  <div class="info-modal-titles">ACTIVITES & SERVICES AT THIS LOCATION</div>
 					  <p class="info-modal-content">
 					  	{% for activity in location.Activity %}
-					  		{% if activity != 'undefined' %}
+					  		{% if activity != 'undefined' and activity != 'Other' %}
 						    	<span class="label label-filter label-activity">{{ activity }}</span>
 					  		{% endif %}
 						{% endfor %}
+						{% if location.Activity_Other %}
+						    <span class="label label-filter label-activity">{{ location.Activity_Other|truncatechars:50 }}</span>
+						{% endif %}
 					  </p>				  	
 					  <div class="info-modal-titles">SERVICE AREA</div>
 					  <p class="info-modal-content">
 					  	{% for Service_Area_Description in location.getSurveyObject.Service_Area_Description %}
 					  		{% if Service_Area_Description != 'undefined' %}
 						    	<span class="label label-filter label-servicearea">{{ Service_Area_Description }}</span>
+					  		{% endif %}					  	
+					  	{% endfor %}
+					  	{% for CouncilDistricts in location.getSurveyObject.CouncilDistricts %}
+					  		{% if CouncilDistricts != 'undefined' and CouncilDistricts != 'Citywide' %}
+						    	<span class="label label-filter label-servicearea">{{ CouncilDistricts }}</span>
 					  		{% endif %}					  	
 					  	{% endfor %}
 					  </p>				  	
@@ -84,10 +104,13 @@
 					  <div class="info-modal-titles">SERVICE POPULATION</div>
 					  <p class="info-modal-content">
 					  	{% for Service_Population in location.getSurveyObject.Service_Population %}
-					  		{% if Service_Population != 'undefined' %}
+					  		{% if Service_Population != 'undefined' and Service_Population != 'Other' %}
 						    	<span class="label label-filter label-servicepop">{{ Service_Population }}</span>
 					  		{% endif %}					  	
 					  	{% endfor %}
+					  	{% if location.getSurveyObject.Service_Population_Other %}
+						    <span class="label label-filter label-servicepop">{{ location.getSurveyObject.Service_Population_Other|truncatechars:50 }}</span>
+					  	{% endif %}
 					  </p>
 				  </div>
 				</div>
@@ -336,7 +359,8 @@
 
 <script type="text/javascript">
 	// globally define maps
-	var maps = [];			
+	var maps = [];
+	var bounds;			
 	
 	// modal maps: loop through each location and create a map for each on the modal
 	$().ready(new function(){
@@ -363,12 +387,25 @@
 
 		// define mini-maps array
 		{% for location in locations %}
-			{% if location.Lat != "0" %}
+			{% if location.getSurveyObject.MapDissolve and location.Lat != "0" %}
+				var type = 'locationAndSA';
+			{% elif location.getSurveyObject.MapDissolve %}
+				var type = 'SA';
+			{% elif location.Lat != "0" %}
+				var type = 'location';
+			{% else %}
+				var type = 'none';
+			{% endif %}	
+
+			{% if location.getSurveyObject.MapDissolve %}
 				var mapid = 'map' + {{ forloop.counter0 }};
-			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, {{ location.Lat }}, {{ location.Lon }}, 16);
+			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, 42.38, -83.1, 9, {{ location.getSurveyObject.id  }}, type);				
+			{% elif location.Lat != "0" %}
+				var mapid = 'map' + {{ forloop.counter0 }};
+			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, {{ location.Lat }}, {{ location.Lon }}, 16, {{ location.getSurveyObject.id  }}, type);
 		    {% else %}
 				var mapid = 'map' + {{ forloop.counter0 }};
-			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, 42.38, -83.1, 9);
+			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, 42.38, -83.1, 9, -99, type);
 		   	{% endif %}				
 		{% endfor %}
 		
@@ -378,6 +415,9 @@
 					// use invalidate size to make maps show appropriately
 					setTimeout(function() {
 						maps[{{ forloop.counter0 }}].map.invalidateSize();
+						// fit bounds
+						console.log(bounds);
+						maps[{{ forloop.counter0 }}].map.fitBounds(bounds);
 						// update modal title
 						if ($( "#modalItem{{ forloop.counter0 }}").hasClass('next') || $( "#modalItem{{ forloop.counter0 }}").hasClass('prev')) {
 							{% if location.getSurveyObject.Organizaton_Acronym %}
@@ -390,6 +430,29 @@
 						
 					}, 10);				
 			{% endfor %}
-		});		
+		});
+
+		$('#orgModal').on('shown.bs.modal', function (e) {
+			{% for location in locations %}				
+					// use invalidate size to make maps show appropriately
+					setTimeout(function() {
+						maps[{{ forloop.counter0 }}].map.invalidateSize();
+						// fit bounds
+						console.log(bounds);
+						maps[{{ forloop.counter0 }}].map.fitBounds(bounds);
+						// update modal title
+						if ($( "#modalItem{{ forloop.counter0 }}").hasClass('next') || $( "#modalItem{{ forloop.counter0 }}").hasClass('prev')) {
+							{% if location.getSurveyObject.Organizaton_Acronym %}
+								var Organizaton_Acronym = "({{ location.getSurveyObject.Organizaton_Acronym}})";
+							{% else %}
+								var Organizaton_Acronym = "";								
+							{% endif %}
+							$( "#titleOrgName" ).html('{{ location.Organization_Name }} ' + Organizaton_Acronym);			
+						}
+						
+					}, 10);				
+			{% endfor %}			
+		});
+
 	});
 </script>

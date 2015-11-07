@@ -81,9 +81,26 @@
 			}
 			// set cookie on page load -- remove only if user elects to remove
 			$.cookie('noIntroSurvey', 'noIntroSurvey', { expires: 365, path: '/' });
+
+			// hide other field if not checked
+			if (!$('#id_Organization_Description_7').is(':checked')) {
+				$('#div_id_Organization_Description_Other').addClass('hidden');
+			}
+
+			$('#id_Organization_Description_7').change(function() {
+				if ($(this).is(':checked')) {
+					$('#div_id_Organization_Description_Other').removeClass('hidden');
+				} else {
+					$('#div_id_Organization_Description_Other').addClass('hidden');
+					// remove text from field
+					$('#id_Organization_Description_Other').val('');
+				}				
+			});
+
 		});
 	</script>
 {% endblock %}
+
 
 
 

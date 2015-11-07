@@ -37,13 +37,17 @@
 {% block js_block %}
 <script type="text/javascript">
 	$( document ).ready(function() {
-		$('#div_id_CDAD_Services_Other').addClass('hidden');
+		if (!$('#id_CDAD_Services_6').is(':checked')) {
+			$('#div_id_CDAD_Services_Other').addClass('hidden');
+		}
 
 		$('#id_CDAD_Services_6').change(function() {
 			if ($(this).is(':checked')) {
 				$('#div_id_CDAD_Services_Other').removeClass('hidden');
 			} else {
 				$('#div_id_CDAD_Services_Other').addClass('hidden');
+				// remove text from field
+				$('#id_CDAD_Services_Other').val('');
 			}
 			
 		});

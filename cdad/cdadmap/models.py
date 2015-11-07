@@ -79,6 +79,7 @@ class SurveyPanel(models.Model):
     Survey_Taker_Email_Address = models.TextField()
     Survey_Taker_Email_AddToList = models.TextField()
     Organization_Description = models.TextField()
+    Organization_Description_Other = models.CharField(max_length=255, default='', null=True, blank=True)
     Year_Founded = models.TextField()
     Organization_Logo = models.TextField()
     Organization_Logo_Image = models.ImageField(upload_to="img/%Y_%m_%d_%h_%M_%s", null=True, blank=True)
@@ -90,6 +91,9 @@ class SurveyPanel(models.Model):
     Social_facebook = models.URLField(max_length=2000, null=True, blank=True)
     Social_website = models.URLField(max_length=2000, null=True, blank=True)
     Social_Twitter = models.URLField(max_length=2000, null=True, blank=True)
+    youtube = models.URLField(max_length=2000, null=True, blank=True)
+    instagram = models.URLField(max_length=2000, null=True, blank=True)
+    nextdoor = models.URLField(max_length=2000, null=True, blank=True)
     Social_other_media = models.TextField()
     Service_Area_Description = models.TextField()
     Service_Area_Geographic_Boundaries = models.TextField()
@@ -101,6 +105,7 @@ class SurveyPanel(models.Model):
     staff_members = models.TextField()
     Activities_Services = models.TextField()
     Service_Population = models.TextField()
+    Service_Population_Other = models.CharField(max_length=255, default='', null=True, blank=True)
     Languages = models.TextField()
     Languages_Other = models.TextField(null=True, blank=True)
     accomplish_one_title = models.TextField()
@@ -115,11 +120,13 @@ class SurveyPanel(models.Model):
     accomplish_five_description = models.TextField(null=True, blank=True)
     CDAD_MemberShip = models.TextField()
     CDAD_Services = models.TextField()
-    CDAD_Services_Other = models.TextField(null=True, blank=True)
+    CDAD_Services_Other = models.CharField(max_length=255, default='', null=True, blank=True)
     CDAD_Comments = models.TextField(null=True, blank=True)
     CDAD_FeedBack = models.TextField(null=True, blank=True)
     partners = models.ManyToManyField(Partners, null=True, blank=True)
-        
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True) 
+
     class Meta:
         db_table = 'surveyPanel'
 
@@ -278,6 +285,7 @@ class LocationPanel(models.Model):
     MailingAddress = models.BooleanField(default=False)
     KeepPrivate = models.BooleanField(default=False)
     Activity = models.TextField()
+    Activity_Other = models.CharField(max_length=255, default='', null=True, blank=True)
     Lat = models.CharField(max_length=255, null=False, blank=True, default='')
     Lon = models.CharField(max_length=255, null=False, blank=True, default='')
     Organization_Name_SurveyPanel_FK = models.ForeignKey(SurveyPanel, to_field='Organization_Name', null=True)
