@@ -438,7 +438,7 @@
 					// use invalidate size to make maps show appropriately
 					setTimeout(function() {
 						maps[{{ forloop.counter0 }}].map.invalidateSize();
-						//maps[{{ forloop.counter0 }}].map.fitBounds(bounds[{{ forloop.counter0 }}]);
+						maps[{{ forloop.counter0 }}].map.fitBounds(bounds[{{ forloop.counter0 }}]);
 						// update modal title
 						if ($( "#modalItem{{ forloop.counter0 }}").hasClass('next') || $( "#modalItem{{ forloop.counter0 }}").hasClass('prev')) {
 							{% if location.getSurveyObject.Organizaton_Acronym %}
