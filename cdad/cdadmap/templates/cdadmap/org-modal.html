@@ -404,7 +404,7 @@
 
 			{% if location.getSurveyObject.MapDissolve %}
 			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, 42.38, -83.1, 9, {{ location.getSurveyObject.id  }}, type, numid);				
-			{% elif location.Lat != "0" %}
+			{% elif location.Address and location.Lat and location.Lat != "0" %}
 			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, {{ location.Lat }}, {{ location.Lon }}, 16, {{ location.getSurveyObject.id  }}, type, numid);
 		    {% else %}
 			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, 42.38, -83.1, 9, -99, type, numid);
