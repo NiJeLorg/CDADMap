@@ -412,7 +412,8 @@
 		{% endfor %}
 		
 		// ensure thumbnail maps render in dropdown				
-		$(".carousel-control").click(function() {				
+		$(".carousel-control").click(function() {
+			console.log(this);				
 			{% for location in locations %}	
 				var modalIdNext = "";
 				var modalIdPrev = "";	
