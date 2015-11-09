@@ -385,6 +385,10 @@
 			var modalHeightString = modalHeightValue + 'px';
 			$(".modal-backdrop").css('height', modalHeightString);
 
+			// update the map for the 
+			var countId = $('.carousel-inner > .active').attr('id');
+			console.log(countId);
+
 		});
 
 		// define mini-maps array
@@ -411,7 +415,7 @@
 		   	{% endif %}				
 		{% endfor %}
 		
-		// ensure thumbnail maps render in dropdown				
+
 		$(".carousel-control").click(function() {
 			console.log(this);				
 			{% for location in locations %}	
