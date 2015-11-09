@@ -52,17 +52,21 @@ function CDADModalMap(mapid, lat, lon, zoom, surveyid, type, numid) {
 		    style: CDADModalMap.getStyleColorFor_DETLAYER,
 		}).addTo(this.map);
 
-		this.DETLAYER = omnivore.topojson(detlayer, null, this.DETLAYER_style);
+		this.DETLAYER = omnivore.topojson(detlayer, null, this.DETLAYER_style)
+			.on('ready', function() {
+				bounds[numid] = this.DETLAYER.getBounds();
+				this.map.fitBounds(bounds[numid]);
+		    });
 
 		// set center and zoom
-		this.map.setView([lat,lon], zoom);
+		//this.map.setView([lat,lon], zoom);
 
 		//var southWest = L.latLng(42.257746, -83.295593);
 		//var northEast = L.latLng(42.489061, -82.853394);
 		//bounds[numid] = L.latLngBounds(southWest, northEast);
-		console.log(this.map.getZoom());
+		//console.log(this.map.getZoom());
 
-		bounds[numid] = this.map.getBounds();
+		//bounds[numid] = this.map.getBounds();
 
 
 	}
