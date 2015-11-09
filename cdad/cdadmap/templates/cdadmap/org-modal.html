@@ -385,9 +385,28 @@
 			var modalHeightString = modalHeightValue + 'px';
 			$(".modal-backdrop").css('height', modalHeightString);
 
-			// update the map for the 
-			var countId = $('.carousel-inner > .active').attr('id');
-			console.log(countId);
+			// update the map for the active layer
+			var modalId = $('.carousel-inner > .active').attr('id');
+			countId = modalId.replace("modalItem", "");
+			countId = parseInt(countId);
+
+			maps[countId].map.invalidateSize();
+			// fit bounds
+			maps[countId].map.fitBounds(bounds[countId]);
+
+			// update title
+			{% for location in locations %}	
+				var counter = {{ forloop.counter0 }};
+				if (counter == countId) {
+					{% if location.getSurveyObject.Organizaton_Acronym %}
+						var Organizaton_Acronym = "({{ location.getSurveyObject.Organizaton_Acronym}})";
+					{% else %}
+						var Organizaton_Acronym = "";								
+					{% endif %}
+					$( "#titleOrgName" ).html('{{ location.Organization_Name }} ' + Organizaton_Acronym);	
+				}
+			{% endfor %}
+
 
 		});
 
@@ -416,59 +435,30 @@
 		{% endfor %}
 		
 
-		$(".carousel-control").click(function() {
-			console.log(this);				
-			{% for location in locations %}	
-				var modalIdNext = "";
-				var modalIdPrev = "";	
-				var countId = "{{ forloop.counter0 }}";
-				if ($( "#modalItem{{ forloop.counter0 }}" ).hasClass('next')) {
-					modalIdNext = "{{ forloop.counter0 }}";
-				} 
-				if ($( "#modalItem{{ forloop.counter0 }}" ).hasClass('prev')) {
-					modalIdPrev = "{{ forloop.counter0 }}";
-				} 
-
-				if (countId == modalIdNext || countId == modalIdPrev) {
-					// use invalidate size to make maps show appropriately
-					setTimeout(function() {
-						maps[{{ forloop.counter0 }}].map.invalidateSize();
-						// fit bounds
-						maps[{{ forloop.counter0 }}].map.fitBounds(bounds[{{ forloop.counter0 }}]);
-						// update modal title
-						if ($( "#modalItem{{ forloop.counter0 }}").hasClass('next') || $( "#modalItem{{ forloop.counter0 }}").hasClass('prev')) {
-							{% if location.getSurveyObject.Organizaton_Acronym %}
-								var Organizaton_Acronym = "({{ location.getSurveyObject.Organizaton_Acronym}})";
-							{% else %}
-								var Organizaton_Acronym = "";								
-							{% endif %}
-							$( "#titleOrgName" ).html('{{ location.Organization_Name }} ' + Organizaton_Acronym);			
-						}
-						
-					}, 100);						
-				}
-	
-			{% endfor %}
-		});
-
 		$('#orgModal').on('shown.bs.modal', function (e) {
-			{% for location in locations %}				
-					// use invalidate size to make maps show appropriately
-					setTimeout(function() {
-						maps[{{ forloop.counter0 }}].map.invalidateSize();
-						maps[{{ forloop.counter0 }}].map.fitBounds(bounds[{{ forloop.counter0 }}]);
-						// update modal title
-						if ($( "#modalItem{{ forloop.counter0 }}").hasClass('next') || $( "#modalItem{{ forloop.counter0 }}").hasClass('prev')) {
-							{% if location.getSurveyObject.Organizaton_Acronym %}
-								var Organizaton_Acronym = "({{ location.getSurveyObject.Organizaton_Acronym}})";
-							{% else %}
-								var Organizaton_Acronym = "";								
-							{% endif %}
-							$( "#titleOrgName" ).html('{{ location.Organization_Name }} ' + Organizaton_Acronym);			
-						}
-						
-					}, 100);				
-			{% endfor %}			
+			// update the map for the active layer
+			var modalId = $('.carousel-inner > .active').attr('id');
+			countId = modalId.replace("modalItem", "");
+			countId = parseInt(countId);
+
+			maps[countId].map.invalidateSize();
+			// fit bounds
+			maps[countId].map.fitBounds(bounds[countId]);
+
+			// update title
+			{% for location in locations %}	
+				var counter = {{ forloop.counter0 }};
+				if (counter == countId) {
+					{% if location.getSurveyObject.Organizaton_Acronym %}
+						var Organizaton_Acronym = "({{ location.getSurveyObject.Organizaton_Acronym}})";
+					{% else %}
+						var Organizaton_Acronym = "";								
+					{% endif %}
+					$( "#titleOrgName" ).html('{{ location.Organization_Name }} ' + Organizaton_Acronym);	
+				}
+			{% endfor %}
+
+		
 		});
 
 	});
