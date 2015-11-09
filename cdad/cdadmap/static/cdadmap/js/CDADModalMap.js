@@ -48,15 +48,15 @@ function CDADModalMap(mapid, lat, lon, zoom, surveyid, type, numid) {
 		bounds[numid] = this.map.getBounds();
 
 	} else {
+		var sel = this;
 		this.DETLAYER_style = L.geoJson(null, {
 		    style: CDADModalMap.getStyleColorFor_DETLAYER,
 		}).addTo(this.map);
 
 		this.DETLAYER = omnivore.topojson(detlayer, null, this.DETLAYER_style)
 			.on('ready', function() {
-				console.log(this.getBounds());
-				//bounds[numid] = .getBounds();
-				//this.map.fitBounds(bounds[numid]);
+				bounds[numid] = this.getBounds();
+				sel.map.fitBounds(bounds[numid]);
 		    });
 
 		// set center and zoom
