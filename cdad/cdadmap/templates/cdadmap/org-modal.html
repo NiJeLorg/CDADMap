@@ -413,10 +413,21 @@
 		
 		// ensure thumbnail maps render in dropdown				
 		$(".carousel-control").click(function() {				
-			{% for location in locations %}				
+			{% for location in locations %}	
+				var modalIdNext = "";
+				var modalIdPrev = "";	
+				var countId = "{{ forloop.counter0 }}";
+				if ($( "#modalItem{{ forloop.counter0 }}" ).hasClass('next')) {
+					modalIdNext = "{{ forloop.counter0 }}";
+				} 
+				if ($( "#modalItem{{ forloop.counter0 }}" ).hasClass('prev')) {
+					modalIdPrev = "{{ forloop.counter0 }}";
+				} 
+
+				if (countId == modalIdNext || countId == modalIdPrev) {
 					// use invalidate size to make maps show appropriately
 					setTimeout(function() {
-						//maps[{{ forloop.counter0 }}].map.invalidateSize();
+						maps[{{ forloop.counter0 }}].map.invalidateSize();
 						// fit bounds
 						maps[{{ forloop.counter0 }}].map.fitBounds(bounds[{{ forloop.counter0 }}]);
 						// update modal title
@@ -429,7 +440,9 @@
 							$( "#titleOrgName" ).html('{{ location.Organization_Name }} ' + Organizaton_Acronym);			
 						}
 						
-					}, 100);				
+					}, 100);						
+				}
+	
 			{% endfor %}
 		});
 
