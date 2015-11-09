@@ -392,11 +392,11 @@
 			var numid = {{ forloop.counter0 }};
 			var mapid = 'map' + {{ forloop.counter0 }};
 
-			{% if location.getSurveyObject.MapDissolve and location.Lat != "0" %}
+			{% if location.getSurveyObject.MapDissolve and location.Address and location.Lat and location.Lat != "0" %}
 				var type = 'locationAndSA';
 			{% elif location.getSurveyObject.MapDissolve %}
 				var type = 'SA';
-			{% elif location.Lat != "0" %}
+			{% elif location.Address and location.Lat and location.Lat != "0" %}
 				var type = 'location';
 			{% else %}
 				var type = 'none';
