@@ -59,17 +59,6 @@ function CDADModalMap(mapid, lat, lon, zoom, surveyid, type, numid) {
 				sel.map.fitBounds(bounds[numid]);
 		    });
 
-		// set center and zoom
-		//this.map.setView([lat,lon], zoom);
-
-		//var southWest = L.latLng(42.257746, -83.295593);
-		//var northEast = L.latLng(42.489061, -82.853394);
-		//bounds[numid] = L.latLngBounds(southWest, northEast);
-		//console.log(this.map.getZoom());
-
-		//bounds[numid] = this.map.getBounds();
-
-
 	}
 		
 }
