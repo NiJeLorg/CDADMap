@@ -54,8 +54,9 @@ function CDADModalMap(mapid, lat, lon, zoom, surveyid, type, numid) {
 
 		this.DETLAYER = omnivore.topojson(detlayer, null, this.DETLAYER_style)
 			.on('ready', function() {
-				bounds[numid] = this.DETLAYER.getBounds();
-				this.map.fitBounds(bounds[numid]);
+				console.log(this);
+				//bounds[numid] = .getBounds();
+				//this.map.fitBounds(bounds[numid]);
 		    });
 
 		// set center and zoom
