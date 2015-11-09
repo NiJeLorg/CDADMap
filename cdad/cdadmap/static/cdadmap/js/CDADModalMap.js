@@ -52,8 +52,10 @@ function CDADModalMap(mapid, lat, lon, zoom, surveyid, type, numid) {
 		CDADModalMap.add_LOCATION(this, numid);
 
 		bounds[numid] = this.map.getBounds();
+		this.map.fitBounds(bounds[numid]);
 
 	} else {
+		var sel = this;
 		// set center and zoom
 		this.map.setView([lat,lon], zoom);
 
@@ -64,6 +66,7 @@ function CDADModalMap(mapid, lat, lon, zoom, surveyid, type, numid) {
 		this.DETLAYER = omnivore.topojson(detlayer, null, this.DETLAYER_style)
 			.on('ready', function() {
 				bounds[numid] = this.getBounds();
+				sel.map.fitBounds(bounds[numid]);
 		    });
 
 	}
@@ -102,6 +105,7 @@ CDADModalMap.add_SA = function(sel, surveyid, numid) {
 
 			    // fit map to bounds of layer
 				bounds[numid] = sel.CDOBCLAYER.getBounds();
+				sel.map.fitBounds(bounds[numid]);
 
 			} 
         }
