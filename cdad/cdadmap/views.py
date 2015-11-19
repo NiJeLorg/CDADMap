@@ -238,6 +238,8 @@ def surveyPage1(request, id=None):
 
 	if id:
 		surveyObject = SurveyPanel.objects.get(id=id)
+		# get survey name 
+		previous_name = surveyObject.Organization_Name
 		# check for non superusers and redirect to their dashboard if the user doesn't own the object
 		if request.user.groups.filter(name="superusers").exists():
 			empty = {}
@@ -257,12 +259,41 @@ def surveyPage1(request, id=None):
 		if form.is_valid():
 			# Save the new data to the database.
 			f = form.save(commit=False)
+
+			# if records already exist, loop through them and change the organization name
+			if id:
+				lookupLocations = LocationPanel.objects.filter(Organization_Name=previous_name)
+				for rec in lookupLocations:
+					rec.Organization_Name = f.Organization_Name
+					rec.Organization_Name_SurveyPanel_FK = None
+					rec.save()
+
+				lookupContacts = ContactPanel.objects.filter(Organization_Name=previous_name)
+				for rec in lookupContacts:
+					rec.Organization_Name = f.Organization_Name
+					rec.save()
+
+				lookupMeetings = MeetingPanel.objects.filter(Organization_Name=previous_name)
+				for rec in lookupMeetings:
+					rec.Organization_Name = f.Organization_Name
+					rec.save()
+
 			# add current user
 			f.user = request.user
 			# mark as draft
 			f.verified = False
 			f.save()
+
 			lookupObject = SurveyPanel.objects.get(Organization_Name=f.Organization_Name)
+
+			# add FK relationship back to survey from location if these exist
+			if id:
+				lookupLocations = LocationPanel.objects.filter(Organization_Name=lookupObject.Organization_Name)
+				for rec in lookupLocations:
+					rec.Organization_Name_SurveyPanel_FK = lookupObject
+					rec.save()	
+
+			
 			return HttpResponseRedirect(reverse('surveyPage2', args=(lookupObject.pk,)))
 		else:
 			# The supplied form contained errors - just print them to the terminal.
@@ -281,6 +312,8 @@ def adminSurveyPage1(request, id=None):
 
 	if id:
 		surveyObject = SurveyPanel.objects.get(id=id)
+		# get survey name 
+		previous_name = surveyObject.Organization_Name
 		# check for non superusers and redirect to their dashboard if the user doesn't own the object
 		if request.user.groups.filter(name="superusers").exists():
 			empty = {}
@@ -298,8 +331,38 @@ def adminSurveyPage1(request, id=None):
 		# Have we been provided with a valid form?
 		if form.is_valid():
 			# Save the new data to the database.
+			f = form.save(commit=False)
+
+			# if records already exist, loop through them and change the organization name
+			if id:
+				lookupLocations = LocationPanel.objects.filter(Organization_Name=previous_name)
+				for rec in lookupLocations:
+					rec.Organization_Name = f.Organization_Name
+					rec.Organization_Name_SurveyPanel_FK = None
+					rec.save()
+
+				lookupContacts = ContactPanel.objects.filter(Organization_Name=previous_name)
+				for rec in lookupContacts:
+					rec.Organization_Name = f.Organization_Name
+					rec.save()
+
+				lookupMeetings = MeetingPanel.objects.filter(Organization_Name=previous_name)
+				for rec in lookupMeetings:
+					rec.Organization_Name = f.Organization_Name
+					rec.save()
+
+			# Save the new data to the database.
 			f = form.save(commit=True)
+
 			lookupObject = SurveyPanel.objects.get(Organization_Name=f.Organization_Name)
+
+			# add FK relationship back to survey from location if these exist
+			if id:
+				lookupLocations = LocationPanel.objects.filter(Organization_Name=lookupObject.Organization_Name)
+				for rec in lookupLocations:
+					rec.Organization_Name_SurveyPanel_FK = lookupObject
+					rec.save()		
+
 			return HttpResponseRedirect(reverse('surveyPage2', args=(lookupObject.pk,)))
 		else:
 			# The supplied form contained errors - just print them to the terminal.
