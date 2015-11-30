@@ -22,8 +22,6 @@
       <a class="btn btn-default btn-lg" href="{% url 'downloaddata' %}" role="button">Export Survey Data</a>
       {% if user|has_group:"superadmin" %}
       <a class="btn btn-default btn-lg" href="{% url 'administerAccounts' %}" role="button">Administer Accounts</a>
-      {% else %}
-      wtf
       {% endif %}
     </div>
   </div>

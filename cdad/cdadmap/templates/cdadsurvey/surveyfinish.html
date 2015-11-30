@@ -31,7 +31,7 @@
         {% csrf_token %}
         {{ form|as_bootstrap }}
         <a class="btn btn-default" href="/survey14/{{ id }}/" role="button">Back</a>
-        <input type="submit" class="btn btn-primary" value="Submit" />
+        <input id="submitButton" type="submit" class="btn btn-primary" value="Submit" />
       </form>
     </div>
 	<div class="col-md-1">
@@ -42,6 +42,17 @@
 	</div>
   </div>
 </div> <!-- /container -->
+{% endblock %}
+
+{% block js_block %}
+  <script type="text/javascript">
+    $( "#submitButton" ).click(function() {
+      $("#submitButton").addClass("disabled");
+    });
+  </script>
+
+
+
 {% endblock %}
 
 
