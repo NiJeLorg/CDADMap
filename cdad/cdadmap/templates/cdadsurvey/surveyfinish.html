@@ -27,7 +27,7 @@
       <p>Find CDAD on the web: <a href="http://cdad-online.org/">http://cdad-online.org/</a></p>
       <p>Like CDAD on Facebook: <a href="http://www.facebook.com/CDADDetroit">http://www.facebook.com/CDADDetroit</a></p>
       <p>Follow CDAD on Twitter: <a href="http://twitter.com/CDADDetroit">http://twitter.com/CDADDetroit</a></p>
-      <form method="post" action=".">
+      <form id="target" method="post" action=".">
         {% csrf_token %}
         {{ form|as_bootstrap }}
         <a id="back" class="btn btn-default" href="/survey14/{{ id }}/" role="button">Back</a>
@@ -46,9 +46,12 @@
 
 {% block js_block %}
   <script type="text/javascript">
-    $( "#submitButton" ).click(function() {
-      $("#submitButton").prop('disabled', true);
-      $("#back").addClass("disabled");
+    $( document ).ready(function() {
+      $( "#submitButton" ).click(function() {
+        $( "#target" ).submit();
+        $("#submitButton").prop('disabled', true);
+        $("#back").addClass("disabled");
+      });
     });
   </script>
 
