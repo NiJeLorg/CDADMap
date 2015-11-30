@@ -30,7 +30,7 @@
       <form method="post" action=".">
         {% csrf_token %}
         {{ form|as_bootstrap }}
-        <a class="btn btn-default" href="/survey14/{{ id }}/" role="button">Back</a>
+        <a id="back" class="btn btn-default" href="/survey14/{{ id }}/" role="button">Back</a>
         <input id="submitButton" type="submit" class="btn btn-primary" value="Submit" />
       </form>
     </div>
@@ -47,7 +47,8 @@
 {% block js_block %}
   <script type="text/javascript">
     $( "#submitButton" ).click(function() {
-      $("#submitButton").addClass("disabled");
+      $("#submitButton").prop('disabled', true);
+      $("#back").addClass("disabled");
     });
   </script>
 
