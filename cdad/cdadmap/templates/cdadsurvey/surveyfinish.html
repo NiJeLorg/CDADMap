@@ -48,9 +48,8 @@
   <script type="text/javascript">
     $( document ).ready(function() {
       $( "#submitButton" ).click(function() {
-        $( "#target" ).submit();
-        $("#submitButton").prop('disabled', true);
-        $("#back").addClass("disabled");
+        // add loading modal
+        $("body").addClass("loading");
       });
     });
   </script>
