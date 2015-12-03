@@ -125,16 +125,16 @@ def filterLocations(request):
 	verified_query = Q(verified__exact = True)
 
 	#get filters
-	Organization_Description_Choices = request.GET.get("Organization_Description_Choices","All")
-	Service_Area_Choices = request.GET.get("Service_Area_Choices","All")
-	organization_structured_Choices = request.GET.get("organization_structured_Choices","All")
-	Activities_Services_Choices = request.GET.get("Activities_Services_Choices","All")
-	Service_Population_Choices = request.GET.get("Service_Population_Choices","All")
-	Languages_Choices = request.GET.get("Languages_Choices","All")
-	Languages_Other = request.GET.get("Languages_Other","All")
-	cdadmebership = request.GET.get("cdadmebership","All")
-	Council_District_Choices = request.GET.get("Council_District_Choices","All")
-	keyword = request.GET.get("keyword","All")
+	Organization_Description_Choices = request.GET.get("Organization_Description_Choices","")
+	Service_Area_Choices = request.GET.get("Service_Area_Choices","")
+	organization_structured_Choices = request.GET.get("organization_structured_Choices","")
+	Activities_Services_Choices = request.GET.get("Activities_Services_Choices","")
+	Service_Population_Choices = request.GET.get("Service_Population_Choices","")
+	Languages_Choices = request.GET.get("Languages_Choices","")
+	Languages_Other = request.GET.get("Languages_Other","")
+	cdadmebership = request.GET.get("cdadmebership","")
+	Council_District_Choices = request.GET.get("Council_District_Choices","")
+	keyword = request.GET.get("keyword","")
 
 	#query for fields
 	if(Organization_Description_Choices != ""):
@@ -217,7 +217,7 @@ def filterLocations(request):
 	surveys_with_maps_ids = list(surveys_with_maps_ids)
 
 	# load template requested 
-	template = request.GET.get("template","All")
+	template = request.GET.get("template","")
 	if (template == "locations"):
 		renderTemplate = 'cdadmap/locations-geojson.html'
 	elif (template == "popup"):
