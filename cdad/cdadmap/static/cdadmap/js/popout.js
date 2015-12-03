@@ -495,6 +495,7 @@ CDADMapPopout.initialLoadModals = function (){
         type: 'GET',
         url:  'filter/',
         success: function(data){
+        	console.log("working?");
         	// remove data in popup content
         	$("#modal-wrapper").html('');
         	// add new data to popup content
