@@ -139,45 +139,45 @@ def filterLocations(request):
 	#query for fields
 	if(Organization_Description_Choices != ""):
 		Organization_Description_ChoicesArray = Organization_Description_Choices.split('|')
-		Organization_Description_query = reduce(operator.or_, (Q(Organization_Description__contains = item) for item in Organization_Description_ChoicesArray))
+		Organization_Description_query = reduce(operator.or_, (Q(Organization_Description__icontains = item) for item in Organization_Description_ChoicesArray))
 
 	if(Service_Area_Choices != ""):
 		Service_Area_ChoicesArray = Service_Area_Choices.split('|')
-		Service_Area_Choices_query = reduce(operator.or_, (Q(Service_Area_Description__contains = item) for item in Service_Area_ChoicesArray))
+		Service_Area_Choices_query = reduce(operator.or_, (Q(Service_Area_Description__icontains = item) for item in Service_Area_ChoicesArray))
 
 
 	if(organization_structured_Choices != ""):
 		organization_structured_ChoicesArray = organization_structured_Choices.split('|')
-		organization_structured_Choices_query = reduce(operator.or_, (Q(organization_structured__contains = item) for item in organization_structured_ChoicesArray))
+		organization_structured_Choices_query = reduce(operator.or_, (Q(organization_structured__icontains = item) for item in organization_structured_ChoicesArray))
 
 	if(Activities_Services_Choices != ""):
 		Activities_Services_ChoicesArray = Activities_Services_Choices.split('|')
-		Activities_Services_Choices_query = reduce(operator.or_, (Q(Activities_Services__contains = item) for item in Activities_Services_ChoicesArray))
+		Activities_Services_Choices_query = reduce(operator.or_, (Q(Activities_Services__icontains = item) for item in Activities_Services_ChoicesArray))
 
 	if(Service_Population_Choices != ""):
 		Service_Population_ChoicesArray = Service_Population_Choices.split('|')
-		Service_Population_Choices_query = reduce(operator.or_, (Q(Service_Population__contains = item) for item in Service_Population_ChoicesArray))
+		Service_Population_Choices_query = reduce(operator.or_, (Q(Service_Population__icontains = item) for item in Service_Population_ChoicesArray))
 
 	if(Languages_Choices != ""):
 		Languages_ChoicesArray = Languages_Choices.split('|')
-		Languages_Choices_query = reduce(operator.or_, (Q(Languages__contains = item) for item in Languages_ChoicesArray))
+		Languages_Choices_query = reduce(operator.or_, (Q(Languages__icontains = item) for item in Languages_ChoicesArray))
 
 	if(Languages_Other == "Other"):
 		Languages_Other_query = Q(Languages_Other__isnull = False)
 
 	if(cdadmebership != ""):
 		if(cdadmebership == "Yes"):
-			cdadmebership_query = Q(CDAD_MemberShip__contains = "Currently a member")
+			cdadmebership_query = Q(CDAD_MemberShip__icontains = "Currently a member")
 		else:
 			surveyKwargsExclude['CDAD_MemberShip__exact'] = "Currently a member"
 
 	if(Council_District_Choices != ""):
 		Council_District_ChoicesArray = Council_District_Choices.split('|')
-		Council_District_Choices_query = reduce(operator.or_, (Q(CouncilDistricts__contains = item) for item in Council_District_ChoicesArray))
+		Council_District_Choices_query = reduce(operator.or_, (Q(CouncilDistricts__icontains = item) for item in Council_District_ChoicesArray))
 
 	if(keyword != ""):
 		fields = [f for f in SurveyPanel._meta.fields if isinstance(f, TextField)]
-		queries = [Q(**{"%s__contains" % f.name: keyword}) for f in fields]
+		queries = [Q(**{"%s__icontains" % f.name: keyword}) for f in fields]
 		for query in queries:
 			keyword_query = keyword_query | query       
 

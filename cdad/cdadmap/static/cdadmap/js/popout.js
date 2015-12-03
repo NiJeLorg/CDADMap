@@ -489,13 +489,11 @@ CDADMapPopout.setFiltersInPopup = function(Organization_Description_Choices, Ser
 
 
 CDADMapPopout.initialLoadModals = function (){
-
 	// ajax call to load the modals
     $.ajax({
         type: 'GET',
         url:  'filter/',
         success: function(data){
-        	console.log("working?");
         	// remove data in popup content
         	$("#modal-wrapper").html('');
         	// add new data to popup content
