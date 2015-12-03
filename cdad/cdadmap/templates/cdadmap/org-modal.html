@@ -359,3 +359,107 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<script type="text/javascript">
+	// globally define maps
+	var maps = [];
+	var bounds = [];			
+	
+	// modal maps: loop through each location and create a map for each on the modal
+	$().ready(new function(){
+		// hide the carousel
+		$('#orgCarousel').hide();
+
+		// set up a listener for hiding the carousel when the modal is closed
+		$('#orgModal').on('hidden.bs.modal', function (e) {
+		  $('#orgCarousel').hide();
+		});
+
+		// after carousel completes sliding 
+		$('#orgCarousel').on('slid.bs.carousel', function () {
+			// set modal backrop height if the modal height is bigger than the window height
+			var modalHeightValue = $('.modal-body').height() + $('.modal-header').height() + $('.modal-footer').height() + 205;
+			var windowHeight = $(window).height();
+			if (modalHeightValue < windowHeight) {
+				modalHeightValue = windowHeight;
+			}
+			var modalHeightString = modalHeightValue + 'px';
+			$(".modal-backdrop").css('height', modalHeightString);
+
+			// update the map for the active layer
+			var modalId = $('.carousel-inner > .active').attr('id');
+			countId = modalId.replace("modalItem", "");
+			countId = parseInt(countId);
+
+			maps[countId].map.invalidateSize();
+			// fit bounds
+			maps[countId].map.fitBounds(bounds[countId]);
+
+			// update title
+			{% for location in locations %}	
+				var counter = {{ forloop.counter0 }};
+				if (counter == countId) {
+					{% if location.getSurveyObject.Organizaton_Acronym %}
+						var Organizaton_Acronym = "({{ location.getSurveyObject.Organizaton_Acronym}})";
+					{% else %}
+						var Organizaton_Acronym = "";								
+					{% endif %}
+					$( "#titleOrgName" ).html('{{ location.Organization_Name }} ' + Organizaton_Acronym);	
+				}
+			{% endfor %}
+
+
+		});
+
+		// define mini-maps array
+		{% for location in locations %}
+			var numid = {{ forloop.counter0 }};
+			var mapid = 'map' + {{ forloop.counter0 }};
+
+			{% if location.getSurveyObject.MapDissolve and location.Address and location.Lat and location.Lat != "0" %}
+				var type = 'locationAndSA';
+			{% elif location.getSurveyObject.MapDissolve %}
+				var type = 'SA';
+			{% elif location.Address and location.Lat and location.Lat != "0" %}
+				var type = 'location';
+			{% else %}
+				var type = 'none';
+			{% endif %}	
+
+			{% if location.getSurveyObject.MapDissolve %}
+			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, 42.38, -83.1, 9, {{ location.getSurveyObject.id  }}, type, numid);				
+			{% elif location.Address and location.Lat and location.Lat != "0" %}
+			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, {{ location.Lat }}, {{ location.Lon }}, 16, {{ location.getSurveyObject.id  }}, type, numid);
+		    {% else %}
+			    maps[{{ forloop.counter0 }}] = new CDADModalMap(mapid, 42.38, -83.1, 9, -99, type, numid);
+		   	{% endif %}				
+		{% endfor %}
+		
+
+		$('#orgModal').on('shown.bs.modal', function (e) {
+			// update the map for the active layer
+			var modalId = $('.carousel-inner > .active').attr('id');
+			countId = modalId.replace("modalItem", "");
+			countId = parseInt(countId);
+
+			maps[countId].map.invalidateSize();
+			// fit bounds
+			maps[countId].map.fitBounds(bounds[countId]);
+
+			// update title
+			{% for location in locations %}	
+				var counter = {{ forloop.counter0 }};
+				if (counter == countId) {
+					{% if location.getSurveyObject.Organizaton_Acronym %}
+						var Organizaton_Acronym = "({{ location.getSurveyObject.Organizaton_Acronym}})";
+					{% else %}
+						var Organizaton_Acronym = "";								
+					{% endif %}
+					$( "#titleOrgName" ).html('{{ location.Organization_Name }} ' + Organizaton_Acronym);	
+				}
+			{% endfor %}
+
+		
+		});
+
+	});
+</script>
