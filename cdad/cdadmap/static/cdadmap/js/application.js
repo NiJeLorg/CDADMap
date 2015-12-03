@@ -30,6 +30,10 @@ $().ready(new function(){
     // load layers after map and popout are loaded to speed things up a bit
     CDADMap.loadLayers();
 
+    // load modal content after page load to speed things up a bit
+    CDADMapPopout.initialLoadModals();
+
+
     // initialize all page tooltips
     $('[data-toggle="tooltip"]').tooltip();
 
