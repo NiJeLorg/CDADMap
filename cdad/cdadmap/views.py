@@ -38,9 +38,7 @@ def index(request):
 	kwargs['Organization_Name_SurveyPanel_FK__verified__exact'] = True
 
 	#get locations 
-	#locations = LocationPanel.objects.filter(**kwargs).order_by('Organization_Name')
-	locations = LocationPanel.objects.none()
-
+	locations = LocationPanel.objects.filter(**kwargs).order_by('Organization_Name')
 
 	# create Activity list and strip out address if address is private
 	for location in locations:
