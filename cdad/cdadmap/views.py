@@ -70,8 +70,13 @@ def getLocationDataForCDOBCLAYER(request):
 	location = LocationPanel.objects.get(Organization_Name__exact=Organization_Name)
 	survey = SurveyPanel.objects.get(Organization_Name__exact=Organization_Name)
 
+	# create Activity list
+	location.Activity = location.Activity.strip('[]').replace("u'","").replace("'","").split(', ')
 	if location.KeepPrivate:
-		location.Address = ''	
+		location.Address = ''
+
+	# create Activities Services
+	survey.Activities_Services = survey.Activities_Services.strip('[]').replace("u'","").replace("'","").split(', ')
 
 	response['idlocation'] = location.idlocation
 	response['Organization_Name'] = location.Organization_Name
