@@ -78,6 +78,8 @@ def getLocationDataForCDOBCLAYER(request):
 	# create Activities Services
 	survey.Activities_Services = survey.Activities_Services.strip('[]').replace("u'","").replace("'","")
 
+	survey.Organization_Description = survey.Organization_Description.strip('[]').replace("u'","").replace("'","")
+
 	response['idlocation'] = location.idlocation
 	response['Organization_Name'] = location.Organization_Name
 	response['Organizaton_Acronym'] = survey.Organizaton_Acronym
