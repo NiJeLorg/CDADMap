@@ -536,16 +536,12 @@ def surveyPage5(request, id=None, passed=False):
 				instance.Organization_Name = surveyObject.Organization_Name
 				# geocoding
 				if bool(instance.MailingAddress) == False:
-					if bool(instance.City) is True and bool(instance.Address2) is True:
-						fullAddress = instance.Address + ' ' + instance.Address2 + ' ' + instance.City + ', ' + instance.State
-					elif bool(instance.City) is True:	
+					if bool(instance.City) is True:
 						fullAddress = instance.Address + ' ' + instance.City + ', ' + instance.State
-					elif bool(instance.Address2) is True:	
-						fullAddress = instance.Address + ' ' + instance.Address2 + ', ' + instance.State
+						params = { 'address' : fullAddress, 'sensor' : "false" }                    
 					else:
 						fullAddress = instance.Address + ', ' + instance.State
-
-					params = { 'address' : fullAddress, 'sensor' : "false" }                    
+						params = { 'address' : fullAddress, 'sensor' : "false" }
 
 					# fully form url    
 					request_url = base_url + urllib.urlencode(params);

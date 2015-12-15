@@ -304,20 +304,23 @@ class Page4Form(forms.ModelForm):
 
 class Page5Form(forms.ModelForm):
 
-    Address2 = forms.CharField(required=False, widget=forms.widgets.TextInput(), label="Address Line 2")
+    Address2 = forms.CharField(required=False, widget=forms.widgets.TextInput(), label="Address Line 2", help_text="Please include any other address information here, like building names, suite numbers, or other information that's part of your address." )
     Activity = forms.MultipleChoiceField(choices=ACTIVITY_CHOICES, widget=forms.CheckboxSelectMultiple(), label="Please indicate any activities or services that take place at this location. (Required)")
 
     class Meta:
         model = LocationPanel
         fields = ('Address','Address2','City','State','ZipCode','MailingAddress','KeepPrivate','Activity', 'Activity_Other')
         labels = {
-            'Address': 'Address',
+            'Address': 'Street Address',
             'City': 'City',
             'State': 'State',
             'ZipCode': 'Zip Code',
             'MailingAddress': 'This is a mailing address only (e.g. P.O. Box)',
             'KeepPrivate': 'Keep this address private',
-            'Activity_Other': 'If you selected other, please specify'
+            'Activity_Other': 'If you selected other, please specify.'
+        }
+        help_texts = {
+            'Address': 'Please only include street addresses here, such as 2648 West Grand Boulevard. This will help with locating your organization on the map.'
         }
         widgets = {
             'Address': forms.widgets.TextInput(),
