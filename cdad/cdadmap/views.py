@@ -27,13 +27,6 @@ from django.contrib.auth.decorators import login_required
 #CSRF decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-
-def strip_non_ascii(string):
-    ''' Returns the string without non ASCII characters'''
-    stripped = (c for c in string if ord(c) >= 32 or ord(c) <= 126)
-    return ''.join(stripped)
-
-
 # Create your views here.
 def index(request):
 	
@@ -1267,49 +1260,49 @@ def downloaddata(request):
 			row[1] = survey.user
 			row[2] = survey.verified
 			row[3] = survey.removed
-			row[4] = strip_non_ascii(survey.Organization_Name)
-			row[5] = strip_non_ascii(survey.Organizaton_Acronym)
-			row[6] = strip_non_ascii(survey.Survey_Taker_Name)
-			row[7] = strip_non_ascii(survey.Survey_Taker_Email_Address)
+			row[4] = survey.Organization_Name
+			row[5] = survey.Organizaton_Acronym
+			row[6] = survey.Survey_Taker_Name
+			row[7] = survey.Survey_Taker_Email_Address
 			row[8] = survey.Survey_Taker_Email_AddToList
-			row[9] = strip_non_ascii(survey.Organization_Description)
-			row[10] = strip_non_ascii(survey.Year_Founded)
+			row[9] = survey.Organization_Description
+			row[10] = survey.Year_Founded
 			row[11] = survey.Organization_Logo_Image
-			row[12] = strip_non_ascii(survey.Organizational_Mission)
-			row[13] = strip_non_ascii(survey.Social_Email)
-			row[14] = strip_non_ascii(survey.AddSocial_Email)
-			row[15] = strip_non_ascii(survey.Social_Phone)
+			row[12] = survey.Organizational_Mission
+			row[13] = survey.Social_Email
+			row[14] = survey.AddSocial_Email
+			row[15] = survey.Social_Phone
 			row[16] = survey.Social_Phone_KeepPrivate
 			row[17] = survey.Social_facebook
 			row[18] = survey.Social_website
 			row[19] = survey.Social_Twitter
-			row[20] = strip_non_ascii(survey.Social_other_media)
-			row[21] = strip_non_ascii(survey.Service_Area_Description)
-			row[22] = strip_non_ascii(survey.Service_Area_Geographic_Boundaries)
-			row[23] = strip_non_ascii(survey.CouncilDistricts)
-			row[24] = strip_non_ascii(survey.organization_structured)
-			row[25] = strip_non_ascii(survey.governance_board)
-			row[26] = strip_non_ascii(survey.No_of_board_members)
-			row[27] = strip_non_ascii(survey.staff_members)
-			row[28] = strip_non_ascii(survey.Activities_Services)
-			row[29] = strip_non_ascii(survey.Service_Population)
-			row[30] = strip_non_ascii(survey.Languages)
-			row[31] = strip_non_ascii(survey.Languages_Other)
-			row[32] = strip_non_ascii(survey.accomplish_one_title)
-			row[33] = strip_non_ascii(survey.accomplish_one_description)
-			row[34] = strip_non_ascii(survey.accomplish_two_title)
-			row[35] = strip_non_ascii(survey.accomplish_two_description)
-			row[36] = strip_non_ascii(survey.accomplish_three_title)
-			row[37] = strip_non_ascii(survey.accomplish_three_description)
-			row[38] = strip_non_ascii(survey.accomplish_four_title)
-			row[39] = strip_non_ascii(survey.accomplish_four_description)
-			row[40] = strip_non_ascii(survey.accomplish_five_title)
-			row[41] = strip_non_ascii(survey.accomplish_five_description)
-			row[42] = strip_non_ascii(survey.CDAD_MemberShip)
-			row[43] = strip_non_ascii(survey.CDAD_Services)
-			row[44] = strip_non_ascii(survey.CDAD_Services_Other)
-			row[45] = strip_non_ascii(survey.CDAD_Comments)
-			row[46] = strip_non_ascii(survey.CDAD_FeedBack)
+			row[20] = survey.Social_other_media
+			row[21] = survey.Service_Area_Description
+			row[22] = survey.Service_Area_Geographic_Boundaries
+			row[23] = survey.CouncilDistricts
+			row[24] = survey.organization_structured
+			row[25] = survey.governance_board
+			row[26] = survey.No_of_board_members
+			row[27] = survey.staff_members
+			row[28] = survey.Activities_Services
+			row[29] = survey.Service_Population
+			row[30] = survey.Languages
+			row[31] = survey.Languages_Other
+			row[32] = survey.accomplish_one_title
+			row[33] = survey.accomplish_one_description
+			row[34] = survey.accomplish_two_title
+			row[35] = survey.accomplish_two_description
+			row[36] = survey.accomplish_three_title
+			row[37] = survey.accomplish_three_description
+			row[38] = survey.accomplish_four_title
+			row[39] = survey.accomplish_four_description
+			row[40] = survey.accomplish_five_title
+			row[41] = survey.accomplish_five_description
+			row[42] = survey.CDAD_MemberShip
+			row[43] = survey.CDAD_Services
+			row[44] = survey.CDAD_Services_Other
+			row[45] = survey.CDAD_Comments
+			row[46] = survey.CDAD_FeedBack
 			row[47] = survey.partners
 			row[48] = survey.created
 			row[49] = survey.modified
@@ -1319,5 +1312,3 @@ def downloaddata(request):
 
 
 	return render(request, 'cdadsurvey/downloaddata.html', {})
-
-
