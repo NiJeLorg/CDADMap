@@ -1303,7 +1303,7 @@ def downloaddata(request):
 			row[44] = survey.CDAD_Services_Other
 			row[45] = survey.CDAD_Comments
 			row[46] = survey.CDAD_FeedBack
-			row[47] = survey.partners
+			row[47] = ''
 			row[48] = survey.created
 			row[49] = survey.modified
 
