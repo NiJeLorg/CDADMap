@@ -1263,26 +1263,26 @@ def downloaddata(request):
 		for survey in surveys:
 			#empty list for a row
 			row = ['','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','']
-			row[0] = strip_non_ascii(survey.id)
-			row[1] = strip_non_ascii(survey.user)
-			row[2] = strip_non_ascii(survey.verified)
-			row[3] = strip_non_ascii(survey.removed)
+			row[0] = survey.id
+			row[1] = survey.user
+			row[2] = survey.verified
+			row[3] = survey.removed
 			row[4] = strip_non_ascii(survey.Organization_Name)
 			row[5] = strip_non_ascii(survey.Organizaton_Acronym)
 			row[6] = strip_non_ascii(survey.Survey_Taker_Name)
 			row[7] = strip_non_ascii(survey.Survey_Taker_Email_Address)
-			row[8] = strip_non_ascii(survey.Survey_Taker_Email_AddToList)
+			row[8] = survey.Survey_Taker_Email_AddToList
 			row[9] = strip_non_ascii(survey.Organization_Description)
 			row[10] = strip_non_ascii(survey.Year_Founded)
-			row[11] = strip_non_ascii(survey.Organization_Logo_Image)
+			row[11] = survey.Organization_Logo_Image
 			row[12] = strip_non_ascii(survey.Organizational_Mission)
 			row[13] = strip_non_ascii(survey.Social_Email)
 			row[14] = strip_non_ascii(survey.AddSocial_Email)
 			row[15] = strip_non_ascii(survey.Social_Phone)
-			row[16] = strip_non_ascii(survey.Social_Phone_KeepPrivate)
-			row[17] = strip_non_ascii(survey.Social_facebook)
-			row[18] = strip_non_ascii(survey.Social_website)
-			row[19] = strip_non_ascii(survey.Social_Twitter)
+			row[16] = survey.Social_Phone_KeepPrivate
+			row[17] = survey.Social_facebook
+			row[18] = survey.Social_website
+			row[19] = survey.Social_Twitter
 			row[20] = strip_non_ascii(survey.Social_other_media)
 			row[21] = strip_non_ascii(survey.Service_Area_Description)
 			row[22] = strip_non_ascii(survey.Service_Area_Geographic_Boundaries)
@@ -1310,9 +1310,9 @@ def downloaddata(request):
 			row[44] = strip_non_ascii(survey.CDAD_Services_Other)
 			row[45] = strip_non_ascii(survey.CDAD_Comments)
 			row[46] = strip_non_ascii(survey.CDAD_FeedBack)
-			row[47] = strip_non_ascii(survey.partners)
-			row[48] = strip_non_ascii(survey.created)
-			row[49] = strip_non_ascii(survey.modified)
+			row[47] = survey.partners
+			row[48] = survey.created
+			row[49] = survey.modified
 
 			writer.writerow(row)
 
