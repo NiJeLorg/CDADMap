@@ -1267,7 +1267,7 @@ def downloaddata(request):
 			row[8] = survey.Survey_Taker_Email_AddToList
 			row[9] = survey.Organization_Description
 			row[10] = survey.Year_Founded
-			row[11] = survey.Organization_Logo_Image
+			row[11] = ''
 			row[12] = survey.Organizational_Mission
 			row[13] = survey.Social_Email
 			row[14] = survey.AddSocial_Email
