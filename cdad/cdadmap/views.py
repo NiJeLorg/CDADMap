@@ -287,6 +287,7 @@ def surveyPage1(request, id=None):
 			f.user = request.user
 			# mark as draft
 			f.verified = False
+			f.completed = False
 			f.save()
 
 			lookupObject = SurveyPanel.objects.get(Organization_Name=f.Organization_Name)
@@ -937,24 +938,40 @@ def surveyfinish(request, id=None):
 
 	# A HTTP POST?
 	if request.method == 'POST':
-		# send email to the user that their record has been submitted and CDAD will verify
-		subject = "Survey Submitted to d[COM]munity!"
-		html_message = "Dear "+ surveyObject.Survey_Taker_Name +",<br /><br />Thank you for completing the survey and adding your organization, " + surveyObject.Organization_Name + " to the d[COM]munity system! A representative from CDAD will review your survey submission shortly, and you will receieve an email at this address when your information is avialable on the d[COM]munity website.<br /><br />Again, thank you for being a part of d[COM]munity and please contact us with any questions!<br /><br /><a href=\"http://cdad-online.org/\">Community Development Advocates of Detroit</a><br />440 Burroughs St. Suite 340<br />Detroit, MI 48202<br />313-832-4620<br />dcommunity@cdad-online.org"
-		message = "Dear "+ surveyObject.Survey_Taker_Name +", Thank you for completing the survey and adding your organization, " + surveyObject.Organization_Name + " to the d[COM]munity system! A representative from CDAD will review your survey submission shortly, and you will receieve an email at this address when your information is avialable on the d[COM]munity website. Again, thank you for being a part of d[COM]munity and please contact us with any questions! Community Development Advocates of Detroit, http://cdad-online.org/, 440 Burroughs St. Suite 340, Detroit, MI 48202; 313-832-4620; dcommunity@cdad-online.org"
+		# set survey to comleted status
+		form = Page15Form(request.POST, instance=surveyObject)
 
-		send_mail(subject, message, 'dcommunity@cdad-online.org', [surveyObject.Survey_Taker_Email_Address], fail_silently=True, html_message=html_message)
+		# Have we been provided with a valid form?
+		if form.is_valid():
+			# set to complted
+			f = form.save(commit=False)
+			f.completed = True
+			f.save()
 
-		# send another email to CDAD superusers
-		group = Group.objects.get(name='superusers')
-		superusers = group.user_set.all()
-		for	superuser in superusers:
-			subject = "New Survey from "+ surveyObject.Organization_Name +" Submitted to d[COM]munity!"
-			html_message = "Dear "+ superuser.first_name +" "+ superuser.last_name +",<br /><br />The group, " + surveyObject.Organization_Name + " just submitted their completed survey to CDAD for their review. Please log in to the d[COM]munity system when you have a moment and verify their work.<br /><br />Thank you!"
-			message = "Dear "+ superuser.first_name +" "+ superuser.last_name +", The group, " + surveyObject.Organization_Name + " just submitted their completed survey to CDAD for their review. Please log in to the d[COM]munity system when you have a moment and verify their work. Thank you!"
+			# send email to the user that their record has been submitted and CDAD will verify
+			subject = "Survey Submitted to d[COM]munity!"
+			html_message = "Dear "+ surveyObject.Survey_Taker_Name +",<br /><br />Thank you for completing the survey and adding your organization, " + surveyObject.Organization_Name + " to the d[COM]munity system! A representative from CDAD will review your survey submission shortly, and you will receieve an email at this address when your information is avialable on the d[COM]munity website.<br /><br />Again, thank you for being a part of d[COM]munity and please contact us with any questions!<br /><br /><a href=\"http://cdad-online.org/\">Community Development Advocates of Detroit</a><br />440 Burroughs St. Suite 340<br />Detroit, MI 48202<br />313-832-4620<br />dcommunity@cdad-online.org"
+			message = "Dear "+ surveyObject.Survey_Taker_Name +", Thank you for completing the survey and adding your organization, " + surveyObject.Organization_Name + " to the d[COM]munity system! A representative from CDAD will review your survey submission shortly, and you will receieve an email at this address when your information is avialable on the d[COM]munity website. Again, thank you for being a part of d[COM]munity and please contact us with any questions! Community Development Advocates of Detroit, http://cdad-online.org/, 440 Burroughs St. Suite 340, Detroit, MI 48202; 313-832-4620; dcommunity@cdad-online.org"
 
-			send_mail(subject, message, 'dcommunity@cdad-online.org', [superuser.email], fail_silently=True, html_message=html_message)
+			send_mail(subject, message, 'dcommunity@cdad-online.org', [surveyObject.Survey_Taker_Email_Address], fail_silently=True, html_message=html_message)
 
-		return HttpResponseRedirect('/dashboard/')
+			# send another email to CDAD superusers
+			group = Group.objects.get(name='superusers')
+			superusers = group.user_set.all()
+			for	superuser in superusers:
+				subject = "New Survey from "+ surveyObject.Organization_Name +" Submitted to d[COM]munity!"
+				html_message = "Dear "+ superuser.first_name +" "+ superuser.last_name +",<br /><br />The group, " + surveyObject.Organization_Name + " just submitted their completed survey to CDAD for their review. Please log in to the d[COM]munity system when you have a moment and verify their work.<br /><br />Thank you!"
+				message = "Dear "+ superuser.first_name +" "+ superuser.last_name +", The group, " + surveyObject.Organization_Name + " just submitted their completed survey to CDAD for their review. Please log in to the d[COM]munity system when you have a moment and verify their work. Thank you!"
+
+				send_mail(subject, message, 'dcommunity@cdad-online.org', [superuser.email], fail_silently=True, html_message=html_message)
+
+			return HttpResponseRedirect('/dashboard/')
+
+		else:
+			# The supplied form contained errors - just print them to the terminal.
+			print form.errors
+
+
 	else:
 		# If the request was not a POST, display the form to enter details.
 		form = Page15Form()
@@ -985,6 +1002,12 @@ def dashboard(request):
 			else:
 				update = False
 
+				# is the survey completed, but not yet verified
+				if surveyObject.completed:
+					completed = True
+				else:
+					completed = False
+
 				# look up meeting, contact and location
 				meetingObjects = MeetingPanel.objects.filter(Organization_Name=surveyObject.Organization_Name)
 				meetingObjectsCount = len(meetingObjects)
@@ -994,7 +1017,7 @@ def dashboard(request):
 				contactObjectsCount = len(contactObjects)
 
 				#where in the survey are they? -- going back to front
-				if surveyObject.CDAD_MemberShip:
+				if completed:
 					page = 15
 				elif surveyObject.partners.count() > 0:
 					page = 14
@@ -1031,7 +1054,7 @@ def dashboard(request):
 			return HttpResponseRedirect('/survey/')
 
 
-		return render(request, 'cdadsurvey/provider_dashboard.html', {'update':update, 'id':id, 'page':page, 'surveyObject':surveyObject})
+		return render(request, 'cdadsurvey/provider_dashboard.html', {'update':update, 'completed':completed, 'id':id, 'page':page, 'surveyObject':surveyObject})
 
 @login_required
 def verifysurvey(request, id=None):
@@ -1095,6 +1118,7 @@ def removesurvey(request, id=None):
 				# Save the new data to the database.
 				f = form.save(commit=False)
 				f.verified = False
+				f.completed = False
 				f.save()
 
 				return HttpResponseRedirect('/dashboard/')
@@ -1267,7 +1291,7 @@ def downloaddata(request):
 			row[8] = survey.Survey_Taker_Email_AddToList
 			row[9] = survey.Organization_Description
 			row[10] = survey.Year_Founded
-			row[11] = ''
+			row[11] = survey.Organization_Logo_Image
 			row[12] = survey.Organizational_Mission
 			row[13] = survey.Social_Email
 			row[14] = survey.AddSocial_Email
@@ -1303,7 +1327,7 @@ def downloaddata(request):
 			row[44] = survey.CDAD_Services_Other
 			row[45] = survey.CDAD_Comments
 			row[46] = survey.CDAD_FeedBack
-			row[47] = ''
+			row[47] = survey.partners
 			row[48] = survey.created
 			row[49] = survey.modified
 
