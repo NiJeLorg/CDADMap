@@ -1284,49 +1284,175 @@ def downloaddata(request):
 			row[1] = survey.user
 			row[2] = survey.verified
 			row[3] = survey.removed
-			row[4] = survey.Organization_Name.encode('ascii', 'ignore')
-			row[5] = survey.Organizaton_Acronym.encode('ascii', 'ignore')
-			row[6] = survey.Survey_Taker_Name.encode('ascii', 'ignore')
-			row[7] = survey.Survey_Taker_Email_Address.encode('ascii', 'ignore')
-			row[8] = survey.Survey_Taker_Email_AddToList.encode('ascii', 'ignore')
-			row[9] = survey.Organization_Description.encode('ascii', 'ignore')
-			row[10] = survey.Year_Founded.encode('ascii', 'ignore')
-			row[11] = survey.Organization_Logo_Image
-			row[12] = survey.Organizational_Mission.encode('ascii', 'ignore')
-			row[13] = survey.Social_Email.encode('ascii', 'ignore')
-			row[14] = survey.AddSocial_Email.encode('ascii', 'ignore')
-			row[15] = survey.Social_Phone.encode('ascii', 'ignore')
+			if survey.Organization_Name:
+				row[4] = survey.Organization_Name.encode('ascii', 'ignore')
+			else:
+				row[4] = ''
+			if survey.Organizaton_Acronym:
+				row[5] = survey.Organizaton_Acronym.encode('ascii', 'ignore')
+			else:
+				row[5] = ''
+			if survey.Survey_Taker_Name:
+				row[6] = survey.Survey_Taker_Name.encode('ascii', 'ignore')
+			else:
+				row[6] = ''
+			if survey.Survey_Taker_Email_Address:
+				row[7] = survey.Survey_Taker_Email_Address.encode('ascii', 'ignore')
+			else:
+				row[7] = ''			
+			if survey.Survey_Taker_Email_AddToList:
+				row[8] = survey.Survey_Taker_Email_AddToList.encode('ascii', 'ignore')
+			else:
+				row[8] = ''			
+			if survey.Organization_Description:
+				row[9] = survey.Organization_Description.encode('ascii', 'ignore')
+			else:
+				row[9] = ''			
+			if survey.Year_Founded:
+				row[10] = survey.Year_Founded.encode('ascii', 'ignore')
+			else:
+				row[10] = ''				
+			if survey.Organization_Logo_Image:
+				row[11] = survey.Organization_Logo_Image
+			else:
+				row[11] = ''			
+			if survey.Organizational_Mission:
+				row[12] = survey.Organizational_Mission.encode('ascii', 'ignore')
+			else:
+				row[12] = ''			
+			if survey.Social_Email:
+				row[13] = survey.Social_Email.encode('ascii', 'ignore')
+			else:
+				row[13] = ''				
+			if survey.AddSocial_Email:
+				row[14] = survey.AddSocial_Email.encode('ascii', 'ignore')
+			else:
+				row[14] = ''				
+			if survey.Social_Phone:
+				row[15] = survey.Social_Phone.encode('ascii', 'ignore')
+			else:
+				row[15] = ''							
 			row[16] = survey.Social_Phone_KeepPrivate
-			row[17] = survey.Social_facebook.encode('ascii', 'ignore')
-			row[18] = survey.Social_website.encode('ascii', 'ignore')
-			row[19] = survey.Social_Twitter.encode('ascii', 'ignore')
-			row[20] = survey.Social_other_media.encode('ascii', 'ignore')
-			row[21] = survey.Service_Area_Description
-			row[22] = survey.Service_Area_Geographic_Boundaries
-			row[23] = survey.CouncilDistricts.encode('ascii', 'ignore')
-			row[24] = survey.organization_structured.encode('ascii', 'ignore')
-			row[25] = survey.governance_board.encode('ascii', 'ignore')
-			row[26] = survey.No_of_board_members.encode('ascii', 'ignore')
-			row[27] = survey.staff_members.encode('ascii', 'ignore')
-			row[28] = survey.Activities_Services.encode('ascii', 'ignore')
-			row[29] = survey.Service_Population.encode('ascii', 'ignore')
-			row[30] = survey.Languages.encode('ascii', 'ignore')
-			row[31] = survey.Languages_Other.encode('ascii', 'ignore')
-			row[32] = survey.accomplish_one_title.encode('ascii', 'ignore')
-			row[33] = survey.accomplish_one_description.encode('ascii', 'ignore')
-			row[34] = survey.accomplish_two_title.encode('ascii', 'ignore')
-			row[35] = survey.accomplish_two_description.encode('ascii', 'ignore')
-			row[36] = survey.accomplish_three_title.encode('ascii', 'ignore')
-			row[37] = survey.accomplish_three_description.encode('ascii', 'ignore')
-			row[38] = survey.accomplish_four_title.encode('ascii', 'ignore')
-			row[39] = survey.accomplish_four_description.encode('ascii', 'ignore')
-			row[40] = survey.accomplish_five_title.encode('ascii', 'ignore')
-			row[41] = survey.accomplish_five_description.encode('ascii', 'ignore')
-			row[42] = survey.CDAD_MemberShip.encode('ascii', 'ignore')
-			row[43] = survey.CDAD_Services.encode('ascii', 'ignore')
-			row[44] = survey.CDAD_Services_Other.encode('ascii', 'ignore')
-			row[45] = survey.CDAD_Comments.encode('ascii', 'ignore')
-			row[46] = survey.CDAD_FeedBack.encode('ascii', 'ignore')
+			if survey.Social_facebook:
+				row[17] = survey.Social_facebook.encode('ascii', 'ignore')
+			else:
+				row[17] = ''				
+			if survey.Social_website:
+				row[18] = survey.Social_website.encode('ascii', 'ignore')
+			else:
+				row[18] = ''				
+			if survey.Social_Twitter:
+				row[19] = survey.Social_Twitter.encode('ascii', 'ignore')
+			else:
+				row[19] = ''
+			if survey.Social_other_media:
+				row[20] = survey.Social_other_media.encode('ascii', 'ignore')
+			else:
+				row[20] = ''
+			if survey.Service_Area_Description:
+				row[21] = survey.Service_Area_Description.encode('ascii', 'ignore')
+			else:
+				row[21] = ''
+			if survey.Service_Area_Geographic_Boundaries:
+				row[22] = survey.Service_Area_Geographic_Boundaries.encode('ascii', 'ignore')
+			else:
+				row[22] = ''			
+			if survey.CouncilDistricts:
+				row[23] = survey.CouncilDistricts.encode('ascii', 'ignore')
+			else:
+				row[23] = ''				
+			if survey.organization_structured:
+				row[24] = survey.organization_structured.encode('ascii', 'ignore')
+			else:
+				row[24] = ''			
+			if survey.governance_board:
+				row[25] = survey.governance_board.encode('ascii', 'ignore')
+			else:
+				row[25] = ''				
+			if survey.No_of_board_members:
+				row[26] = survey.No_of_board_members.encode('ascii', 'ignore')
+			else:
+				row[26] = ''			
+			if survey.staff_members:
+				row[27] = survey.staff_members.encode('ascii', 'ignore')
+			else:
+				row[27] = ''				
+			if survey.Activities_Services:
+				row[28] = survey.Activities_Services.encode('ascii', 'ignore')
+			else:
+				row[28] = ''						
+			if survey.Service_Population:
+				row[29] = survey.Service_Population.encode('ascii', 'ignore')
+			else:
+				row[29] = ''			
+			if survey.Languages:
+				row[30] = survey.Languages.encode('ascii', 'ignore')
+			else:
+				row[30] = ''			
+			if survey.Languages_Other:
+				row[31] = survey.Languages_Other.encode('ascii', 'ignore')
+			else:
+				row[31] = ''			
+			if survey.accomplish_one_title:
+				row[32] = survey.accomplish_one_title.encode('ascii', 'ignore')
+			else:
+				row[32] = ''			
+			if survey.accomplish_one_description:
+				row[33] = survey.accomplish_one_description.encode('ascii', 'ignore')
+			else:
+				row[33] = ''			
+			if survey.accomplish_two_title:
+				row[34] = survey.accomplish_two_title.encode('ascii', 'ignore')
+			else:
+				row[34] = ''			
+			if survey.accomplish_two_description:
+				row[35] = survey.accomplish_two_description.encode('ascii', 'ignore')
+			else:
+				row[35] = ''			
+			if survey.accomplish_three_title:
+				row[36] = survey.accomplish_three_title.encode('ascii', 'ignore')
+			else:
+				row[36] = ''			
+			if survey.accomplish_three_description:
+				row[37] = survey.accomplish_three_description.encode('ascii', 'ignore')
+			else:
+				row[37] = ''				
+			if survey.accomplish_four_title:
+				row[38] = survey.accomplish_four_title.encode('ascii', 'ignore')
+			else:
+				row[38] = ''			
+			if survey.accomplish_four_description:
+				row[39] = survey.accomplish_four_description.encode('ascii', 'ignore')
+			else:
+				row[39] = ''			
+			if survey.accomplish_five_title:
+				row[40] = survey.accomplish_five_title.encode('ascii', 'ignore')
+			else:
+				row[40] = ''				
+			if survey.accomplish_five_description:
+				row[41] = survey.accomplish_five_description.encode('ascii', 'ignore')
+			else:
+				row[41] = ''			
+			if survey.CDAD_MemberShip:
+				row[42] = survey.CDAD_MemberShip.encode('ascii', 'ignore')
+			else:
+				row[42] = ''				
+			if survey.CDAD_Services:
+				row[43] = survey.CDAD_Services.encode('ascii', 'ignore')
+			else:
+				row[43] = ''			
+			if survey.CDAD_Services_Other:
+				row[44] = survey.CDAD_Services_Other.encode('ascii', 'ignore')
+			else:
+				row[44] = ''				
+			if survey.CDAD_Comments:
+				row[45] = survey.CDAD_Comments.encode('ascii', 'ignore')
+			else:
+				row[45] = ''			
+			if survey.CDAD_Comments:
+				row[46] = survey.CDAD_FeedBack.encode('ascii', 'ignore')
+			else:
+				row[46] = ''						
 			row[47] = survey.created
 			row[48] = survey.modified
 			row[49] = survey.completed
