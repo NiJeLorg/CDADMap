@@ -1284,65 +1284,56 @@ def downloaddata(request):
 			row[1] = survey.user
 			row[2] = survey.verified
 			row[3] = survey.removed
-			row[4] = survey.Organization_Name
-			row[5] = survey.Organizaton_Acronym
-			row[6] = survey.Survey_Taker_Name
-			row[7] = survey.Survey_Taker_Email_Address
-			row[8] = survey.Survey_Taker_Email_AddToList
-			row[9] = survey.Organization_Description
-			row[10] = survey.Year_Founded
+			row[4] = survey.Organization_Name.encode('ascii', 'ignore')
+			row[5] = survey.Organizaton_Acronym.encode('ascii', 'ignore')
+			row[6] = survey.Survey_Taker_Name.encode('ascii', 'ignore')
+			row[7] = survey.Survey_Taker_Email_Address.encode('ascii', 'ignore')
+			row[8] = survey.Survey_Taker_Email_AddToList.encode('ascii', 'ignore')
+			row[9] = survey.Organization_Description.encode('ascii', 'ignore')
+			row[10] = survey.Year_Founded.encode('ascii', 'ignore')
 			row[11] = survey.Organization_Logo_Image
-			row[12] = survey.Organizational_Mission
-			row[13] = survey.Social_Email
-			row[14] = survey.AddSocial_Email
-			row[15] = survey.Social_Phone
+			row[12] = survey.Organizational_Mission.encode('ascii', 'ignore')
+			row[13] = survey.Social_Email.encode('ascii', 'ignore')
+			row[14] = survey.AddSocial_Email.encode('ascii', 'ignore')
+			row[15] = survey.Social_Phone.encode('ascii', 'ignore')
 			row[16] = survey.Social_Phone_KeepPrivate
-			row[17] = survey.Social_facebook
-			row[18] = survey.Social_website
-			row[19] = survey.Social_Twitter
-			row[20] = survey.Social_other_media
+			row[17] = survey.Social_facebook.encode('ascii', 'ignore')
+			row[18] = survey.Social_website.encode('ascii', 'ignore')
+			row[19] = survey.Social_Twitter.encode('ascii', 'ignore')
+			row[20] = survey.Social_other_media.encode('ascii', 'ignore')
 			row[21] = survey.Service_Area_Description
 			row[22] = survey.Service_Area_Geographic_Boundaries
-			row[23] = survey.CouncilDistricts
-			row[24] = survey.organization_structured
-			row[25] = survey.governance_board
-			row[26] = survey.No_of_board_members
-			row[27] = survey.staff_members
-			row[28] = survey.Activities_Services
-			row[29] = survey.Service_Population
-			row[30] = survey.Languages
-			row[31] = survey.Languages_Other
-			row[32] = survey.accomplish_one_title
-			row[33] = survey.accomplish_one_description
-			row[34] = survey.accomplish_two_title
-			row[35] = survey.accomplish_two_description
-			row[36] = survey.accomplish_three_title
-			row[37] = survey.accomplish_three_description
-			row[38] = survey.accomplish_four_title
-			row[39] = survey.accomplish_four_description
-			row[40] = survey.accomplish_five_title
-			row[41] = survey.accomplish_five_description
-			row[42] = survey.CDAD_MemberShip
-			row[43] = survey.CDAD_Services
-			row[44] = survey.CDAD_Services_Other
-			row[45] = survey.CDAD_Comments
-			row[46] = survey.CDAD_FeedBack
-			row[47] = survey.partners
+			row[23] = survey.CouncilDistricts.encode('ascii', 'ignore')
+			row[24] = survey.organization_structured.encode('ascii', 'ignore')
+			row[25] = survey.governance_board.encode('ascii', 'ignore')
+			row[26] = survey.No_of_board_members.encode('ascii', 'ignore')
+			row[27] = survey.staff_members.encode('ascii', 'ignore')
+			row[28] = survey.Activities_Services.encode('ascii', 'ignore')
+			row[29] = survey.Service_Population.encode('ascii', 'ignore')
+			row[30] = survey.Languages.encode('ascii', 'ignore')
+			row[31] = survey.Languages_Other.encode('ascii', 'ignore')
+			row[32] = survey.accomplish_one_title.encode('ascii', 'ignore')
+			row[33] = survey.accomplish_one_description.encode('ascii', 'ignore')
+			row[34] = survey.accomplish_two_title.encode('ascii', 'ignore')
+			row[35] = survey.accomplish_two_description.encode('ascii', 'ignore')
+			row[36] = survey.accomplish_three_title.encode('ascii', 'ignore')
+			row[37] = survey.accomplish_three_description.encode('ascii', 'ignore')
+			row[38] = survey.accomplish_four_title.encode('ascii', 'ignore')
+			row[39] = survey.accomplish_four_description.encode('ascii', 'ignore')
+			row[40] = survey.accomplish_five_title.encode('ascii', 'ignore')
+			row[41] = survey.accomplish_five_description.encode('ascii', 'ignore')
+			row[42] = survey.CDAD_MemberShip.encode('ascii', 'ignore')
+			row[43] = survey.CDAD_Services.encode('ascii', 'ignore')
+			row[44] = survey.CDAD_Services_Other.encode('ascii', 'ignore')
+			row[45] = survey.CDAD_Comments.encode('ascii', 'ignore')
+			row[46] = survey.CDAD_FeedBack.encode('ascii', 'ignore')
+			row[47] = survey.partners.encode('ascii', 'ignore')
 			row[48] = survey.created
 			row[49] = survey.modified
 			row[50] = survey.completed
 
-			try:
-				writer.writerow(row)
-			except:
-				#set accomplishment descriptions to null 
-				row[33] = ""
-				row[35] = ""
-				row[36] = ""
-				row[38] = ""
-				row[40] = ""
-				#try writing now
-				writer.writerow(row)
+			writer.writerow(row)
+
 
 
 	return render(request, 'cdadsurvey/downloaddata.html', {})
