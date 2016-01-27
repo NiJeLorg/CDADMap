@@ -1327,7 +1327,7 @@ def downloaddata(request):
 			row[44] = survey.CDAD_Services_Other.encode('ascii', 'ignore')
 			row[45] = survey.CDAD_Comments.encode('ascii', 'ignore')
 			row[46] = survey.CDAD_FeedBack.encode('ascii', 'ignore')
-			row[47] = survey.partners.encode('ascii', 'ignore')
+			row[47] = survey.partners
 			row[48] = survey.created
 			row[49] = survey.modified
 			row[50] = survey.completed
