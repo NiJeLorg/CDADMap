@@ -1274,12 +1274,12 @@ def downloaddata(request):
 	with open(MEDIA_ROOT + folder + 'survey_data.csv', 'wb') as f:
 		writer = csv.writer(f, quoting=csv.QUOTE_ALL)
 		#header row
-		headerRow = ['id','user','verified','removed', 'Organization_Name', 'Organizaton_Acronym', 'Survey_Taker_Name', 'Survey_Taker_Email_Address', 'Survey_Taker_Email_AddToList', 'Organization_Description', 'Year_Founded', 'Organization_Logo_Image', 'Organizational_Mission', 'Social_Email', 'AddSocial_Email', 'Social_Phone', 'Social_Phone_KeepPrivate', 'Social_facebook', 'Social_website', 'Social_Twitter', 'Social_other_media', 'Service_Area_Description', 'Service_Area_Geographic_Boundaries', 'CouncilDistricts', 'organization_structured', 'governance_board', 'No_of_board_members', 'staff_members', 'Activities_Services', 'Service_Population', 'Languages', 'Languages_Other', 'accomplish_one_title', 'accomplish_one_description', 'accomplish_two_title', 'accomplish_two_description', 'accomplish_three_title', 'accomplish_three_description', 'accomplish_four_title', 'accomplish_four_description', 'accomplish_five_title', 'accomplish_five_description', 'CDAD_MemberShip', 'CDAD_Services', 'CDAD_Services_Other', 'CDAD_Comments', 'CDAD_FeedBack', 'partners', 'created', 'modified']
+		headerRow = ['id','user','verified','removed', 'Organization_Name', 'Organizaton_Acronym', 'Survey_Taker_Name', 'Survey_Taker_Email_Address', 'Survey_Taker_Email_AddToList', 'Organization_Description', 'Year_Founded', 'Organization_Logo_Image', 'Organizational_Mission', 'Social_Email', 'AddSocial_Email', 'Social_Phone', 'Social_Phone_KeepPrivate', 'Social_facebook', 'Social_website', 'Social_Twitter', 'Social_other_media', 'Service_Area_Description', 'Service_Area_Geographic_Boundaries', 'CouncilDistricts', 'organization_structured', 'governance_board', 'No_of_board_members', 'staff_members', 'Activities_Services', 'Service_Population', 'Languages', 'Languages_Other', 'accomplish_one_title', 'accomplish_one_description', 'accomplish_two_title', 'accomplish_two_description', 'accomplish_three_title', 'accomplish_three_description', 'accomplish_four_title', 'accomplish_four_description', 'accomplish_five_title', 'accomplish_five_description', 'CDAD_MemberShip', 'CDAD_Services', 'CDAD_Services_Other', 'CDAD_Comments', 'CDAD_FeedBack', 'created', 'modified', 'completed']
 		writer.writerow(headerRow)
 		surveys = SurveyPanel.objects.all()
 		for survey in surveys:
 			#empty list for a row
-			row = ['','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','']
+			row = ['','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','']
 			row[0] = survey.id
 			row[1] = survey.user
 			row[2] = survey.verified
@@ -1327,7 +1327,6 @@ def downloaddata(request):
 			row[44] = survey.CDAD_Services_Other.encode('ascii', 'ignore')
 			row[45] = survey.CDAD_Comments.encode('ascii', 'ignore')
 			row[46] = survey.CDAD_FeedBack.encode('ascii', 'ignore')
-			row[47] = survey.partners
 			row[48] = survey.created
 			row[49] = survey.modified
 			row[50] = survey.completed
