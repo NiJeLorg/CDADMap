@@ -1330,9 +1330,19 @@ def downloaddata(request):
 			row[47] = survey.partners
 			row[48] = survey.created
 			row[49] = survey.modified
+			row[50] = survey.completed
 
-			writer.writerow(row)
-
+			try:
+				writer.writerow(row)
+			except:
+				#set accomplishment descriptions to null 
+				row[33] = ""
+				row[35] = ""
+				row[36] = ""
+				row[38] = ""
+				row[40] = ""
+				#try writing now
+				writer.writerow(row)
 
 
 	return render(request, 'cdadsurvey/downloaddata.html', {})
