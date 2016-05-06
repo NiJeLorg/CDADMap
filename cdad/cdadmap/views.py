@@ -996,6 +996,8 @@ def dashboard(request):
 			surveyObject = SurveyPanel.objects.get(user=request.user, removed=False)
 			id = surveyObject.id
 			page = -99
+			update = False
+			completed = False
 			# is the survey verified? -- if so just give them the update button
 			if surveyObject.verified:
 				update = True
