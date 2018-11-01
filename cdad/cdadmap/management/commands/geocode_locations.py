@@ -14,7 +14,7 @@ class Command(BaseCommand):
     def geocode_locations(self):
         
     	# get base URL and params for geocoding
-    	base_url = "http://maps.googleapis.com/maps/api/geocode/json?"
+    	base_url = "https://maps.googleapis.com/maps/api/geocode/json?"
         
         
         for counter, location in enumerate(LocationPanel.objects.filter(Address__isnull=False, Lat__exact='', Lon__exact='')):

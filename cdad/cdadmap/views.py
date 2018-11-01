@@ -507,7 +507,7 @@ def surveyPage4(request, id=None, passed=False):
 def surveyPage5(request, id=None, passed=False):
 
 	# get base URL and params for geocoding
-	base_url = "http://maps.googleapis.com/maps/api/geocode/json?"
+	base_url = "https://maps.googleapis.com/maps/api/geocode/json?"
 
 	surveyObject = SurveyPanel.objects.get(id=id)
 	# check for non superusers and redirect to their dashboard if the user doesn't own the object
