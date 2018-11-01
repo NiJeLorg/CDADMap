@@ -23,7 +23,7 @@ function OrgDraw() {
 	this.map.addLayer(this.CartoDBLayer);
 
 	//load geocoder control
-	this.map.addControl(L.Control.geocoder({placeholder:'Address Search', geocoder:new L.Control.Geocoder.Google()}));
+	this.map.addControl(L.Control.geocoder({placeholder:'Address Search', geocoder:new L.Control.Geocoder.Google(GEOCODER_API_KEY)}));
 
 		
 	//load scale bars

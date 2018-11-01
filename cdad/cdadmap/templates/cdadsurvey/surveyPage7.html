@@ -67,6 +67,7 @@
 	<script type="text/javascript">
     var id = "{{ id }}";
     var OrgName = "{{ surveyObject.Organization_Name }}";
+    var GEOCODER_API_KEY = "{{ GEOCODER_API_KEY }}";
     var cdblayer = "{% static 'cdadmap/topojsons/detroit_city_council_district_boundaries.json' %}";
 	</script>
   <script type="text/javascript" src="{% static 'cdadmap/js/d3.min.js' %}"></script>

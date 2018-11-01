@@ -356,6 +356,7 @@
 		var cdblayer = "{% static 'cdadmap/topojsons/detroit_city_council_district_boundaries.json' %}";	
 		var nblayer = "{% static 'cdadmap/topojsons/detroit_neighborhood_boundaries.json' %}";	
 		var zcblayer = "{% static 'cdadmap/topojsons/detroit_zip_codes.json' %}";
+		var GEOCODER_API_KEY = "{{ GEOCODER_API_KEY }}";
 		var locations = {% include 'cdadmap/locations-geojson.html' %};
 	</script>
 	<script type="text/javascript" src="{% static 'cdadmap/js/popout.js' %}"></script>

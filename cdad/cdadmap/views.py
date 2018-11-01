@@ -16,6 +16,7 @@ from django.core.mail import send_mail
 from django.core.files import File
 from django.conf import settings
 MEDIA_ROOT = settings.MEDIA_ROOT
+GEOCODER_API_KEY = settings.GEOCODER_API_KEY
 
 # import all cdadmap models and forms
 from cdadmap.forms import *
@@ -56,7 +57,7 @@ def index(request):
 	surveys_with_maps_ids = set(surveys_with_maps_ids)
 	surveys_with_maps_ids = list(surveys_with_maps_ids)
 		
-	context_dict = {'locations': locations, "Organization_Description_Choices": ORG_DESCRIPTION_CHOICES, "Service_Area_Choices": SERVICE_AREA_CHOICES, "organization_structured_Choices": STRUCTURE_CHOICES, "Activities_Services_Choices": ACTIVITY_SERVICES_CHOICES, "Service_Population_Choices": POPULATION_CHOICES, "Languages_Choices": LANGUAGE_CHOICES, 'surveys_with_maps_ids':surveys_with_maps_ids, 'Council_District_Choices':COUNCIL_DISTRICT_CHOICES}
+	context_dict = {'locations': locations, "Organization_Description_Choices": ORG_DESCRIPTION_CHOICES, "Service_Area_Choices": SERVICE_AREA_CHOICES, "organization_structured_Choices": STRUCTURE_CHOICES, "Activities_Services_Choices": ACTIVITY_SERVICES_CHOICES, "Service_Population_Choices": POPULATION_CHOICES, "Languages_Choices": LANGUAGE_CHOICES, 'surveys_with_maps_ids':surveys_with_maps_ids, 'Council_District_Choices':COUNCIL_DISTRICT_CHOICES, 'GEOCODER_API_KEY':GEOCODER_API_KEY}
 	return render(request, 'cdadmap/index.html', context_dict)
 
 
@@ -539,13 +540,13 @@ def surveyPage5(request, id=None, passed=False):
 				if bool(instance.MailingAddress) == False:
 					if bool(instance.City) is True:
 						fullAddress = instance.Address + ' ' + instance.City + ', ' + instance.State
-						params = { 'address' : fullAddress, 'sensor' : "false" }                    
+						params = { 'address' : fullAddress, 'key' : GEOCODER_API_KEY }                    
 					else:
 						fullAddress = instance.Address + ', ' + instance.State
-						params = { 'address' : fullAddress, 'sensor' : "false" }
+						params = { 'address' : fullAddress, 'key' : GEOCODER_API_KEY }
 
 					# fully form url    
-					request_url = base_url + urllib.urlencode(params);
+					request_url = base_url + urllib.urlencode(params)
 					
 					#send request to google and decode the returned JSON into a string
 					response = json.loads(urllib2.urlopen(request_url).read(1000000))
@@ -623,7 +624,7 @@ def surveyPage7(request, id=None, passed=False):
 			#send them back to their dashboard
 			return HttpResponseRedirect('/dashboard/')
 
-	return render(request, 'cdadsurvey/surveyPage7.html', {'surveyObject': surveyObject, 'id':id})
+	return render(request, 'cdadsurvey/surveyPage7.html', {'surveyObject': surveyObject, 'id':id, 'GEOCODER_API_KEY':GEOCODER_API_KEY})
 
 
 def getJSONforMap(request, id=None, passed=False):

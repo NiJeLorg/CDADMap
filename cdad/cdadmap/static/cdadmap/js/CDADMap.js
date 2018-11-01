@@ -34,7 +34,7 @@ function CDADMap() {
 	this.map.addLayer(this.CartoDBLayer);
 	
 	//load geocoder control
-	this.map.addControl(L.Control.geocoder({collapsed: false, placeholder:'', geocoder:new L.Control.Geocoder.Google()}));
+	this.map.addControl(L.Control.geocoder({collapsed: false, placeholder:'', geocoder:new L.Control.Geocoder.Google(GEOCODER_API_KEY)}));
 	
 	//load scale bars
 	this.map.addControl(L.control.scale());

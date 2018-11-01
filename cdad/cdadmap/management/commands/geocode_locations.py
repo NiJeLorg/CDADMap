@@ -2,6 +2,8 @@ import sys,os,urllib,urllib2,json
 from django.core.management.base import BaseCommand, CommandError
 from cdadmap.models import LocationPanel
 import time
+from django.conf import settings
+GEOCODER_API_KEY = settings.GEOCODER_API_KEY
 
 
 """
@@ -22,13 +24,13 @@ class Command(BaseCommand):
 
                 if bool(location.City) is True:
                     fullAddress = location.Address + ' ' + location.City + ', ' + location.State
-                    params = { 'address' : fullAddress, 'sensor' : "false" }                    
+                    params = { 'address' : fullAddress, 'key' : GEOCODER_API_KEY }                    
                 else:
                     fullAddress = location.Address + ', ' + location.State
-                    params = { 'address' : fullAddress, 'sensor' : "false" }                    
+                    params = { 'address' : fullAddress, 'key' : GEOCODER_API_KEY }                    
             
                 # fully form url    
-                request_url = base_url + urllib.urlencode(params);
+                request_url = base_url + urllib.urlencode(params)
                 
                 #send request to google and decode the returned JSON into a string
                 response = json.loads(urllib2.urlopen(request_url).read(1000000))
